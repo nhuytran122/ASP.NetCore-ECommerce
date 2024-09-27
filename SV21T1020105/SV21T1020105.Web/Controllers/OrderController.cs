@@ -14,7 +14,7 @@ namespace SV21T1020105.Web.Controllers
             return View();
         }
 
-        public IActionResult Detals(int id = 0)
+        public IActionResult Details(int id = 0)
         {
             return View();
         }

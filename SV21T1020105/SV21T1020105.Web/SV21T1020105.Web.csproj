@@ -6081,6 +6081,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Account\" />
     <Folder Include="wwwroot\images\employees\" />
   </ItemGroup>
 
