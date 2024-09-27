@@ -9,8 +9,23 @@ namespace SV21T1020105.Web.Controllers
             return View();
         }
 
-
         public IActionResult Create()
+        {
+            return View();
+        }
+
+        public IActionResult Detals(int id = 0)
+        {
+            return View();
+        }
+
+
+        public IActionResult EditDetail(int id = 0, int productId = 0)
+        {
+            return View();
+        }
+
+        public IActionResult Shipping(int id = 0)
         {
             return View();
         }

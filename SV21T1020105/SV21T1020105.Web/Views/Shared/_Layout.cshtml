@@ -18,6 +18,10 @@
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="~/themes/dist/css/skins/_all-skins.min.css">
 
+    <link rel="stylesheet" href="~/themes/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="~/themes/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="~/themes/bower_components/select2/dist/css/select2.min.css">
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -26,6 +30,7 @@
     <![endif]-->
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    @RenderSection("style", false);
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
     <!-- Site wrapper -->
@@ -70,14 +75,32 @@
     <script src="~/themes/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
     <!-- FastClick -->
     <script src="~/themes/bower_components/fastclick/lib/fastclick.js"></script>
+    
+    <script src="~/themes/bower_components/moment/min/moment.min.js"></script>
+    <script src="~/themes/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script src="~/themes/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/themes/bower_components//select2/dist/js/select2.min.js"></script>
+    
     <!-- AdminLTE App -->
     <script src="~/themes/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="~/themes/dist/js/demo.js"></script>
+
     <script>
         $(document).ready(function () {
-            $('.sidebar-menu').tree()
+            $('.sidebar-menu').tree();
+            $('.date-picker').datepicker({
+                autoclose: true,
+                format: "dd/mm/yyyy"
+            });
+            $('.daterange-picker').daterangepicker({
+                locale: {
+                    format: 'DD/MM/YYYY'
+                }
+            });
+            $('.select2').select2();
         })
     </script>
+    @RenderSection("scripts", false)
 </body>
 </html>

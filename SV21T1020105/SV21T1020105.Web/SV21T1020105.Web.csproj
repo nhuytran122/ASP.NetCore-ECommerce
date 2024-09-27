@@ -6082,7 +6082,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\employees\" />
-    <Folder Include="wwwroot\images\products\" />
   </ItemGroup>
 
 </Project>
