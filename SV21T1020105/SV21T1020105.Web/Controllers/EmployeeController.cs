@@ -8,5 +8,22 @@ namespace SV21T1020105.Web.Controllers
         {
             return View();
         }
+
+        public IActionResult Create()
+        {
+            ViewBag.Title = "Bổ sung nhân viên";
+            return View("Edit");
+        }
+
+        public IActionResult Edit(int id = 0)
+        {
+            ViewBag.Title = "Cập nhật thông tin nhân viên";
+            return View();
+        }
+
+        public IActionResult Delete(int id)
+        {
+            return View();
+        }
     }
 }
