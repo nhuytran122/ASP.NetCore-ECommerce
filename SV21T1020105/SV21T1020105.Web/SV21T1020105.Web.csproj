@@ -6080,4 +6080,9 @@
     <None Include="wwwroot\themes\bower_components\select2\src\scss\_single.scss" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\employees\" />
+    <Folder Include="wwwroot\images\products\" />
+  </ItemGroup>
+
 </Project>

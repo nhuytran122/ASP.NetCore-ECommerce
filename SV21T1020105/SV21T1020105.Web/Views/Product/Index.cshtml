@@ -1,66 +1,61 @@
 ﻿@{
     ViewBag.Title = "Quản lý mặt hàng";
 }
-
 <div class="box box-primary">
     <div class="box-body">
+        <!-- Form đầu vào tìm kiếm -->
         <form>
             <div class="row">
-                <div class="col-md-3">
-                    <label for="loaiHang">Loại hàng:</label>
-                    <select id="loaiHang" class="form-control">
-                        <option selected>Chọn loại hàng</option>
-                        <option>Bàn ghế - đồ nội thất</option>
-                        <option>Điện tử</option>
+                <div class="col-sm-3">
+                    <label>Loại hàng:</label>
+                    <select class="form-control" name="CategoryID">
+                        <option value="">-- Chọn loại hàng --</option>
+                        <option value="1">May mặc - Thời trang</option>
+                        <option value="2">Mỹ phẩm</option>
                     </select>
                 </div>
-
-                <div class="col-md-3">
-                    <label for="nhaCungCap">Nhà cung cấp:</label>
-                    <select id="nhaCungCap" class="form-control">
-                        <option selected>Chọn nhà cung cấp</option>
-                        <option>Công ty A</option>
-                        <option>Công ty B</option>
+                <div class="col-sm-3">
+                    <label>Nhà cung cấp:</label>
+                    <select class="form-control" name="SupplierID">
+                        <option value="">-- Chọn nhà cung cấp --</option>
+                        <option value="1">Công ty Xuất nhập khẩu Thành Hưng</option>
+                        <option value="2">Công ty TNHH Sao Mai Việt</option>
                     </select>
                 </div>
-
-                <div class="col-md-1">
-                    <label for="giaTu">Giá từ:</label>
-                    <input id="giaTu" type="number" class="form-control" placeholder="0">
+                <div class="col-sm-1">
+                    <label>Giá từ:</label>
+                    <input type="text" class="form-control" name="MinPrice" value="0">
                 </div>
-
-                <div class="col-md-1">
-                    <label for="giaDen">đến:</label>
-                    <input id="giaDen" type="number" class="form-control" placeholder="0">
+                <div class="col-sm-1">
+                    <label>đến:</label>
+                    <input type="text" class="form-control" name="MaxPrice" value="0">
                 </div>
-
-                <div class="col-md-4">
-                    <label for="inputSearch">Tên mặt hàng cần tìm:</label>
+                <div class="col-sm-4">
+                    <label>Tên mặt hàng cần tìm:</label>
                     <div class="input-group">
-                        <input id="inputSearch" type="text" class="form-control" placeholder="Nhập mặt hàng cần tìm">
-                        <span class="input-group-btn">
+                        <input name="SearchValue" type="text" class="form-control" placeholder="Nhập mặt hàng hàng cần tìm" autofocus="">
+                        <div class="input-group-btn">
                             <button class="btn btn-info" type="submit">
-                                <i class="fa fa-search"></i>
+                                <i class="glyphicon glyphicon-search"></i>
                             </button>
-                            <a href="~/Product/Create" class="btn btn-primary" style="margin-left: 5px">
-                                <i class="fa fa-plus" style="margin-right: 5px; vertical-align: middle;"></i> Bổ sung
+                            <a href="/Product/Create" class="btn btn-primary" style="margin-left:5px">
+                                <i class="fa fa-plus"></i> Bổ sung
                             </a>
-                        </span>
+                        </div>
                     </div>
                 </div>
             </div>
         </form>
 
-        <p style="margin: 10px 0 10px 0">
-            Có <b> 692</b> mặt hàng trong tổng số <b>35</b> trang
+        <p style="margin:10px 0 10px 0">
+            Có <strong>3,000</strong> mặt hàng trong tổng số <strong>100</strong> trang
         </p>
 
-        <!-- Bảng kết quả tìm kiếm -->
         <div class="table-responsive">
             <table class="table table-bordered table-hover table-striped">
                 <thead>
                     <tr class="bg-primary">
-                        <th>Ảnh</th>
+                        <th style="width:80px">Ảnh</th>
                         <th>Tên mặt hàng</th>
                         <th>Đơn vị tính</th>
                         <th>Giá</th>
@@ -68,14 +63,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @for (int i = 1; i <= 10; i++)
+                    @for (int i = 1; i <= 5; i++)
                     {
                         <tr>
-                            <td><img src="path/to/image" alt="Ảnh" /></td>
-                            <td>01234 - Xe tập đi Chiccco Xanh dương</td>
-                            <td>Cái</td>
-                            <td>2,590,000</td>
                             <td>
+                                <img src="~/images/products/macbook.png" style="width:100%" alt="" />
+                            </td>
+                            <td>
+                                Macbook Pro M2 2023
+                            </td>
+                            <td>Cái</td>
+                            <td>25,000,000</td>
+                            <td class="text-right">
                                 <a href="~/Product/Edit/123" class="btn btn-xs btn-info">
                                     <i class="fa fa-edit"></i>
                                 </a>
