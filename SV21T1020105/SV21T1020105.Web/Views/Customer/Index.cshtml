@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<SV21T1020105.DomainModels.Customer>
+@{
     ViewBag.Title = "Quản lý khách hàng"; 
 }
 
@@ -6,7 +7,9 @@
     <div class="box-body">
         <form>
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Nhập tên khách hàng cần tìm" antifocus />
+                <input type="text" class="form-control" placeholder="Nhập tên khách hàng cần tìm" antifocus 
+                name = "searchValue"
+                value="@ViewBag.SearchValue"/>
                 <div class="input-group-btn">
                     <button class="btn btn-info" type="submit">
                         <i class="fa fa-search"></i>
@@ -20,7 +23,7 @@
 
         <!--Hiển thị kết quả tìm kiếm -->
         <p style="margin: 10px 0 10px 0">
-            Có <b> 1,000</b> khách hàng trong tổng số <b>100</b> trang
+            Có <b> @ViewBag.RowCount</b> khách hàng trong tổng số <b>@ViewBag.PageCount</b> trang
         </p>
         <div class="table-responsive">
             <table class="table table-bordered table-hover table-striped">
@@ -39,22 +42,24 @@
                 </thead>
 
                 <tbody>
-                    @for(int i=1; i<=10; i++)
+                    @foreach(var item in Model)
                     {
                         <tr>
-                            <td>Trần Như Ý</td>
-                            <td>GD001</td>
-                            <td>0123456789</td>
-                            <td>21t1020105@husc.edu.vn</td>
-                            <td>77  Nguyễn Huệ</td>
-                            <td>Thừa Thiên Huế</td>
-                            <td></td>
+                            <td>@item.CustomerName</td>
+                            <td>@item.ContactName</td>
+                            <td>@item.Phone</td>
+                            <td>@item.Email</td>
+                            <td>@item.Address</td>
+                            <td>@item.Province</td>
+                            <td class="text-center">
+                                @(item.IsLocked ? "x" : "")
+                            </td>
                             <td>
-                                <a href="~/Customer/Edit/123" class="btn btn-xs btn-info">
+                                <a href="~/Customer/Edit/@item.CustomerID" class="btn btn-xs btn-info">
                                     <i class="fa fa-edit"></i>
                                 </a>
 
-                                <a href="~/Customer/Delete/123" class="btn btn-xs btn-danger">
+                                <a href="~/Customer/Delete/@item.CustomerID" class="btn btn-xs btn-danger">
                                     <i class="fa fa-trash"></i>
                                 </a>
                             </td>
@@ -67,11 +72,17 @@
 
         <div class="text-center">
             <ul class="pagination">
-                <li><a href="#">1</a></li>
-                <li class="active"><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
+                @for (int p = 1; p <= ViewBag.PageCount; p++)
+                {
+                    if(p == ViewBag.Page)
+                    {
+                        <li class="active"><a href="#">@p</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="~/Customer?page=@p&searchValue=@ViewBag.SearchValue">@p</a></li>
+                    }
+                }
             </ul>
         </div>
     </div>
