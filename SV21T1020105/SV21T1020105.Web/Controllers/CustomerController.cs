@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SV21T1020105.DataLayers;
+using SV21T1020105.BusinessLayers;
 
 namespace SV21T1020105.Web.Controllers
 {

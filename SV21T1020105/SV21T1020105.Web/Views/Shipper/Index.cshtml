@@ -1,12 +1,16 @@
-﻿@{
+﻿@model IEnumerable<Shipper>
+@{
     ViewBag.Title = "Quản lý người giao hàng";
 }
 
 <div class="box box-primary">
     <div class="box-body">
-        <form>
+        <form action="~/Shipper" method="get">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Nhập tên người giao hàng cần tìm" antifocus />
+                <input type="text" class="form-control" placeholder="Nhập tên người giao hàng cần tìm"
+                       name="searchValue"
+                       value="@ViewBag.SearchValue" 
+                       antifocus />
                 <div class="input-group-btn">
                     <button class="btn btn-info" type="submit">
                         <i class="fa fa-search"></i>
@@ -20,7 +24,7 @@
 
         <!--Hiển thị kết quả tìm kiếm -->
         <p style="margin: 10px 0 10px 0">
-            Có <b> 3</b> người giao hàng trong tổng số <b>1</b> trang
+            Có <b> @ViewBag.RowCount</b> người giao hàng trong tổng số <b>@ViewBag.PageCount</b> trang
         </p>
         <div class="table-responsive">
             <table class="table table-bordered table-hover table-striped">
@@ -33,17 +37,17 @@
                 </thead>
 
                 <tbody>
-                    @for (int i = 1; i <= 3; i++)
+                    @foreach (var item in Model)
                     {
                         <tr>
-                            <td>Giao hàng tiết kiệm</td>
-                            <td>0123654789</td>
+                            <td>@item.ShipperName</td>
+                            <td>@item.Phone</td>
                             <td>
-                                <a href="~/Shipper/Edit/123" class="btn btn-xs btn-info">
+                                <a href="~/Shipper/Edit/@item.ShipperID" class="btn btn-xs btn-info">
                                     <i class="fa fa-edit"></i>
                                 </a>
 
-                                <a href="~/Shipper/Delete/123" class="btn btn-xs btn-danger">
+                                <a href="~/Shipper/Delete/@item.ShipperID" class="btn btn-xs btn-danger">
                                     <i class="fa fa-trash"></i>
                                 </a>
                             </td>
@@ -54,14 +58,20 @@
             </table>
         </div>
 
-        @* <div class="text-center">
+        <div class="text-center">
             <ul class="pagination">
-                <li><a href="#">1</a></li>
-                <li class="active"><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
+                @for (int p = 1; p <= ViewBag.PageCount; p++)
+                {
+                    if (p == ViewBag.Page)
+                    {
+                        <li class="active"><a href="#">@p</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="~/Shipper?page=@p&searchValue=@ViewBag.SearchValue">@p</a></li>
+                    }
+                }
             </ul>
-        </div> *@
+        </div>
     </div>
 </div>
