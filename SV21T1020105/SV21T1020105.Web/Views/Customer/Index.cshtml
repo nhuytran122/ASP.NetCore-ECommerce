@@ -1,11 +1,11 @@
-﻿@model IEnumerable<SV21T1020105.DomainModels.Customer>
+﻿@model IEnumerable<Customer>
 @{
     ViewBag.Title = "Quản lý khách hàng"; 
 }
 
 <div class="box box-primary">
     <div class="box-body">
-        <form>
+        <form action="~/Customer" method="get">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Nhập tên khách hàng cần tìm" antifocus 
                 name = "searchValue"
