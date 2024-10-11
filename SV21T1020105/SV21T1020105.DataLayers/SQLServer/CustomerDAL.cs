@@ -2,6 +2,9 @@
 using Dapper;
 using System;
 using System.Data;
+using System.Net;
+using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace SV21T1020105.DataLayers.SQLServer
 {
@@ -16,7 +19,27 @@ namespace SV21T1020105.DataLayers.SQLServer
 
         public int Add(Customer data)
         {
-            throw new NotImplementedException();
+            int id = 0;
+            using (var connection = OpenConnection())
+            {
+                var sql = @"insert into Customers(CustomerName, ContactName, Province, Address, Phone, Email, IsLocked)
+                            values (@CustomerName, @ContactName, @Province, @Address, @Phone, @Email, @IsLocked);
+                            select SCOPE_IDENTITY();";
+                var parameters = new
+                {
+                    CustomerName = data.CustomerName ?? "",
+                    ContactName = data.ContactName ?? "",
+                    Province = data.Province ?? "",
+                    Address = data.Address ?? "",
+                    Phone = data.Phone ?? "",
+                    Email = data.Email ?? "",
+                    IsLocked = data.IsLocked
+                };
+                id = connection.ExecuteScalar<int>(sql, parameters, commandType: CommandType.Text);
+                //Thực thi câu lệnh
+                connection.Close();
+            }
+            return id;
         }
 
         public int Count(string searchValue = "")
@@ -39,17 +62,53 @@ namespace SV21T1020105.DataLayers.SQLServer
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            bool result = false;
+            using (var connection = OpenConnection())
+            {
+                var sql = @"delete from Customers where CustomerID = @CustomerID";
+                var parameters = new
+                {
+                    CustomerID = id
+                };
+                result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
+                connection.Close();
+            }
+            return result;
         }
 
         public Customer? Get(int id)
         {
-            throw new NotImplementedException();
+            Customer? data = null;
+            using (var connection = OpenConnection())
+            {
+                var sql = @"select * from Customers where CustomerID = @CustomerID";
+                var parameters = new
+                {
+                    CustomerID = id
+                };
+                data = connection.QueryFirstOrDefault<Customer>(sql: sql, param: parameters, commandType: CommandType.Text);
+                connection.Close();
+            }
+            return data;
         }
 
         public bool InUsed(int id)
         {
-            throw new NotImplementedException();
+            bool result = false;
+            using (var connection = OpenConnection())
+            {
+                var sql = @"if exists (select * from Orders where CustomerID = @CustomerID)
+	                            select 1
+                            else
+	                            select 0";
+                var parameters = new
+                {
+                    CustomerID = id
+                };
+                result = connection.ExecuteScalar<bool>(sql: sql, param: parameters, commandType: CommandType.Text);
+                connection.Close();
+            }
+            return result;
         }
 
         public List<Customer> List(int page = 1, int pageSize = 0, string searchValue = "")
@@ -82,7 +141,33 @@ namespace SV21T1020105.DataLayers.SQLServer
 
         public bool Update(Customer data)
         {
-            throw new NotImplementedException();
+            bool result = false;
+            using (var connection = OpenConnection())
+            {
+                var sql = @"update Customers
+                            set CustomerName = @CustomerName,
+	                            ContactName = @ContactName,
+	                            Province = @Province,
+	                            Address = @Address,
+	                            Phone = @Phone,
+	                            Email = @Email,
+	                            IsLocked = @IsLocked
+                            where CustomerID = @CustomerID";
+                var parameters = new
+                {
+                   CustomerID = data.CustomerID,
+                   CustomerName = data.CustomerName ?? "",
+                   ContactName = data.ContactName,
+                   Province = data.Province ?? "",
+                   Address = data.Address,
+                   Phone = data.Phone,
+                   Email = data.Email,
+                   IsLocked = data.IsLocked
+                };
+                result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
+                connection.Close();
+            }
+            return result;
         }
     }
 }

@@ -10,6 +10,7 @@ namespace SV21T1020105.BusinessLayers
         private static readonly ICommonDAL<Supplier> supplierDB;
         private static readonly ICommonDAL<Shipper> shipperDB;
         private static readonly ICommonDAL<Employee> employeeDB;
+        private static readonly ISimpleQueryDAL<Province> provinceDB;
 
         static CommonDataService()
         {
@@ -19,6 +20,7 @@ namespace SV21T1020105.BusinessLayers
             supplierDB = new DataLayers.SQLServer.SupplierDAL(connectionString);
             shipperDB = new DataLayers.SQLServer.ShipperDAL(connectionString);
             employeeDB = new DataLayers.SQLServer.EmployeeDAL(connectionString);
+            provinceDB = new DataLayers.SQLServer.ProvinceDAL(connectionString);
         }
 
         /// <summary>
@@ -34,6 +36,57 @@ namespace SV21T1020105.BusinessLayers
             rowCount = customerDB.Count(searchValue);
             return customerDB.List(page, pageSize, searchValue);
         }
+
+        /// <summary>
+        /// Lấy 1 khách hàng có mã là id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static Customer? GetCustomer(int id)
+        {
+            return customerDB.Get(id);
+        }
+
+        /// <summary>
+        /// Bổ sung 1 khách hàng, hàm trả về id của khách hàng được bổ sung
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static int AddCustomer(Customer data)
+        {
+            return customerDB.Add(data);
+        }
+
+        /// <summary>
+        /// Cập nhật thông tin của 1 khách hàng
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static bool UpdateCustomer(Customer data)
+        {
+            return customerDB.Update(data);
+        }
+
+        /// <summary>
+        /// Xóa 1 khách hàng có mã là id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static bool DeleteCustomer(int id) 
+        { 
+            return customerDB.Delete(id);
+        }
+
+        /// <summary>
+        /// Kiểm tra xem 1 khách hàng hiện đang có đơn hàng liên quan hay là không
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public static bool InUsedCustomer(int id)
+        {
+            return customerDB.InUsed(id);
+        }
+
 
         public static List<Category> ListOfCategories(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "")
         {
@@ -58,6 +111,12 @@ namespace SV21T1020105.BusinessLayers
             rowCount = employeeDB.Count(searchValue);
             return employeeDB.List(page, pageSize, searchValue);
         }
+
+        public static List<Province> ListOfProvinces()
+        {
+            return provinceDB.List();
+        }
+
     }
 }
 
