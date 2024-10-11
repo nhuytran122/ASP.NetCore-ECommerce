@@ -26,7 +26,7 @@ namespace SV21T1020105.Web.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.Title = "Bổ sung khách hàng";
+            ViewBag.Title = "Bổ sung Khách hàng";
             var data = new Customer()
             {
                 CustomerID = 0,
@@ -37,7 +37,7 @@ namespace SV21T1020105.Web.Controllers
 
         public IActionResult Edit(int id = 0)
         {
-            ViewBag.Title = "Cập nhật thông tin khách hàng";
+            ViewBag.Title = "Cập nhật thông tin Khách hàng";
             var data = CommonDataService.GetCustomer(id);
             if(data == null)
                 return RedirectToAction("Index");

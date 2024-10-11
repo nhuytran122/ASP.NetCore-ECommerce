@@ -25,13 +25,13 @@ namespace SV21T1020105.Web.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.Title = "Bổ sung người giao hàng";
+            ViewBag.Title = "Bổ sung Người giao hàng";
             return View("Edit");
         }
 
         public IActionResult Edit(int id = 0)
         {
-            ViewBag.Title = "Cập nhật thông tin người giao hàng";
+            ViewBag.Title = "Cập nhật thông tin Người giao hàng";
             return View();
         }
 

@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Employee>
 @{
-    ViewBag.Title = "Quản lý nhân viên";
+    ViewBag.Title = "Quản lý Nhân viên";
 }
 
 <div class="box box-primary">
@@ -11,7 +11,7 @@
                 <input name="searchValue"
                        type="text"
                        class="form-control"
-                       placeholder="Nhập tên nhân viên cần tìm"
+                       placeholder="Nhập tên Nhân viên cần tìm"
                        value="@ViewBag.SearchValue"
                        autofocus />
                 <div class="input-group-btn">
@@ -27,7 +27,7 @@
 
         <!-- Hiển thị dữ liệu -->
         <p style="margin-top:10px">
-            Có <strong>@ViewBag.RowCount</strong> nhân viên trong tổng số <strong>@ViewBag.PageCount</strong> trang.
+            Có <strong>@ViewBag.RowCount</strong> Nhân viên trong tổng số <strong>@ViewBag.PageCount</strong> trang.
         </p>
         <div class="row">
             @foreach (var item in Model)
