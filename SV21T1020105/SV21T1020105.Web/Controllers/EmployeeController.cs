@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SV21T1020105.BusinessLayers;
+using SV21T1020105.DomainModels;
 
 namespace SV21T1020105.Web.Controllers
 {
     public class EmployeeController : Controller
     {
-        public const int PAGE_SIZE = 18;
+        public const int PAGE_SIZE = 16;
         public IActionResult Index(int page = 1, string searchValue = "")
         {
             int rowCount;
@@ -26,18 +27,49 @@ namespace SV21T1020105.Web.Controllers
         public IActionResult Create()
         {
             ViewBag.Title = "Bổ sung Nhân viên";
-            return View("Edit");
+            var data = new Employee()
+            {
+                EmployeeID = 0,
+                IsWorking = false
+            };
+            return View("Edit", data);
         }
 
         public IActionResult Edit(int id = 0)
         {
             ViewBag.Title = "Cập nhật thông tin Nhân viên";
-            return View();
+            var data = CommonDataService.GetEmployee(id);
+            if (data == null)
+                return RedirectToAction("Index");
+            return View(data);
         }
 
+        [HttpPost]
+        public IActionResult Save(Employee data)
+        {
+            //TODO: Kiểm soát dữ liệu đầu vào
+            if (data.EmployeeID == 0)
+            {
+                CommonDataService.AddEmployee(data);
+            }
+            else
+            {
+                CommonDataService.UpdateEmployee(data);
+            }
+            return RedirectToAction("Index");
+        }
         public IActionResult Delete(int id)
         {
-            return View();
+            if (Request.Method == "POST")
+            {
+                CommonDataService.DeleteEmployee(id);
+                return RedirectToAction("Index");
+            }
+            var data = CommonDataService.GetEmployee(id);
+            if (data == null)
+                return RedirectToAction("Index");
+            return View(data);
         }
     }
+
 }
