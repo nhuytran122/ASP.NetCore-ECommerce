@@ -29,7 +29,7 @@ namespace SV21T1020105.DataLayers.SQLServer
                     Address = data.Address ?? "",
                     Phone = data.Phone ?? "",
                     Email = data.Email ?? "",
-                    //Photo = data.Photo
+                    Photo = data.Photo ?? "",
                     IsWorking = data.IsWorking
                 };
                 id = connection.ExecuteScalar<int>(sql, parameters, commandType: CommandType.Text);
@@ -149,7 +149,7 @@ namespace SV21T1020105.DataLayers.SQLServer
 	                            Address = @Address,
 	                            Phone = @Phone,
 	                            Email = @Email,
-                                Photo = @Photo
+                                Photo = @Photo,
 	                            IsWorking = @IsWorking
                             where EmployeeID = @EmployeeID";
                 var parameters = new
@@ -160,7 +160,7 @@ namespace SV21T1020105.DataLayers.SQLServer
                     Address = data.Address ?? "",
                     Phone = data.Phone ?? "",
                     Email = data.Email ?? "",
-                    //Photo = data.Photo
+                    Photo = data.Photo ?? "",
                     IsWorking = data.IsWorking
                 };
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;

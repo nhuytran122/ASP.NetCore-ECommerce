@@ -30,7 +30,7 @@ namespace SV21T1020105.Web.Controllers
             var data = new Employee()
             {
                 EmployeeID = 0,
-                IsWorking = false
+                IsWorking = true
             };
             return View("Edit", data);
         }
