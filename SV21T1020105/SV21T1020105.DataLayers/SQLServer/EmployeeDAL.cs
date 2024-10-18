@@ -13,7 +13,6 @@ namespace SV21T1020105.DataLayers.SQLServer
         {
         }
 
-        //TODO: xử lý upload ảnh
         public int Add(Employee data)
         {
             int id = 0;
@@ -128,7 +127,7 @@ namespace SV21T1020105.DataLayers.SQLServer
                 {
                     page = page,
                     pageSize = pageSize,
-                    searchValue = searchValue // bên trái: tên cảu tham số trong câu lệnh SQL, bên phải: giá trị truyền cho tham số
+                    searchValue = searchValue // bên trái: tên của tham số trong câu lệnh SQL, bên phải: giá trị truyền cho tham số
                 };
                 data = connection.Query<Employee>(sql: sql, param: parameters, commandType: System.Data.CommandType.Text).ToList();
             }
@@ -136,7 +135,6 @@ namespace SV21T1020105.DataLayers.SQLServer
             return data;
         }
 
-        //TODO: xử lý upload ảnh
         //FullName, BirthDate, Address, Phone, Email, Photo, IsWorking
         public bool Update(Employee data)
         {

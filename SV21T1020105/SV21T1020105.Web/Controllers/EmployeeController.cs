@@ -58,7 +58,7 @@ namespace SV21T1020105.Web.Controllers
             //Xử lý với ảnh
             if (uploadPhoto != null)
             {
-                string fileName = $"{DateTime.Now.Ticks} -{uploadPhoto.FileName}";
+                string fileName = $"{DateTime.Now.Ticks}-{uploadPhoto.FileName}";
                 string folder = @"D:\HK7\Code_Web\CODE\source\repos\SV21T1020105\SV21T1020105.Web\wwwroot\images\employees";
                 string filePath = Path.Combine(folder, fileName);
                 using(var stream = new FileStream(filePath, FileMode.Create))
