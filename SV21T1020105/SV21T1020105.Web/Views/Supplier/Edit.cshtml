@@ -37,7 +37,7 @@
 
             <div class="form-group">
                 <label>Tỉnh thành:</label>
-                <select class="form-control" name="@nameof(Model.Province)">
+                <select class="form-control select2" name="@nameof(Model.Province)">
                     @foreach (var item in CommonDataService.ListOfProvinces())
                     {
                         if (item.ProvinceName == Model.Province)
