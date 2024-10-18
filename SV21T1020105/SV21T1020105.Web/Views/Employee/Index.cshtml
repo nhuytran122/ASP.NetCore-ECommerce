@@ -48,12 +48,20 @@
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <img class="profile-user-img img-responsive img-bordered" src="~/images/employees/kimjiwon.jpg">
+                                    @if(item.Photo == null)
+                                    {
+                                        <img style="height: 150px; width: 150px;" class="profile-user-img img-responsive img-bordered" src="~/images/employees/avatar-default.png">
+                                    }
+                                    else
+                                    {
+                                        <img style="height: 150px; width: 150px;" class="profile-user-img img-responsive img-bordered" src="~/images/employees/@item.Photo">
+                                    }
+                                   
                                 </div>
                                 <div class="col-sm-8">
                                     <ul class="list-group list-group-unbordered">
                                         <li class="list-group-item">
-                                            <i class="fa fa-birthday-cake"></i> @item.BirthDate?.ToString("dd/MM/yyyy")
+                                            <i class="fa fa-birthday-cake"></i> @item.BirthDate.ToString("dd/MM/yyyy")
                                         </li>
                                         <li class="list-group-item">
                                             <i class="fa fa-phone"></i> @item.Phone
