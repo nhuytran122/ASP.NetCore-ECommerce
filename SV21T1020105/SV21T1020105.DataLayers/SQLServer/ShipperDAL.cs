@@ -18,9 +18,14 @@ namespace SV21T1020105.DataLayers.SQLServer
             int id = 0;
             using (var connection = OpenConnection())
             {
-                var sql = @"insert into Shippers(ShipperName, Phone)
-                            values (@ShipperName, @Phone);
-                            select SCOPE_IDENTITY();";
+                var sql = @"if exists(select * from Shippers where Phone = @Phone)
+                                select -1;
+                            else
+                                begin
+                                    insert into Shippers(ShipperName, Phone)
+                                    values (@ShipperName, @Phone);
+                                    select SCOPE_IDENTITY();
+                                end";
                 var parameters = new
                 {
                     ShipperName = data.ShipperName ?? "",
@@ -135,10 +140,13 @@ namespace SV21T1020105.DataLayers.SQLServer
             bool result = false;
             using (var connection = OpenConnection())
             {
-                var sql = @"update Shippers
-                            set ShipperName = @ShipperName,
-	                            Phone = @Phone
-                            where ShipperID = @ShipperID";
+                var sql = @"if not exists(select * from Shippers where ShipperID <> @ShipperID and Phone = @Phone)
+                                begin
+                                    update Shippers
+                                    set ShipperName = @ShipperName,
+	                                    Phone = @Phone
+                                    where ShipperID = @ShipperID
+                                end";
                 var parameters = new
                 {
                     ShipperID = data.ShipperID,

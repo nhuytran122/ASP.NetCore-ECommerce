@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SV21T1020105.BusinessLayers;
 using SV21T1020105.DomainModels;
 using System.Globalization;
@@ -48,17 +49,52 @@ namespace SV21T1020105.Web.Controllers
         [HttpPost]
         public IActionResult Save(Customer data) //(int customerID, string customerName...)
         {
-            //TODO: Kiểm soát dữ liệu đầu vào
-            if(data.CustomerID == 0)
+            ViewBag.Title = data.CustomerID == 0 ? "Bổ sung khách hàng" : "Cập nhật thông tin khách hàng";
+
+            //Kiểm tra dữ liệu đầu vào, nếu không hợp lệ thì tạo ra thông báo lỗi và lưu trữ trong ModelState sử dụng lệnh:
+            //ModelState.AddModelError(key, message)
+            // - key: Chuỗi tên lỗi/ mã lỗi
+            // - message: Thông báo lỗi mà ta muốn chuyển đến người sử dụng trên View
+            if (string.IsNullOrWhiteSpace(data.CustomerName))
+                ModelState.AddModelError(nameof(data.CustomerName), "Tên khách hàng không được để trống");
+            if (string.IsNullOrWhiteSpace(data.ContactName))
+                ModelState.AddModelError(nameof(data.ContactName), "Tên giao dịch không được để trống");
+            if (string.IsNullOrWhiteSpace(data.Phone))
+                ModelState.AddModelError(nameof(data.Phone), "Vui lòng nhập điện thoại của khách hàng");
+            if (string.IsNullOrWhiteSpace(data.Email))
+                ModelState.AddModelError(nameof(data.Email), "Vui lòng nhập email của khách hàng");
+            if (string.IsNullOrWhiteSpace(data.Address))
+                ModelState.AddModelError(nameof(data.Address), "Vui lòng nhập địa chỉ của khách hàng");
+            if (string.IsNullOrWhiteSpace(data.Province))
+                ModelState.AddModelError(nameof(data.Province), "Bạn chưa chọn tỉnh/thành của khách hàng");
+
+            //Dựa vào ModelState để biết có tồn tại trường hợp lỗi nào không? Sử dụng thuộc tính ModelState.IsValid
+            if (!ModelState.IsValid)
             {
-                CommonDataService.AddCustomer(data);
+                return View("Edit", data); //Trả dữ liệu về cho View, kèm theo các thông báo lỗi
+            }
+
+            if (data.CustomerID == 0)
+            {
+                int id = CommonDataService.AddCustomer(data);
+                if (id <= 0)
+                {
+                    ModelState.AddModelError(nameof(data.Email), "Email bị trùng");
+                    return View("Edit", data);
+                }
             }
             else
             {
-                CommonDataService.UpdateCustomer(data);
+                bool result = CommonDataService.UpdateCustomer(data);
+                if (!result)
+                {
+                    ModelState.AddModelError(nameof(data.Email), "Email bị trùng");
+                    return View("Edit", data);
+                }
             }
             return RedirectToAction("Index");
         }
+
         public IActionResult Delete(int id)
         {
             if (Request.Method == "POST")

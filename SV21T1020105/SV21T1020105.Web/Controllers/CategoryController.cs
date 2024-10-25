@@ -45,17 +45,39 @@ namespace SV21T1020105.Web.Controllers
         [HttpPost]
         public IActionResult Save(Category data)
         {
-            //TODO: Kiểm soát dữ liệu đầu vào
+            ViewBag.Title = data.CategoryID == 0 ? "Bổ sung loại hàng" : "Cập nhật thông tin loại hàng";
+
+            if (string.IsNullOrWhiteSpace(data.CategoryName))
+                ModelState.AddModelError(nameof(data.CategoryName), "Tên loại hàng không được để trống");
+            if (string.IsNullOrWhiteSpace(data.Description))
+                ModelState.AddModelError(nameof(data.Description), "Vui lòng mô tả của loại hàng");
+
+            if (!ModelState.IsValid)
+            {
+                return View("Edit", data);
+            }
+
             if (data.CategoryID == 0)
             {
-                CommonDataService.AddCategory(data);
+                int id = CommonDataService.AddCategory(data);
+                if (id <= 0)
+                {
+                    ModelState.AddModelError(nameof(data.CategoryName), "Tên loại hàng bị trùng");
+                    return View("Edit", data);
+                }
             }
             else
             {
-                CommonDataService.UpdateCategory(data);
+                bool result = CommonDataService.UpdateCategory(data);
+                if (!result)
+                {
+                    ModelState.AddModelError(nameof(data.CategoryName), "Tên loại hàng bị trùng");
+                    return View("Edit", data);
+                }
             }
             return RedirectToAction("Index");
         }
+
         public IActionResult Delete(int id)
         {
             if (Request.Method == "POST")

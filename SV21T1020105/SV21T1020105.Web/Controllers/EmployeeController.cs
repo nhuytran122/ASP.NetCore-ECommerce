@@ -48,19 +48,40 @@ namespace SV21T1020105.Web.Controllers
         [HttpPost]
         public IActionResult Save(Employee data, string _birthDate, IFormFile? uploadPhoto)
         {
+            ViewBag.Title = data.EmployeeID == 0 ? "Bổ sung nhân viên" : "Cập nhật thông tin nhân viên";
+
+            if (string.IsNullOrWhiteSpace(data.FullName))
+                ModelState.AddModelError(nameof(data.FullName), "Tên nhân viên không được để trống");
+            if (string.IsNullOrWhiteSpace(data.Email))
+                ModelState.AddModelError(nameof(data.Email), "Vui lòng nhập Email của nhân viên");
+
+            if (string.IsNullOrWhiteSpace(_birthDate))
+                ModelState.AddModelError(nameof(data.FullName), "Vui lòng nhập ngày sinh của nhân viên");
+            
             //Xử lý ngày sinh
-            DateTime? d = ToDateTime(_birthDate);
-            if(d != null)
+            DateTime? d = _birthDate.ToDateTime();
+            if (d != null)
             {
                 data.BirthDate = d.Value;
+            }
+            else
+                ModelState.AddModelError(nameof(data.BirthDate), "Ngày sinh nhập không hợp lệ");
+
+            if (string.IsNullOrWhiteSpace(data.Phone))
+                data.Phone = "";
+            if (string.IsNullOrWhiteSpace(data.Address))
+                data.Address = "";
+
+            if ((!ModelState.IsValid))
+            {
+                return View("Edit", data);
             }
 
             //Xử lý với ảnh
             if (uploadPhoto != null)
             {
                 string fileName = $"{DateTime.Now.Ticks}-{uploadPhoto.FileName}";
-                string folder = @"D:\HK7\Code_Web\CODE\source\repos\SV21T1020105\SV21T1020105.Web\wwwroot\images\employees";
-                string filePath = Path.Combine(folder, fileName);
+                string filePath = Path.Combine(ApplicationContext.WebRootPath, @"images\employees", fileName);
                 using(var stream = new FileStream(filePath, FileMode.Create))
                 {
                     uploadPhoto.CopyTo(stream);
@@ -68,30 +89,27 @@ namespace SV21T1020105.Web.Controllers
                 data.Photo = fileName;
             }
 
-            //TODO: Kiểm soát dữ liệu đầu vào
 
             if (data.EmployeeID == 0)
             {
-                CommonDataService.AddEmployee(data);
+                int id = CommonDataService.AddEmployee(data);
+                if(id <= 0){
+                    ModelState.AddModelError(nameof(data.Email), "Email bị trùng");
+                    return View("Edit", data);
+                }
             }
             else
             {
-                CommonDataService.UpdateEmployee(data);
+                bool result = CommonDataService.UpdateEmployee(data);
+                if (!result)
+                {
+                    ModelState.AddModelError(nameof(data.Email), "Email bị trùng");
+                    return View("Edit", data);
+                }
             }
             return RedirectToAction("Index");
         }
 
-        private DateTime? ToDateTime(string input, string formats = "d/M/yyyy; d-M-yyyy;d.M.yyyy")
-        {
-            try
-            {
-                return DateTime.ParseExact(input, formats.Split(';'), CultureInfo.InvariantCulture);
-            }
-            catch
-            {
-                return null;
-            }
-        }
         public IActionResult Delete(int id)
         {
             if (Request.Method == "POST")
