@@ -6081,8 +6081,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="AppCodes\" />
     <Folder Include="Views\Account\" />
     <Folder Include="wwwroot\images\employees\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
