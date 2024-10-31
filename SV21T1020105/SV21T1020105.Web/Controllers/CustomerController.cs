@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SV21T1020105.BusinessLayers;
 using SV21T1020105.DomainModels;
 using SV21T1020105.Web.Models;
+using SV21T1020105.Web.Models.SearchResults;
 using System.Globalization;
 
 namespace SV21T1020105.Web.Controllers

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SV21T1020105.BusinessLayers;
 using SV21T1020105.DomainModels;
+using SV21T1020105.Web.Models.SearchResults;
+using SV21T1020105.Web.Models;
 using System.Globalization;
 
 namespace SV21T1020105.Web.Controllers
@@ -8,22 +10,38 @@ namespace SV21T1020105.Web.Controllers
     public class EmployeeController : Controller
     {
         public const int PAGE_SIZE = 16;
-        public IActionResult Index(int page = 1, string searchValue = "")
+        private const string EMPLOYEE_SEARCH_CONDITION = "EmployeeSearchCondition";
+        public IActionResult Index()
+        {
+            PaginationSearchInput? condition = ApplicationContext.GetSessionData<PaginationSearchInput>(EMPLOYEE_SEARCH_CONDITION);
+            if (condition == null)
+                condition = new PaginationSearchInput()
+                {
+                    Page = 1,
+                    PageSize = PAGE_SIZE,
+                    SearchValue = ""
+                };
+            return View(condition);
+        }
+
+        public IActionResult Search(PaginationSearchInput condition)
         {
             int rowCount;
-            var data = CommonDataService.ListOfEmployees(out rowCount, page, PAGE_SIZE, searchValue ?? "");
+            var data = CommonDataService.ListOfEmployees(out rowCount, condition.Page, condition.PageSize, condition.SearchValue ?? "");
+            EmployeeSearchResult model = new EmployeeSearchResult()
+            {
+                Page = condition.Page,
+                PageSize = condition.PageSize,
+                SearchValue = condition.SearchValue ?? "",
+                RowCount = rowCount,
+                Data = data
+            };
 
-            int pageCount = rowCount / PAGE_SIZE;
-            if (rowCount % PAGE_SIZE > 0)
-                pageCount += 1;
+            ApplicationContext.SetSessionData(EMPLOYEE_SEARCH_CONDITION, condition);
 
-            ViewBag.Page = page;
-            ViewBag.RowCount = rowCount;
-            ViewBag.PageCount = pageCount;
-            ViewBag.SearchValue = searchValue;
-
-            return View(data);
+            return View(model);
         }
+
 
         public IActionResult Create()
         {
