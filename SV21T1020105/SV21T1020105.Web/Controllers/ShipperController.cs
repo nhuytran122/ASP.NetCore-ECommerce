@@ -97,5 +97,17 @@ namespace SV21T1020105.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult Delete(int id)
+        {
+            if (Request.Method == "POST")
+            {
+                CommonDataService.DeleteShipper(id);
+                return RedirectToAction("Index");
+            }
+            var data = CommonDataService.GetShipper(id);
+            if (data == null)
+                return RedirectToAction("Index");
+            return View(data);
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Product
+@{
+    var isCreateMode = ViewBag.IsCreateMode ?? true;
 }
 <div class="box box-primary">
 
@@ -12,29 +14,42 @@
     </div>
 
     <div class="box-body">
-        <form class="form-horizontal" action="#" method="post" enctype="multipart/form-data">
+        <form action="~/Product/Save" method="post" class="form-horizontal" enctype="multipart/form-data">
+
+            <input type="hidden" name="@nameof(Model.ProductID)" value="@Model.ProductID" />
 
             <div class="form-group">
                 <label class="control-label col-sm-2">Tên mặt hàng:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" autofocus name="ProductName">
+                    <input type="text" class="form-control" autofocus
+                           name="@nameof(Model.ProductName)" value="@Model.ProductName">
+                    @Html.ValidationMessage(nameof(Model.ProductName))
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-sm-2">Mô tả:</label>
                 <div class="col-sm-10">
-                    <textarea class="form-control" rows="3" name="ProductDescription"></textarea>
+                    <textarea class="form-control" rows="3" name="@nameof(Model.ProductDescription)">@Model.ProductDescription</textarea>
+
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-sm-2">Loại hàng:</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="CategoryId">
-                        <option>-- Loại hàng --</option>
-                        <option>Mỹ phẩm</option>
-                        <option>Thực phẩm</option>
+                    <select class="form-control select" name="@nameof(Model.CategoryID)">
+                        @foreach (var item in CommonDataService.ListOfCategories())
+                        {
+                            if (item.CategoryID == Model.CategoryID)
+                            {
+                                <option value="@item.CategoryID" selected>@item.CategoryName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.CategoryID">@item.CategoryName</option>
+                            }
+                        }
                     </select>
                 </div>
             </div>
@@ -42,10 +57,18 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Nhà cung cấp:</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="SupplierID">
-                        <option>-- Nhà cung cấp --</option>
-                        <option>Công ty TNHH Thành Công</option>
-                        <option>Vina Foods</option>
+                    <select class="form-control select" name="@nameof(Model.SupplierID)">
+                        @foreach (var item in CommonDataService.ListOfSuppliers())
+                        {
+                            if (item.SupplierID == Model.SupplierID)
+                            {
+                                <option value="@item.SupplierID" selected>@item.SupplierName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.SupplierID">@item.SupplierName</option>
+                            }
+                        }
                     </select>
                 </div>
             </div>
@@ -53,21 +76,25 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Đơn vị tính:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="Unit">
+                    <input type="text" class="form-control" 
+                           name="@nameof(Model.Unit)" value="@Model.Unit">
+                    @Html.ValidationMessage(nameof(Model.Unit))
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-sm-2">Giá hàng:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="Price">
+                    <input type="text" class="form-control" autofocus
+                           name="@nameof(Model.Price)" value="@Model.Price">
+                    @Html.ValidationMessage(nameof(Model.Price))
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-lg-offset-2 col-sm-10">
                     <div class="checkbox">
-                        <label><input type="checkbox" value="true" checked name="IsSelling">Hiện đang được bán</label>
+                        <input type="checkbox" name="@nameof(Model.IsSelling)" value="true" @(Model.IsSelling ? "checked" : "")> Hiện đang được bán
                     </div>
                 </div>
             </div>
@@ -75,17 +102,20 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Ảnh minh họa:</label>
                 <div class="col-sm-10">
+                    <input type="hidden" name="@nameof(Model.Photo)" value="@Model.Photo" />
+
                     <input type="file" class="form-control" name="uploadPhoto" accept="image/*"
-                           onchange="document.getElementById('Photo').src = window.URL.createObjectURL(this.files[0])" />
+                           onchange="document.getElementById('PhotoPreview').src = window.URL.createObjectURL(this.files[0])" />
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-lg-offset-2 col-sm-10">
-                    <input type="hidden" name="Photo" value="macbook.png" />
-                    <img id="Photo" src="~/images/products/mac.jpeg" class="img img-bordered" style="width:200px" />
+                    <img id="PhotoPreview" src="@(string.IsNullOrWhiteSpace(Model.Photo) ? Url.Content("~/images/products/no-image.jpg") : Url.Content("~/images/products/" + Model.Photo))"
+                         class="img img-bordered" style="width:200px" />
                 </div>
             </div>
+
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
@@ -103,7 +133,8 @@
 
 </div>
 
-
+@if (!isCreateMode)
+{
 <div class="box box-info">
     <div class="box-header with-border ">
         <h3 class="box-title">Thư viện ảnh</h3>
@@ -175,7 +206,7 @@
                     <th>Giá trị thuộc tính</th>
                     <th>Thứ tự hiển thị</th>
                     <th class="text-right">
-                        <a class="btn btn-xs btn-primary" href="~/Product/Attribute/123?method=add">
+                        <a class="btn btn-xs btn-primary" href="~/Product/Attribute/@Model.ProductID?method=add">
                             <i class="fa fa-plus"></i>
                         </a>
                     </th>
@@ -202,4 +233,4 @@
         </table>
     </div>
 </div>
-
+}
