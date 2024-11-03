@@ -331,7 +331,7 @@ namespace SV21T1020105.DataLayers.SQLServer
             bool result = false;
             using (var connection = OpenConnection())
             {
-                var sql = @"update Products
+                var sql = @"update ProductAttributes
                             set AttributeName = @AttributeName,
 	                        AttributeValue = @AttributeValue,
 	                        DisplayOrder = @DisplayOrder
@@ -354,11 +354,11 @@ namespace SV21T1020105.DataLayers.SQLServer
             bool result = false;
             using (var connection = OpenConnection())
             {
-                var sql = @"update Products
+                var sql = @"update ProductPhotos
                             set Photo = @Photo,
 	                        Description = @Description,
-	                        DisplayOrder = @DisplayOrder
-                            IsHidden = @IsHidden,
+	                        DisplayOrder = @DisplayOrder,
+                            IsHidden = @IsHidden
                             where ProductID = @ProductID";
                 var parameters = new
                 {

@@ -13,7 +13,7 @@
                 <div class="col-sm-3">
                     <label>Loại hàng:</label>
                     <select class="form-control select" name="@nameof(Model.CategoryID)">
-                        <option value="0">--Chọn loại hàng--</option>
+                        <option value="0">-- Chọn loại hàng --</option>
                         @foreach (var item in CommonDataService.ListOfCategories())
                         {
                             if (item.CategoryID == Model.CategoryID)
@@ -30,7 +30,7 @@
                 <div class="col-sm-3">
                     <label>Nhà cung cấp:</label>
                     <select class="form-control select" name="@nameof(Model.SupplierID)">
-                        <option value="0">--Chọn nhà cung cấp--</option>
+                        <option value="0">-- Chọn nhà cung cấp --</option>
                         @foreach (var item in CommonDataService.ListOfSuppliers())
                         {
                             if (item.SupplierID == Model.SupplierID)
