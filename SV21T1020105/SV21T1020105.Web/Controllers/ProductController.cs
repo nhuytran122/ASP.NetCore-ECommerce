@@ -160,7 +160,7 @@ namespace SV21T1020105.Web.Controllers
 
                 case "delete":
                     ProductDataService.DeletePhoto(photoId);
-                    return RedirectToAction("Edit", id);
+                    return RedirectToAction("Edit", new { id = id });
 
                 default:
                     return RedirectToAction("Index");
@@ -227,7 +227,7 @@ namespace SV21T1020105.Web.Controllers
 
                 case "delete":
                     ProductDataService.DeleteAttribute(attributeId);
-                    return RedirectToAction("Edit", id);
+                    return RedirectToAction("Edit", new { id = id });
 
                 default:
                     return RedirectToAction("Index");

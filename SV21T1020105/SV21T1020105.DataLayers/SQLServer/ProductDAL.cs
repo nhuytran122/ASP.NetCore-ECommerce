@@ -153,7 +153,7 @@ namespace SV21T1020105.DataLayers.SQLServer
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
                 connection.Close();
             }
-            return result; throw new NotImplementedException();
+            return result;
         }
 
         public Product? Get(int productID)
