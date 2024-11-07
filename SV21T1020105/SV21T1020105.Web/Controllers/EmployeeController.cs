@@ -9,7 +9,7 @@ namespace SV21T1020105.Web.Controllers
 {
     public class EmployeeController : Controller
     {
-        public const int PAGE_SIZE = 16;
+        public const int PAGE_SIZE = 9;
         private const string EMPLOYEE_SEARCH_CONDITION = "EmployeeSearchCondition";
         public IActionResult Index()
         {
