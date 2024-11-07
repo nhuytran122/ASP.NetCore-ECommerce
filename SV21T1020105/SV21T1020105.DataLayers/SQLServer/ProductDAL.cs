@@ -107,7 +107,6 @@ namespace SV21T1020105.DataLayers.SQLServer
             return count;
         }
 
-
         public bool Delete(int productID)
         {
             bool result = false;
@@ -151,6 +150,46 @@ namespace SV21T1020105.DataLayers.SQLServer
                     PhotoID = photoID
                 };
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
+                connection.Close();
+            }
+            return result;
+        }
+
+        public bool DisplayOrderOfAttributeInUsed(int productID, int displayOrder)
+        {
+            bool result = false;
+            using (var connection = OpenConnection())
+            {
+                var sql = @"if exists (select * from ProductAttributes where ProductID = @ProductID AND DisplayOrder = @DisplayOrder)
+                                select 1
+                            else
+                                select 0";
+                var parameters = new
+                {
+                    ProductID = productID,
+                    DisplayOrder = displayOrder
+                };
+                result = connection.ExecuteScalar<bool>(sql: sql, param: parameters, commandType: CommandType.Text);
+                connection.Close();
+            }
+            return result;
+        }
+
+        public bool DisplayOrderOfPhotoInUsed(int productID, int displayOrder)
+        {
+            bool result = false;
+            using (var connection = OpenConnection())
+            {
+                var sql = @"if exists (select * from ProductPhotos where ProductID = @ProductID AND DisplayOrder = @DisplayOrder)
+                                select 1
+                            else
+                                select 0";
+                var parameters = new
+                {
+                    ProductID = productID,
+                    DisplayOrder = displayOrder
+                };
+                result = connection.ExecuteScalar<bool>(sql: sql, param: parameters, commandType: CommandType.Text);
                 connection.Close();
             }
             return result;

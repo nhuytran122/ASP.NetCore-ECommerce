@@ -68,6 +68,10 @@ namespace SV21T1020105.DataLayers
         /// <returns></returns>
         bool InUsed(int productID);
 
+        bool DisplayOrderOfAttributeInUsed(int productID, int displayOrder);
+
+        bool DisplayOrderOfPhotoInUsed(int productID, int displayOrder);
+
         /// <summary>
         /// Lấy danh sách ảnh của mặt hàng (sắp xếp theo thứ tự của DisplayOrder)
         /// </summary>

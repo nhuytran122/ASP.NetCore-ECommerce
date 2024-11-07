@@ -163,27 +163,27 @@
                 </tr>
             </thead>
             <tbody>
-                    @foreach (var item in ProductDataService.ListPhotos(Model.ProductID))
-                {
-                    <tr>
-                        <td style="vertical-align:middle">
-                            <img src="~/Images/Products/@item.Photo" alt="@item.Photo" style="width:100px" />
-                        </td>
-                        <td style="vertical-align:middle;">
-                            @item.Description
-                        </td>
-                        <td style="vertical-align:middle;">@item.DisplayOrder</td>
+                    @foreach (var item in ProductDataService.ListPhotos(Model.ProductID).OrderBy(p => p.DisplayOrder))
+                    {
+                        <tr>
+                            <td style="vertical-align:middle">
+                                <img src="~/Images/Products/@item.Photo" alt="@item.Photo" style="width:100px; height:100px;" />
+                            </td>
+                            <td style="vertical-align:middle;">
+                                @item.Description
+                            </td>
+                            <td style="vertical-align:middle;">@item.DisplayOrder</td>
                             <td style="vertical-align:middle;">@(item.IsHidden ? "x" : "")</td>
-                        <td style="vertical-align:middle; text-align:right">
-                            <a class="btn btn-xs btn-primary" href="~/Product/Photo/@Model.ProductID?method=edit&photoId=@item.PhotoID">
-                                <i class="fa fa-edit"></i>
-                            </a>
+                            <td style="vertical-align:middle; text-align:right">
+                                <a class="btn btn-xs btn-primary" href="~/Product/Photo/@Model.ProductID?method=edit&photoId=@item.PhotoID">
+                                    <i class="fa fa-edit"></i>
+                                </a>
                                 <a class="btn btn-xs btn-danger" href="~/Product/Photo/@Model.ProductID?method=delete&photoId=@item.PhotoID" onclick="return confirm('Xóa ảnh của mặt hàng hay không?')">
-                                <i class="fa fa-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                }
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
             </tbody>
         </table>
     </div>
@@ -216,7 +216,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in ProductDataService.ListAttributes(Model.ProductID))
+                    @foreach (var item in ProductDataService.ListAttributes(Model.ProductID).OrderBy(a => a.DisplayOrder))
                     {
                         <tr>
                             <td style="vertical-align:middle">@item.AttributeName</td>
@@ -232,6 +232,7 @@
                             </td>
                         </tr>
                     }
+
                 </tbody>
             </table>
         </div>

@@ -185,10 +185,12 @@ namespace SV21T1020105.Web.Controllers
             if (string.IsNullOrWhiteSpace(data.Photo))
                 ModelState.AddModelError(nameof(data.Photo), "Vui lòng upload ảnh");
             if (string.IsNullOrWhiteSpace(data.Description))
-                ModelState.AddModelError(nameof(data.Description), "Tên thuộc tính không được để trống");
+                ModelState.AddModelError(nameof(data.Description), "Mô tả hình ảnh không được để trống");
             if (data.DisplayOrder <= 0)
                 ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị không được bé hơn 0");
-            
+            if (ProductDataService.InUsedDisplayOrderOfPhoto(data.ProductID, data.DisplayOrder) == true)
+                ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị hình ảnh đã tồn tại. Vui lòng nhập lại");
+
             if (!ModelState.IsValid)
             {
                 return View("Photo", data);
@@ -243,6 +245,8 @@ namespace SV21T1020105.Web.Controllers
                 ModelState.AddModelError(nameof(data.AttributeValue), "Giá trị thuộc tính không được để trống");
             if (data.DisplayOrder <= 0)
                 ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị không được bé hơn 0");
+            if (ProductDataService.InUsedDisplayOrderOfAttribute(data.ProductID, data.DisplayOrder) == true)
+                ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị thuộc tính đã tồn tại. Vui lòng nhập lại");
 
             if (!ModelState.IsValid)
             {
