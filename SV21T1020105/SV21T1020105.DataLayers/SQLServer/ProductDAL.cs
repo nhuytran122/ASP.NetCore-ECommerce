@@ -155,7 +155,7 @@ namespace SV21T1020105.DataLayers.SQLServer
             return result;
         }
 
-        public bool DisplayOrderOfAttributeInUsed(int productID, int displayOrder)
+        public bool DisplayOrderOfAttributeInUsed(int productID, int? displayOrder)
         {
             bool result = false;
             using (var connection = OpenConnection())
@@ -175,7 +175,7 @@ namespace SV21T1020105.DataLayers.SQLServer
             return result;
         }
 
-        public bool DisplayOrderOfPhotoInUsed(int productID, int displayOrder)
+        public bool DisplayOrderOfPhotoInUsed(int productID, int? displayOrder)
         {
             bool result = false;
             using (var connection = OpenConnection())

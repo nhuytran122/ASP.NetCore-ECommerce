@@ -169,12 +169,12 @@ namespace SV21T1020105.BusinessLayers
             return productDB.DeleteAttribute(attributeID);
         }
 
-        public static bool InUsedDisplayOrderOfAttribute(int productID, int displayOrder)
+        public static bool InUsedDisplayOrderOfAttribute(int productID, int? displayOrder)
         {
             return productDB.DisplayOrderOfAttributeInUsed(productID, displayOrder);
         }
 
-        public static bool InUsedDisplayOrderOfPhoto(int productID, int displayOrder)
+        public static bool InUsedDisplayOrderOfPhoto(int productID, int? displayOrder)
         {
             return productDB.DisplayOrderOfPhotoInUsed(productID, displayOrder);
         }

@@ -83,6 +83,12 @@ namespace SV21T1020105.Web.Controllers
                 ModelState.AddModelError(nameof(data.SupplierID), "Bạn chưa chọn nhà cung cấp của mặt hàng");
             if (string.IsNullOrWhiteSpace(data.Unit))
                 ModelState.AddModelError(nameof(data.Unit), "Vui lòng nhập đơn vị tính");
+
+            if (!data.Price.HasValue )
+            {
+                data.Price = 0;
+            }
+
             if (data.Price <= 0)
                 ModelState.AddModelError(nameof(data.Price), "Giá phải lớn hơn 0");
 
@@ -186,8 +192,14 @@ namespace SV21T1020105.Web.Controllers
                 ModelState.AddModelError(nameof(data.Photo), "Vui lòng upload ảnh");
             if (string.IsNullOrWhiteSpace(data.Description))
                 ModelState.AddModelError(nameof(data.Description), "Mô tả hình ảnh không được để trống");
+
+            if (!data.DisplayOrder.HasValue)
+            {
+                data.DisplayOrder = 0;
+            }
+
             if (data.DisplayOrder <= 0)
-                ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị không được bé hơn 0");
+                ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị phải lớn hơn 0");
             if (ProductDataService.InUsedDisplayOrderOfPhoto(data.ProductID, data.DisplayOrder) == true)
                 ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị hình ảnh đã tồn tại. Vui lòng nhập lại");
 
@@ -243,8 +255,14 @@ namespace SV21T1020105.Web.Controllers
                 ModelState.AddModelError(nameof(data.AttributeName), "Tên thuộc tính không được để trống");
             if (string.IsNullOrWhiteSpace(data.AttributeValue))
                 ModelState.AddModelError(nameof(data.AttributeValue), "Giá trị thuộc tính không được để trống");
+
+            if (!data.DisplayOrder.HasValue)
+            {
+                data.DisplayOrder = 0;
+            }
+
             if (data.DisplayOrder <= 0)
-                ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị không được bé hơn 0");
+                ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị phải lớn hơn 0");
             if (ProductDataService.InUsedDisplayOrderOfAttribute(data.ProductID, data.DisplayOrder) == true)
                 ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị thuộc tính đã tồn tại. Vui lòng nhập lại");
 
