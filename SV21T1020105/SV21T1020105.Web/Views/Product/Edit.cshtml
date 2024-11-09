@@ -89,7 +89,7 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Giá hàng:</label>
                 <div class="col-sm-10">
-                    <input type="number" class="form-control" 
+                    <input type="text" class="form-control number-separator"
                            name="@nameof(Model.Price)" value="@Model.Price">
                     @Html.ValidationMessage(nameof(Model.Price))
                 </div>
@@ -138,60 +138,69 @@
 
 @if (!isCreateMode)
 {
-<div class="box box-info">
-    <div class="box-header with-border ">
-        <h3 class="box-title">Thư viện ảnh</h3>
-        <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                <i class="fa fa-minus"></i>
-            </button>
+    <div class="box box-info">
+        <div class="box-header with-border ">
+            <h3 class="box-title">Thư viện ảnh</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
         </div>
-    </div>
-    <div class="box-body">
-        <table class="table table-bordered table-hover table-striped">
-            <thead>
-                <tr class="bg-gray">
-                    <th>Ảnh</th>
-                    <th>Mô tả/tiêu đề</th>
-                    <th>Thứ tự hiển thị</th>
-                    <th>Ẩn ảnh</th>
-                    <th class="text-right">
-                        <a class="btn btn-xs btn-primary" href="~/Product/Photo/@Model.ProductID?method=add">
-                            <i class="fa fa-plus"></i>
-                        </a>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                    @foreach (var item in ProductDataService.ListPhotos(Model.ProductID).OrderBy(p => p.DisplayOrder))
+        <div class="box-body">
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                    <tr class="bg-gray">
+                        <th>Ảnh</th>
+                        <th>Mô tả/tiêu đề</th>
+                        <th>Thứ tự hiển thị</th>
+                        <th>Ẩn ảnh</th>
+                        <th class="text-right">
+                            <a class="btn btn-xs btn-primary" href="~/Product/Photo/@Model.ProductID?method=add">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ProductDataService.ListPhotos(Model.ProductID).Count == 0)
                     {
                         <tr>
-                            <td style="vertical-align:middle">
-                                <img src="~/Images/Products/@item.Photo" alt="@item.Photo" style="width:100px; height:100px;" />
-                            </td>
-                            <td style="vertical-align:middle;">
-                                @item.Description
-                            </td>
-                            <td style="vertical-align:middle;">@item.DisplayOrder</td>
-                            <td style="vertical-align:middle;">@(item.IsHidden ? "x" : "")</td>
-                            <td style="vertical-align:middle; text-align:right">
-                                <a class="btn btn-xs btn-primary" href="~/Product/Photo/@Model.ProductID?method=edit&photoId=@item.PhotoID">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <a class="btn btn-xs btn-danger" href="~/Product/Photo/@Model.ProductID?method=delete&photoId=@item.PhotoID" onclick="return confirm('Xóa ảnh của mặt hàng hay không?')">
-                                    <i class="fa fa-trash"></i>
-                                </a>
+                            <td colspan="5" class="text-center text-danger" style="padding: 20px 0;">
+                                Không có hình ảnh nào để hiển thị
                             </td>
                         </tr>
                     }
-            </tbody>
-        </table>
+                    else
+                    {
+                        @foreach (var item in ProductDataService.ListPhotos(Model.ProductID).OrderBy(p => p.DisplayOrder))
+                        {
+                            <tr>
+                                <td style="vertical-align:middle">
+                                    <img src="~/Images/Products/@item.Photo" alt="@item.Photo" style="width:100px; height:100px;" />
+                                </td>
+                                <td style="vertical-align:middle;">
+                                    @item.Description
+                                </td>
+                                <td style="vertical-align:middle;">@item.DisplayOrder</td>
+                                <td style="vertical-align:middle;">@(item.IsHidden ? "x" : "")</td>
+                                <td style="vertical-align:middle; text-align:right">
+                                    <a class="btn btn-xs btn-primary" href="~/Product/Photo/@Model.ProductID?method=edit&photoId=@item.PhotoID">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a class="btn btn-xs btn-danger" href="~/Product/Photo/@Model.ProductID?method=delete&photoId=@item.PhotoID" onclick="return confirm('Xóa ảnh của mặt hàng hay không?')">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 
-</div>
-
     <div class="box box-info">
-
         <div class="box-header with-border ">
             <h3 class="box-title">Thuộc tính của mặt hàng</h3>
             <div class="box-tools pull-right">
@@ -205,10 +214,10 @@
             <table class="table table-bordered table-hover table-striped">
                 <thead>
                     <tr class="bg-gray">
-                        <th>Tên thuộc tính</th>
+                        <th style="width: 120px;">Tên thuộc tính</th>
                         <th>Giá trị thuộc tính</th>
-                        <th>Thứ tự hiển thị</th>
-                        <th class="text-right">
+                        <th style="width: 110px;">Thứ tự hiển thị</th>
+                        <th class="text-right" style="width: 80px;">
                             <a class="btn btn-xs btn-primary" href="~/Product/Attribute/@Model.ProductID?method=add">
                                 <i class="fa fa-plus"></i>
                             </a>
@@ -216,25 +225,36 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in ProductDataService.ListAttributes(Model.ProductID).OrderBy(a => a.DisplayOrder))
+                    @if (ProductDataService.ListAttributes(Model.ProductID).Count == 0)
                     {
                         <tr>
-                            <td style="vertical-align:middle">@item.AttributeName</td>
-                            <td style="vertical-align:middle;">@item.AttributeValue</td>
-                            <td style="vertical-align:middle;">@item.DisplayOrder</td>
-                            <td style="vertical-align:middle; text-align:right">
-                                <a class="btn btn-xs btn-primary" href="~/Product/Attribute/@Model.ProductID?method=edit&attributeId=@item.AttributeID">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <a class="btn btn-xs btn-danger" href="~/Product/Attribute/@Model.ProductID?method=delete&attributeId=@item.AttributeID" onclick="return confirm('Xóa thuộc tính này của mặt hàng?')">
-                                    <i class="fa fa-trash"></i>
-                                </a>
+                            <td colspan="4" class="text-center text-danger" style="padding: 20px 0;">
+                                Không có thuộc tính nào để hiển thị
                             </td>
                         </tr>
                     }
-
+                    else
+                    {
+                        @foreach (var item in ProductDataService.ListAttributes(Model.ProductID).OrderBy(a => a.DisplayOrder))
+                        {
+                            <tr>
+                                <td style="vertical-align:middle">@item.AttributeName</td>
+                                <td style="vertical-align:middle;">@item.AttributeValue</td>
+                                <td style="vertical-align:middle;">@item.DisplayOrder</td>
+                                <td style="vertical-align:middle; text-align:right">
+                                    <a class="btn btn-xs btn-primary" href="~/Product/Attribute/@Model.ProductID?method=edit&attributeId=@item.AttributeID">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a class="btn btn-xs btn-danger" href="~/Product/Attribute/@Model.ProductID?method=delete&attributeId=@item.AttributeID" onclick="return confirm('Xóa thuộc tính này của mặt hàng?')">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
                 </tbody>
             </table>
         </div>
     </div>
+
 }
