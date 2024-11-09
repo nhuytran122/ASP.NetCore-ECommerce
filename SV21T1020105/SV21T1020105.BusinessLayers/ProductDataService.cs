@@ -64,20 +64,6 @@ namespace SV21T1020105.BusinessLayers
         /// </summary>
         public static bool DeleteProduct(int productID) 
         {
-            // Xóa tất cả các ảnh liên quan đến mặt hàng
-            var photos = ListPhotos(productID);
-            foreach (var photo in photos)
-            {
-                DeletePhoto(photo.PhotoID);
-            }
-
-            // Xóa tất cả các thuộc tính liên quan đến mặt hàng
-            var attributes = ListAttributes(productID);
-            foreach (var attribute in attributes)
-            {
-                DeleteAttribute(attribute.AttributeID);
-            }
-
             return productDB.Delete(productID); 
         }
 
@@ -169,12 +155,12 @@ namespace SV21T1020105.BusinessLayers
             return productDB.DeleteAttribute(attributeID);
         }
 
-        public static bool InUsedDisplayOrderOfAttribute(int productID, int? displayOrder)
+        public static bool InUsedDisplayOrderOfAttribute(int productID, int displayOrder)
         {
             return productDB.DisplayOrderOfAttributeInUsed(productID, displayOrder);
         }
 
-        public static bool InUsedDisplayOrderOfPhoto(int productID, int? displayOrder)
+        public static bool InUsedDisplayOrderOfPhoto(int productID, int displayOrder)
         {
             return productDB.DisplayOrderOfPhotoInUsed(productID, displayOrder);
         }

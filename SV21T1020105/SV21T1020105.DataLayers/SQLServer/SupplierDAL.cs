@@ -43,7 +43,7 @@ namespace SV21T1020105.DataLayers.SQLServer
             return id;
         }
 
-    public int Count(string searchValue = "")
+        public int Count(string searchValue = "")
         {
             int count = 0;
             searchValue = $"%{searchValue}%";

@@ -112,7 +112,10 @@ namespace SV21T1020105.DataLayers.SQLServer
             bool result = false;
             using (var connection = OpenConnection())
             {
-                var sql = @"delete from Products where ProductID = @ProductID";
+                var sql = @"delete from ProductAttributes where ProductID = @ProductID
+                            delete from ProductPhotos where ProductID = @ProductID
+                            delete from Products where ProductID = @ProductID";
+                            
                 var parameters = new
                 {
                     ProductID = productID
@@ -155,7 +158,7 @@ namespace SV21T1020105.DataLayers.SQLServer
             return result;
         }
 
-        public bool DisplayOrderOfAttributeInUsed(int productID, int? displayOrder)
+        public bool DisplayOrderOfAttributeInUsed(int productID, int displayOrder)
         {
             bool result = false;
             using (var connection = OpenConnection())
@@ -175,7 +178,7 @@ namespace SV21T1020105.DataLayers.SQLServer
             return result;
         }
 
-        public bool DisplayOrderOfPhotoInUsed(int productID, int? displayOrder)
+        public bool DisplayOrderOfPhotoInUsed(int productID, int displayOrder)
         {
             bool result = false;
             using (var connection = OpenConnection())

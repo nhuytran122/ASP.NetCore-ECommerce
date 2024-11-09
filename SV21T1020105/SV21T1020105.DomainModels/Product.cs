@@ -10,9 +10,7 @@ namespace SV21T1020105.DomainModels
         public int SupplierID { get; set; }
         public int CategoryID { get; set; }
         public string Unit { get; set; } = "";
-
-        [Required(ErrorMessage = "Vui lòng nhập giá của mặt hàng")]
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
         public string Photo { get; set; } = "";
         public bool IsSelling { get; set; }
     }

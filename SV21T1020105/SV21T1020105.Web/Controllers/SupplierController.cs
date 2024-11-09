@@ -8,7 +8,7 @@ namespace SV21T1020105.Web.Controllers
 {
     public class SupplierController : Controller
     {
-        public const int PAGE_SIZE = 2;
+        public const int PAGE_SIZE = 10;
         private const string SUPPLIER_SEARCH_CONDITION = "SupplierSearchCondition";
         public IActionResult Index()
         {

@@ -8,7 +8,7 @@ namespace SV21T1020105.Web.Controllers
 {
     public class CategoryController : Controller
     {
-        public const int PAGE_SIZE = 5;
+        public const int PAGE_SIZE = 10;
         private const string CATEGORY_SEARCH_CONDITION = "CategorySearchCondition";
         public IActionResult Index()
         {
@@ -67,8 +67,6 @@ namespace SV21T1020105.Web.Controllers
 
             if (string.IsNullOrWhiteSpace(data.CategoryName))
                 ModelState.AddModelError(nameof(data.CategoryName), "Tên loại hàng không được để trống");
-            if (string.IsNullOrWhiteSpace(data.Description))
-                ModelState.AddModelError(nameof(data.Description), "Vui lòng mô tả của loại hàng");
 
             if (!ModelState.IsValid)
             {

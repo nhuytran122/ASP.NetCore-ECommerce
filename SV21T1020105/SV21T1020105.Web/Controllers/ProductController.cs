@@ -49,7 +49,6 @@ namespace SV21T1020105.Web.Controllers
             return View(model);
         }
 
-
         public IActionResult Create()
         {
             ViewBag.Title = "Bổ sung mặt hàng";
@@ -83,14 +82,8 @@ namespace SV21T1020105.Web.Controllers
                 ModelState.AddModelError(nameof(data.SupplierID), "Bạn chưa chọn nhà cung cấp của mặt hàng");
             if (string.IsNullOrWhiteSpace(data.Unit))
                 ModelState.AddModelError(nameof(data.Unit), "Vui lòng nhập đơn vị tính");
-
-            if (!data.Price.HasValue )
-            {
-                data.Price = 0;
-            }
-
             if (data.Price <= 0)
-                ModelState.AddModelError(nameof(data.Price), "Giá phải lớn hơn 0");
+                ModelState.AddModelError(nameof(data.Price), "Vui lòng nhập giá hàng hợp lệ");
 
             if (!ModelState.IsValid)
             {
@@ -113,16 +106,17 @@ namespace SV21T1020105.Web.Controllers
                 int id = ProductDataService.AddProduct(data);
                 if (id <= 0)
                 {
-                    ModelState.AddModelError(nameof(data.ProductName), "Đã xảy ra lỗi khi thao tác");
+                    ModelState.AddModelError(nameof(data.ProductName), "Đã xảy ra lỗi khi thao tác thêm mặt hàng");
                     return View("Edit", data);
                 }
+                return RedirectToAction("Edit", new {id = id});
             }
             else
             {
                 bool result = ProductDataService.UpdateProduct(data);
                 if (!result)
                 {
-                    ModelState.AddModelError(nameof(data.ProductName), "Đã xảy ra lỗi khi thao tác");
+                    ModelState.AddModelError(nameof(data.ProductName), "Đã xảy ra lỗi khi thao tác sửa mặt hàng");
                     return View("Edit", data);
                 }
             }
@@ -165,6 +159,7 @@ namespace SV21T1020105.Web.Controllers
                     return View(data);
 
                 case "delete":
+                    //TODO: Xóa ảnh (xóa trực tiếp, không cần confirm)
                     ProductDataService.DeletePhoto(photoId);
                     return RedirectToAction("Edit", new { id = id });
 
@@ -177,36 +172,32 @@ namespace SV21T1020105.Web.Controllers
         public IActionResult SavePhoto(ProductPhoto data, IFormFile? uploadPhoto)
         {
             ViewBag.Title = data.PhotoID == 0 ? "Bổ sung ảnh cho mặt hàng" : "Thay đổi ảnh của mặt hàng";
-            
-            if (uploadPhoto != null)
-            {
-                string fileName = $"{DateTime.Now.Ticks}-{uploadPhoto.FileName}";
-                string filePath = Path.Combine(ApplicationContext.WebRootPath, @"images\products", fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    uploadPhoto.CopyTo(stream);
-                }
-                data.Photo = fileName;
-            }
-            if (string.IsNullOrWhiteSpace(data.Photo))
-                ModelState.AddModelError(nameof(data.Photo), "Vui lòng upload ảnh");
+
             if (string.IsNullOrWhiteSpace(data.Description))
                 ModelState.AddModelError(nameof(data.Description), "Mô tả hình ảnh không được để trống");
 
-            if (!data.DisplayOrder.HasValue)
-            {
-                data.DisplayOrder = 0;
-            }
-
             if (data.DisplayOrder <= 0)
-                ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị phải lớn hơn 0");
-            if (ProductDataService.InUsedDisplayOrderOfPhoto(data.ProductID, data.DisplayOrder) == true)
+                ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị không hợp lệ");
+
+            if (ProductDataService.InUsedDisplayOrderOfPhoto(data.ProductID, data.DisplayOrder))
                 ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị hình ảnh đã tồn tại. Vui lòng nhập lại");
+
+            if (uploadPhoto == null)
+                ModelState.AddModelError(nameof(data.Photo), "Vui lòng upload ảnh");
 
             if (!ModelState.IsValid)
             {
                 return View("Photo", data);
             }
+
+            string fileName = $"{DateTime.Now.Ticks}-{uploadPhoto.FileName}";
+            string filePath = Path.Combine(ApplicationContext.WebRootPath, @"images\products", fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                uploadPhoto.CopyTo(stream);
+            }
+                data.Photo = fileName;
+            
 
             if (data.PhotoID == 0)
             {
@@ -240,6 +231,7 @@ namespace SV21T1020105.Web.Controllers
                     return View(data);
 
                 case "delete":
+                    //TODO: Xóa thuộc tính (xóa trực tiếp, không cần confirm)
                     ProductDataService.DeleteAttribute(attributeId);
                     return RedirectToAction("Edit", new { id = id });
 
@@ -256,13 +248,8 @@ namespace SV21T1020105.Web.Controllers
             if (string.IsNullOrWhiteSpace(data.AttributeValue))
                 ModelState.AddModelError(nameof(data.AttributeValue), "Giá trị thuộc tính không được để trống");
 
-            if (!data.DisplayOrder.HasValue)
-            {
-                data.DisplayOrder = 0;
-            }
-
             if (data.DisplayOrder <= 0)
-                ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị phải lớn hơn 0");
+                ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị không hợp lệ");
             if (ProductDataService.InUsedDisplayOrderOfAttribute(data.ProductID, data.DisplayOrder) == true)
                 ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị thuộc tính đã tồn tại. Vui lòng nhập lại");
 
