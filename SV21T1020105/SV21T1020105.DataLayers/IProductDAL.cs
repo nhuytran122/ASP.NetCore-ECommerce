@@ -18,7 +18,7 @@ namespace SV21T1020105.DataLayers
         /// <param name="minPrice">Mức giá nhỏ nhất trong khoảng giá cần tìm (0 nếu không hạn chế mức giá nhỏ nhất)</param>
         /// <param name="maxPrice">Mức giá lớn nhất trong khoảng giá cần tìm (0 nếu không hạn chế mức giá lớn nhất)</param>
         /// <returns></returns>
-        List<Product> List(int page = 1, int pageSize = 0,
+        IList<Product> List(int page = 1, int pageSize = 0,
             string searchValue = "", int categoryID = 0, int supplierID = 0,
             decimal minPrice = 0, decimal maxPrice = 0);
 
@@ -77,7 +77,7 @@ namespace SV21T1020105.DataLayers
         /// </summary>
         /// <param name="productID"></param>
         /// <returns></returns>
-        List<ProductPhoto> ListPhotos(int productID);
+        IList<ProductPhoto> ListPhotos(int productID);
 
         /// <summary>
         /// Lấy thông tin 1 ảnh dựa vào ID
@@ -112,7 +112,7 @@ namespace SV21T1020105.DataLayers
         /// </summary>
         /// <param name="productID"></param>
         /// <returns></returns>
-        List<ProductAttribute> ListAttributes(int productID);
+        IList<ProductAttribute> ListAttributes(int productID);
 
         /// <summary>
         /// Lấy thông tin của thuộc tính theo mã thuộc tính

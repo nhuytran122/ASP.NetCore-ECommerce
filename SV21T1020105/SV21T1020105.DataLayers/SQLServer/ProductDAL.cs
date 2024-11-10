@@ -265,7 +265,7 @@ namespace SV21T1020105.DataLayers.SQLServer
             return result;
         }
 
-        public List<Product> List(int page = 1, int pageSize = 0, string searchValue = "", int categoryID = 0, int supplierID = 0, decimal minPrice = 0, decimal maxPrice = 0)
+        public IList<Product> List(int page = 1, int pageSize = 0, string searchValue = "", int categoryID = 0, int supplierID = 0, decimal minPrice = 0, decimal maxPrice = 0)
         {
             List<Product> data = new List<Product>();
             searchValue = $"%{searchValue}%";
@@ -299,7 +299,7 @@ namespace SV21T1020105.DataLayers.SQLServer
             return data;
         }
 
-        public List<ProductAttribute> ListAttributes(int productID)
+        public IList<ProductAttribute> ListAttributes(int productID)
         {
             List<ProductAttribute> data = new List<ProductAttribute>();
             using (var connection = OpenConnection())
@@ -317,7 +317,7 @@ namespace SV21T1020105.DataLayers.SQLServer
             return data;
         }
 
-        public List<ProductPhoto> ListPhotos(int productID)
+        public IList<ProductPhoto> ListPhotos(int productID)
         {
             List<ProductPhoto> data = new List<ProductPhoto>();
             using (var connection = OpenConnection())

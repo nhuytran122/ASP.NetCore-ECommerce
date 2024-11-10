@@ -21,7 +21,7 @@ namespace SV21T1020105.BusinessLayers
         /// </summary>
         public static List<Product> ListProducts(string searchValue = "") 
         {  
-            return productDB.List(searchValue: searchValue);
+            return productDB.List(searchValue: searchValue).ToList();
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace SV21T1020105.BusinessLayers
                                                  decimal minPrice = 0, decimal maxPrice = 0)
         { 
             rowCount = productDB.Count(searchValue, categoryId, supplierId, minPrice, maxPrice);
-            return productDB.List(page, pageSize, searchValue, categoryId, supplierId, minPrice, maxPrice);
+            return productDB.List(page, pageSize, searchValue, categoryId, supplierId, minPrice, maxPrice).ToList();
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace SV21T1020105.BusinessLayers
         /// </summary>
         public static List<ProductPhoto> ListPhotos(int productID) 
         {
-            return productDB.ListPhotos(productID);
+            return productDB.ListPhotos(productID).ToList();
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace SV21T1020105.BusinessLayers
         /// </summary>
         public static List<ProductAttribute> ListAttributes(int productID) 
         {  
-            return productDB.ListAttributes(productID);
+            return productDB.ListAttributes(productID).ToList();
         }
 
         /// <summary>
