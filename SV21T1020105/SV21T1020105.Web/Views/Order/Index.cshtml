@@ -11,14 +11,15 @@
             <div class="row container-fluid">
                 <div class="col-sm-2">
                     <select class="form-control" name="@nameof(Model.Status)">
-                        <option value="0">-- Trạng thái --</option>
-                        <option value="1">Đơn hàng mới (chờ duyệt)</option>
-                        <option value="2">Đơn hàng đã duyệt (chờ chuyển hàng)</option>
-                        <option value="3">Đơn hàng đang được giao</option>
-                        <option value="4">Đơn hàng đã hoàn tất thành công</option>
-                        <option value="-1">Đơn hàng bị hủy</option>
-                        <option value="-2">Đơn hàng bị từ chối</option>
+                        <option value="0" selected="@(Model.Status == 0)">-- Trạng thái --</option>
+                        <option value="1" selected="@(Model.Status == 1)">Đơn hàng mới (chờ duyệt)</option>
+                        <option value="2" selected="@(Model.Status == 2)">Đơn hàng đã duyệt (chờ chuyển hàng)</option>
+                        <option value="3" selected="@(Model.Status == 3)">Đơn hàng đang được giao</option>
+                        <option value="4" selected="@(Model.Status == 4)">Đơn hàng đã hoàn tất thành công</option>
+                        <option value="-1" selected="@(Model.Status == -1)">Đơn hàng bị hủy</option>
+                        <option value="-2" selected="@(Model.Status == -2)">Đơn hàng bị từ chối</option>
                     </select>
+
                 </div>
                 <div class="col-sm-2">
                     <input type="text" name="@nameof(Model.TimeRange)" value="@Model.TimeRange" class="form-control daterange-picker" placeholder="" />
@@ -49,7 +50,7 @@
             searchCondition.push({ name: "page", value: page });
 
             var action = $("#frmSearchInput").prop("action");
-            var method = $("frmSearchInput").prop("method");
+            var method = $("#frmSearchInput").prop("method");
 
             $.ajax({
                 url: action,
