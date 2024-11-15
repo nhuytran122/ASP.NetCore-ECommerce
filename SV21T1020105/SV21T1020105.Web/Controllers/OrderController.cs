@@ -23,7 +23,7 @@ namespace SV21T1020105.Web.Controllers
                     PageSize = PAGE_SIZE,
                     SearchValue = "",
                     Status = 0,
-                    TimeRange = $"{DateTime.Today.AddDays(-7).ToString("dd/MM/yyyy", cultureInfo)} - {DateTime.Today.ToString("dd/MM/yyyy", cultureInfo)}"
+                    TimeRange = $"{DateTime.Today.AddYears(-2).ToString("dd/MM/yyyy", cultureInfo)} - {DateTime.Today.ToString("dd/MM/yyyy", cultureInfo)}"
                 };
             }
             return View(condition);
