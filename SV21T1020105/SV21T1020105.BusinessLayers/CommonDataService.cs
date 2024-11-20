@@ -319,6 +319,11 @@ namespace SV21T1020105.BusinessLayers
             return supplierDB.List();
         }
 
+        public static List<Customer> ListOfCustomers()
+        {
+            return customerDB.List();
+        }
+
     }
 }
 

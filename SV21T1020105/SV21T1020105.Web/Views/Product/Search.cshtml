@@ -47,7 +47,7 @@ else
                         @item.Unit
                     </td>
                      <td>
-                        @String.Format("{0:N0}", item.Price)
+                         @item.Price.ToString("N0")
                      </td>
 
                     <td class="text-right">
@@ -80,3 +80,4 @@ else
             </ul>
         </div>
 }
+

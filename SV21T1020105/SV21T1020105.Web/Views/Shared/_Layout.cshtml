@@ -48,10 +48,6 @@
         .field-validation-error {
             color: #f00;
         }
-
-        .number-separator {
-            text-align: left !important;
-        }
     </style>
 
     @RenderSection("styles", false)
@@ -128,14 +124,17 @@
     </script>
 
     <script>
-        // Đảm bảo mã JavaScript này được chạy sau khi trang được tải xong
-        $('.number-separator').inputmask({
-            alias: "numeric",
-            groupSeparator: ",",       // Dấu phẩy phân cách phần nghìn
-            autoGroup: true,           // Tự động thêm dấu phân cách
-            digits: 0,                 // Không có chữ số thập phân
-            removeMaskOnSubmit: true   // Loại bỏ ký tự phân cách phần nghìn khi submit form
-        });
+        $(document).ready(function () {
+            // Đảm bảo mã JavaScript này được chạy sau khi trang được tải xong
+            $('.number-separator').inputmask({
+                alias: "numeric",
+                groupSeparator: ",",       // Dấu phẩy phân cách phần nghìn
+                autoGroup: true,           // Tự động thêm dấu phân cách
+                digits: 0,                 // Không có chữ số thập phân
+                rightAlign: false,
+                removeMaskOnSubmit: true   // Loại bỏ ký tự phân cách phần nghìn khi submit form
+            });
+        })
     </script>
 
     @RenderSection("scripts", false)
