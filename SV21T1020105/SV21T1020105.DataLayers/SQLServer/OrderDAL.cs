@@ -20,7 +20,7 @@ namespace SV21T1020105.DataLayers.SQLServer
                                                 EmployeeID, Status)
                             values(@CustomerID, getdate(), 
                                     @DeliveryProvince, @DeliveryAddress, 
-                                    @EmployeeID, 1);
+                                    @EmployeeID, @Status);
                             select SCOPE_IDENTITY();";
                 var parameters = new
                 {
@@ -28,7 +28,7 @@ namespace SV21T1020105.DataLayers.SQLServer
                     DeliveryProvince = data.DeliveryProvince,
                     DeliveryAddress = data.DeliveryAddress,
                     EmployeeID = data.EmployeeID,
-                    //Status = data.Status
+                    Status = Constants.ORDER_INIT
                 };
                 id = connection.ExecuteScalar<int>(sql, parameters, commandType: CommandType.Text);
             }
