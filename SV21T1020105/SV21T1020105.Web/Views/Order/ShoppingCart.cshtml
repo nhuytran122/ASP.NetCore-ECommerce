@@ -33,8 +33,7 @@
                     <td class="text-right">@item.TotalPrice.ToString("N0")</td>
                     <td class="text-right">
                         <a href="~/Order/RemoveFromCart/@item.ProductID" data-product-name="@item.ProductName"
-                        class="btn btn-xs btn-danger ajax-link"
-                           onclick="return false;">
+                        class="btn btn-xs btn-danger ajax-link">
                             <i class="fa fa-minus"></i>
                         </a>
                     </td>
@@ -60,7 +59,7 @@
     </tfoot>
 </table>
 <div class="text-right">
-    <a href="~/Order/ClearCart" class="btn btn-sm btn-danger ajax-link" onclick="return false;">
+    <a href="~/Order/ClearCart" class="btn btn-sm btn-danger ajax-link">
         <i class="fa fa-trash"></i> Xóa giỏ hàng
     </a>
 </div>
