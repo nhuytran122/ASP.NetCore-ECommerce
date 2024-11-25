@@ -4,6 +4,7 @@ using SV21T1020105.Web.Models.SearchResults;
 using SV21T1020105.Web.Models;
 using System.Globalization;
 using SV21T1020105.DomainModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SV21T1020105.Web.Controllers
 {
@@ -192,9 +193,53 @@ namespace SV21T1020105.Web.Controllers
             return View();
         }
 
-        public IActionResult Shipping(int id = 0)
+        //public IActionResult Shipping(int id = 0)
+        //{
+        //    return View();
+        //}
+
+        public IActionResult Accept(int id)
         {
-            return View();
+            bool success = OrderDataService.AcceptOrder(id);
+            return RedirectToAction("Details", new { id });
         }
+
+        public IActionResult Shipping(int id = 0, int shipperID = 0)
+        {
+            var order = OrderDataService.GetOrder(id);
+           
+            if (shipperID == -1)
+            {
+                ModelState.AddModelError("errShipper", "Vui lòng chọn người giao hàng");
+                return View("Shipping", order);
+
+            }
+            else if (shipperID == 0)
+            {
+                return View("Shipping", order);
+            }
+            bool success = OrderDataService.ShipOrder(id, shipperID);
+
+            return RedirectToAction("Details", new { id });
+        }
+
+        public IActionResult Finish(int id)
+        {
+            bool success = OrderDataService.FinishOrder(id);
+            return RedirectToAction("Details", new { id });
+        }
+
+        public IActionResult Cancel(int id)
+        {
+            bool success = OrderDataService.CancelOrder(id);
+            return RedirectToAction("Details", new { id });
+        }
+
+        public IActionResult Reject(int id)
+        {
+            bool success = OrderDataService.RejectOrder(id);
+            return RedirectToAction("Details", new { id });
+        }
+
     }
 }
