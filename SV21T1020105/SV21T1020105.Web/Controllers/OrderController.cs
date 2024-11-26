@@ -240,6 +240,10 @@ namespace SV21T1020105.Web.Controllers
 
         public IActionResult Shipping(int id = 0, int shipperID = 0)
         {
+            var data = OrderDataService.GetOrder(id);
+            if (data == null)
+                return RedirectToAction("Index");
+
             if (Request.Method == "POST")
             {
                 if (shipperID == -1)
@@ -248,12 +252,8 @@ namespace SV21T1020105.Web.Controllers
                 }
 
                 OrderDataService.ShipOrder(id, shipperID);
-                return Json(id);
-            }
-
-            var data = OrderDataService.GetOrder(id);
-            if (data == null)
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id });
+            }            
             return View(data);
         }
 
