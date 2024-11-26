@@ -29,6 +29,8 @@
                     }
                     else if (Model.Order.Status == Constants.ORDER_SHIPPING)
                     {
+                        <li><a href="~/Order/Shipping/@Model.Order.OrderID" class="btn-modal">Chuyển giao hàng</a></li>
+                        <li class="divider"></li>
                         <li><a href="~/Order/Finish/@Model.Order.OrderID">Xác nhận hoàn tất đơn hàng</a></li>
                     }
                 </ul>
