@@ -190,9 +190,27 @@ namespace SV21T1020105.Web.Controllers
         }
         public IActionResult EditDetail(int id = 0, int productId = 0)
         {
-            return View();
+            var orderDetail = OrderDataService.GetOrderDetail(id, productId);
+            return View(orderDetail);
         }
 
+        public IActionResult DeleteDetail(int id = 0, int productId = 0)
+        {
+            OrderDataService.DeleteOrderDetail(id, productId);
+            return RedirectToAction("Details", new { id = id });
+        }
+
+        public IActionResult UpdateDetail(OrderDetail data, int id = 0)
+        {
+            OrderDataService.SaveOrderDetail(id, data.ProductID, data.Quantity, data.SalePrice);
+            return RedirectToAction("Details", new { id });
+        }
+
+        public IActionResult Delete(int id)
+        {
+            OrderDataService.DeleteOrder(id);
+            return RedirectToAction("Index");
+        }
         //public IActionResult Shipping(int id = 0)
         //{
         //    return View();
@@ -200,44 +218,45 @@ namespace SV21T1020105.Web.Controllers
 
         public IActionResult Accept(int id)
         {
-            bool success = OrderDataService.AcceptOrder(id);
+            OrderDataService.AcceptOrder(id);
             return RedirectToAction("Details", new { id });
         }
 
         public IActionResult Shipping(int id = 0, int shipperID = 0)
         {
-            var order = OrderDataService.GetOrder(id);
-           
-            if (shipperID == -1)
+            if (Request.Method == "POST")
             {
-                ModelState.AddModelError("errShipper", "Vui lòng chọn người giao hàng");
-                return View("Shipping", order);
+                if (shipperID == -1)
+                {
+                    return Json("Vui lòng chọn người giao hàng");
+                }
 
+                OrderDataService.ShipOrder(id, shipperID);
+                return RedirectToAction("Details", new { id });
             }
-            else if (shipperID == 0)
-            {
-                return View("Shipping", order);
-            }
-            bool success = OrderDataService.ShipOrder(id, shipperID);
 
-            return RedirectToAction("Details", new { id });
+            var data = OrderDataService.GetOrder(id);
+
+            if (data == null)
+                return RedirectToAction("Index");
+            return View(data);
         }
 
         public IActionResult Finish(int id)
         {
-            bool success = OrderDataService.FinishOrder(id);
+            OrderDataService.FinishOrder(id);
             return RedirectToAction("Details", new { id });
         }
 
         public IActionResult Cancel(int id)
         {
-            bool success = OrderDataService.CancelOrder(id);
+            OrderDataService.CancelOrder(id);
             return RedirectToAction("Details", new { id });
         }
 
         public IActionResult Reject(int id)
         {
-            bool success = OrderDataService.RejectOrder(id);
+            OrderDataService.RejectOrder(id);
             return RedirectToAction("Details", new { id });
         }
 
