@@ -196,18 +196,30 @@ namespace SV21T1020105.Web.Controllers
 
         public IActionResult DeleteDetail(int id = 0, int productId = 0)
         {
+            var order = OrderDataService.GetOrder(id);
+            if (order == null)
+                return RedirectToAction("Index");
+
             OrderDataService.DeleteOrderDetail(id, productId);
             return RedirectToAction("Details", new { id = id });
         }
 
         public IActionResult UpdateDetail(OrderDetail data, int id = 0)
         {
+            var order = OrderDataService.GetOrder(id);
+            if (order == null)
+                return RedirectToAction("Index");
+
             OrderDataService.SaveOrderDetail(id, data.ProductID, data.Quantity, data.SalePrice);
-            return RedirectToAction("Details", new { id });
+            return RedirectToAction("Details", new { id = id });
         }
 
         public IActionResult Delete(int id)
         {
+            var order = OrderDataService.GetOrder(id);
+            if (order == null)
+                return RedirectToAction("Index");
+
             OrderDataService.DeleteOrder(id);
             return RedirectToAction("Index");
         }
@@ -218,8 +230,12 @@ namespace SV21T1020105.Web.Controllers
 
         public IActionResult Accept(int id)
         {
+            var order = OrderDataService.GetOrder(id);
+            if (order == null)
+                return RedirectToAction("Index");
+
             OrderDataService.AcceptOrder(id);
-            return RedirectToAction("Details", new { id });
+            return RedirectToAction("Details", new { id = id });
         }
 
         public IActionResult Shipping(int id = 0, int shipperID = 0)
@@ -232,11 +248,10 @@ namespace SV21T1020105.Web.Controllers
                 }
 
                 OrderDataService.ShipOrder(id, shipperID);
-                return RedirectToAction("Details", new { id });
+                return Json(id);
             }
 
             var data = OrderDataService.GetOrder(id);
-
             if (data == null)
                 return RedirectToAction("Index");
             return View(data);
@@ -244,20 +259,32 @@ namespace SV21T1020105.Web.Controllers
 
         public IActionResult Finish(int id)
         {
+            var order = OrderDataService.GetOrder(id);
+            if (order == null)
+                return RedirectToAction("Index");
+
             OrderDataService.FinishOrder(id);
-            return RedirectToAction("Details", new { id });
+            return RedirectToAction("Details", new { id = id });
         }
 
         public IActionResult Cancel(int id)
         {
+            var order = OrderDataService.GetOrder(id);
+            if (order == null)
+                return RedirectToAction("Index");
+
             OrderDataService.CancelOrder(id);
-            return RedirectToAction("Details", new { id });
+            return RedirectToAction("Details", new { id = id });
         }
 
         public IActionResult Reject(int id)
         {
+            var order = OrderDataService.GetOrder(id);
+            if (order == null)
+                return RedirectToAction("Index");
+
             OrderDataService.RejectOrder(id);
-            return RedirectToAction("Details", new { id });
+            return RedirectToAction("Details", new { id = id });
         }
 
     }
