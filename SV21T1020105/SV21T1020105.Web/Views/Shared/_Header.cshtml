@@ -18,34 +18,53 @@
 
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
+                @{
+                    var userData = User.GetUserData();
+                    if (userData != null)
+                    {
 
-                <!-- User Account: style can be found in dropdown.less -->
-                <li class="dropdown user user-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="~/themes/dist/img/my_avatar.jpg" class="user-image" alt="User Image">
-                        <span class="hidden-xs">Như Ý Trần</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <!-- User image -->
-                        <li class="user-header">
-                            <img src="~/themes/dist/img/my_avatar.jpg" class="img-circle" alt="User Image">
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                @if (string.IsNullOrWhiteSpace(@userData.Photo))
+                                {
+                                    <img src="~/images/employees/default-avatar.jpg" class="user-image" alt="User Image">
+                                }
+                                else
+                                {
+                                    <img src="~/images/employees/@userData.Photo" class="user-image" alt="User Image">
+                                }
+                                <span class="hidden-xs">@userData.DisplayName</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    @if (string.IsNullOrWhiteSpace(@userData.Photo))
+                                    {
+                                        <img src="~/images/employees/default-avatar.jpg" class="img-circle" alt="User Image">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/images/employees/@userData.Photo" class="img-circle" alt="User Image">
+                                    }
+                                    <p>
+                                        @userData.DisplayName
+                                    </p>
+                                </li>
 
-                            <p>
-                                Như Ý Trần
-                            </p>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="~/Account/ChangePassword" class="btn btn-default btn-flat">Đổi mật khẩu</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="~/Account/Logout" class="btn btn-default btn-flat">Đăng xuất</a>
+                                    </div>
+                                </li>
+                            </ul>
                         </li>
-                        
-                        <!-- Menu Footer-->
-                        <li class="user-footer">
-                            <div class="pull-left">
-                                <a href="~/Account/ChangePassword" class="btn btn-default btn-flat">Đổi mật khẩu</a>
-                            </div>
-                            <div class="pull-right">
-                                <a href="~/Account/Logout" class="btn btn-default btn-flat">Đăng xuất</a>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
+                    }
+                }
             </ul>
         </div>
     </nav>

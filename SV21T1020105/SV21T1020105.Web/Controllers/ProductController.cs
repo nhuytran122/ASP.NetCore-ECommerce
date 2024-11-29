@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SV21T1020105.BusinessLayers;
 using SV21T1020105.DomainModels;
 using SV21T1020105.Web.Models;
@@ -6,6 +7,7 @@ using SV21T1020105.Web.Models.SearchResults;
 
 namespace SV21T1020105.Web.Controllers
 {
+    [Authorize(Roles = $"{WebUserRoles.ADMIN},{WebUserRoles.MANAGER}")]
     public class ProductController : Controller
     {
         public const int PAGE_SIZE = 10;

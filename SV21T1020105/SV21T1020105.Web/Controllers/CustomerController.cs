@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SV21T1020105.BusinessLayers;
 using SV21T1020105.DomainModels;
@@ -8,6 +9,7 @@ using System.Globalization;
 
 namespace SV21T1020105.Web.Controllers
 {
+    [Authorize(Roles = $"{WebUserRoles.ADMIN},{WebUserRoles.MANAGER}")]
     public class CustomerController : Controller
     {
         public const int PAGE_SIZE = 20;

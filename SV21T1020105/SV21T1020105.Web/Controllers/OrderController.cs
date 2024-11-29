@@ -5,9 +5,11 @@ using SV21T1020105.Web.Models;
 using System.Globalization;
 using SV21T1020105.DomainModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SV21T1020105.Web.Controllers
 {
+    [Authorize(Roles = $"{WebUserRoles.SALE}")]
     public class OrderController : Controller
     {
         public const string ORDER_SEARCH_CONDITION = "OrderSearchCondition";

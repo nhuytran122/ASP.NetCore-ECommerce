@@ -4,9 +4,11 @@ using SV21T1020105.DomainModels;
 using SV21T1020105.Web.Models.SearchResults;
 using SV21T1020105.Web.Models;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SV21T1020105.Web.Controllers
 {
+    [Authorize(Roles = $"{WebUserRoles.ADMIN}")]
     public class EmployeeController : Controller
     {
         public const int PAGE_SIZE = 9;
