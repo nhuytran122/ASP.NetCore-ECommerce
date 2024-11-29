@@ -7,11 +7,14 @@
     <div class="box-header text-right">
         <div class="btn-group">
             <div class="btn-group">
-                @if (Model.Order.Status != Constants.ORDER_FINISHED)
+                @if (Model.Order.Status != Constants.ORDER_FINISHED
+                && Model.Order.Status != Constants.ORDER_REJECTED
+                && Model.Order.Status != Constants.ORDER_CANCEL)
                 {
                     <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
                         Xử lý đơn hàng <span class="caret"></span>
-                </button>}
+                    </button>
+                }
                 <ul class="dropdown-menu" role="menu">
                     @if (Model.Order.Status == Constants.ORDER_INIT)
                     {
@@ -36,7 +39,9 @@
                 </ul>
 
             </div>
-            @if (Model.Order.Status == Constants.ORDER_INIT)
+            @if (Model.Order.Status == Constants.ORDER_INIT 
+            || Model.Order.Status == Constants.ORDER_CANCEL 
+            || Model.Order.Status == Constants.ORDER_REJECTED)
             {
                 <a href="~/Order/Delete/@Model.Order.OrderID" class="btn btn-sm btn-danger" onclick="return confirm('Có chắc chắn muốn xóa đơn hàng này không?')"><i class="fa fa-trash"></i> Xóa đơn hàng</a>
             }
