@@ -21,6 +21,14 @@ namespace SV21T1020105.BusinessLayers
             else
                 return customerAccountDB.Authorize(username, password);
         }
+
+        public static bool ChangePassword(UserTypes userType, string username, string password, string newPassword)
+        {
+            if (userType == UserTypes.Employee)
+                return employeeAccountDB.ChangePassword(username, password, newPassword);
+            else
+                return customerAccountDB.ChangePassword(username, password, newPassword);
+        }
     }
 
     public enum UserTypes

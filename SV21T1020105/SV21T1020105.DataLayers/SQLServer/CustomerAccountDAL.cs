@@ -34,9 +34,26 @@ namespace SV21T1020105.DataLayers.SQLServer
             return data;
         }
 
-        public bool ChangePassword(string username, string password)
+        public bool ChangePassword(string username, string password, string newPassword)
         {
-            throw new NotImplementedException();
+            bool result = false;
+            using (var connection = OpenConnection())
+            {
+                var sql = @"update Customers
+                            set Password = @NewPassword
+                            where Email = @Email and Password = @OldPassword";
+
+                var parameters = new
+                {
+                    Email = username,
+                    OldPassword = password,
+                    NewPassword = newPassword
+                };
+
+                result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
+                connection.Close();
+            }
+            return result;
         }
     }
 }

@@ -30,7 +30,7 @@ namespace SV21T1020105.Web.Controllers
                 return View();
             }
 
-            // TODO: Kiểm tra xem username và password (của Employee) có đúng hay không?
+            // Kiểm tra xem username và password (của Employee) có đúng hay không?
             var userAccount = UserAccountService.Authorize(UserTypes.Employee, userName, password);
             if (userAccount == null)
             {
@@ -68,6 +68,34 @@ namespace SV21T1020105.Web.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public IActionResult ChangePassword(string oldPassword, string newPassword, string confirmPassword)
+        {
+            var userData = User.GetUserData();
+            if (string.IsNullOrWhiteSpace(oldPassword) || string.IsNullOrWhiteSpace(newPassword) || string.IsNullOrWhiteSpace(confirmPassword))
+            {
+                ModelState.AddModelError("Error", "Vui lòng nhập đầy đủ thông tin.");
+                return View();
+            }
+
+            if (newPassword != confirmPassword)
+            {
+                ModelState.AddModelError("Error", "Mật khẩu mới và xác nhận mật khẩu không khớp.");
+                return View();
+            }
+
+            // Gọi service để thực hiện việc đổi mật khẩu
+            bool isChanged = UserAccountService.ChangePassword(UserTypes.Employee, userData.UserName, oldPassword, newPassword);
+            if (!isChanged)
+            {
+                ModelState.AddModelError("Error", "Đổi mật khẩu thất bại. Vui lòng kiểm tra mật khẩu cũ.");
+                return View();
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
 
         [AllowAnonymous]
         public IActionResult ForgotPassword()
