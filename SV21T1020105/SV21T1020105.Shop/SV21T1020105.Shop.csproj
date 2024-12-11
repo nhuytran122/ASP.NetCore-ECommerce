@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\themes\fruitables-1.0.0\**" />
+    <Content Remove="wwwroot\themes\fruitables-1.0.0\**" />
+    <EmbeddedResource Remove="wwwroot\themes\fruitables-1.0.0\**" />
+    <None Remove="wwwroot\themes\fruitables-1.0.0\**" />
+  </ItemGroup>
+
+</Project>
