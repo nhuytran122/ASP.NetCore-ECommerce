@@ -250,14 +250,17 @@ namespace SV21T1020105.Web.Controllers
             {
                 if (shipperID == -1)
                 {
-                    return Json("Vui lòng chọn người giao hàng");
+                    ModelState.AddModelError("error", "Vui lòng chọn người giao hàng");
+                    return View(data); 
                 }
 
                 OrderDataService.ShipOrder(id, shipperID);
                 return RedirectToAction("Details", new { id });
-            }            
+            }
+
             return View(data);
         }
+
 
         public IActionResult Finish(int id)
         {

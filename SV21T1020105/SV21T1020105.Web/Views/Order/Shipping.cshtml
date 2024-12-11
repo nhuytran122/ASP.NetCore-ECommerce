@@ -20,6 +20,7 @@
                             <option value="@item.ShipperID">@item.ShipperName</option>
                         }
                     </select>
+                    @Html.ValidationMessage("error")
                 </div>
                 <div class="form-group">
                     <div class="col-lg-offset-2 col-sm-10">
@@ -38,28 +39,3 @@
         </form>
     </div>
 </div>
-
-@section scripts {
-    <script>
-        $(document).ready(function () {
-            $("#frmSelectShipping").submit(function (e) {
-                e.preventDefault();
-
-                $.ajax({
-                    url: $(this).prop("action"),
-                    type: $(this).prop("method"),
-                    data: $(this).serializeArray(),
-
-                    success: function (result) {
-                        if (isNaN(result)) {
-                            $("#error-message").html(result);
-                        }
-                        else{
-                            window.location.href = "Details/" + result;
-                        }
-                    }
-                });
-            })
-        })
-    </script>
-}
