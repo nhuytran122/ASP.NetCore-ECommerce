@@ -13,20 +13,18 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label class="control-label">Người giao hàng:</label>
-                    <select class="form-control" name="shipperID">
+                    <select class="form-control shipperID" name="shipperID">
                         <option value="-1" selected>-- Chọn người giao hàng --</option>
                         @foreach (var item in CommonDataService.ListOfShippers())
                         {
                             <option value="@item.ShipperID">@item.ShipperName</option>
                         }
                     </select>
-                    @Html.ValidationMessage("error")
+                    <span id="formError" class="text-danger" style="display:none;">
+                        Vui lòng chọn người giao hàng
+                    </span>
                 </div>
-                <div class="form-group">
-                    <div class="col-lg-offset-2 col-sm-10">
-                        <span id="error-message" style="color: #f00"></span>
-                    </div>
-                </div>
+                
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">
@@ -39,3 +37,16 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.querySelector("#frmSelectShipping").addEventListener("submit", function (e) {
+        var shipperId = document.querySelector(".shipperID").value;
+        var errorSpan = document.querySelector("#formError");
+        if (shipperId == -1) {
+            e.preventDefault();
+            errorSpan.style.display = "block";
+        } else {
+            errorSpan.style.display = "none";
+        }
+    });
+</script>

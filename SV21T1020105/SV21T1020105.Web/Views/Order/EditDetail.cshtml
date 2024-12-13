@@ -5,7 +5,7 @@
 
 <div class="modal-dialog">
     <div class="modal-content">
-        <form action="~/Order/UpdateDetail/@Model.OrderID" method="post" class="form-horizontal">
+        <form action="~/Order/UpdateDetail/@Model.OrderID" method="post" class="form-horizontal" id="frmEditDetail">
             <input type="hidden" name="@nameof(Model.ProductID)" value="@Model.ProductID" />
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -33,7 +33,10 @@
                 <div class="form-group">
                     <label class="control-label col-sm-3">Giá bán:</label>
                     <div class="col-sm-9">
-                        <input name="@nameof(Model.SalePrice)" type="number" class="form-control number-separator" value="@Model.SalePrice" min="0" />
+                        <input name="@nameof(Model.SalePrice)" type="text" class="form-control number-separator salePrice" value="@Model.SalePrice" />
+                        <span id="errorSalePrice" class="text-danger" style="display:none;">
+                            Giá bán không hợp lệ
+                        </span>
                     </div>
                 </div>
             </div>
@@ -61,4 +64,20 @@
             removeMaskOnSubmit: true   // Loại bỏ ký tự phân cách phần nghìn khi submit form
         });
     })
+
+    document.querySelector("#frmEditDetail").addEventListener("submit", function (e) {
+        var salePrice = document.querySelector(".salePrice").value;
+        var errorSalePriceSpan = document.querySelector("#errorSalePrice");
+
+        // Loại bỏ dấu phẩy phân cách -> chuyển thành số
+        var numericSalePrice = parseFloat(salePrice.replace(/,/g, ''));
+
+        if (isNaN(numericSalePrice) || numericSalePrice < 0) { 
+            e.preventDefault();
+            errorSalePriceSpan.style.display = "block";
+        } else {
+            errorSalePriceSpan.style.display = "none";
+        }
+    });
+
 </script>

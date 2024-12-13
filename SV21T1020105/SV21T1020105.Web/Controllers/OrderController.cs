@@ -225,10 +225,6 @@ namespace SV21T1020105.Web.Controllers
             OrderDataService.DeleteOrder(id);
             return RedirectToAction("Index");
         }
-        //public IActionResult Shipping(int id = 0)
-        //{
-        //    return View();
-        //}
 
         public IActionResult Accept(int id)
         {
@@ -248,11 +244,6 @@ namespace SV21T1020105.Web.Controllers
 
             if (Request.Method == "POST")
             {
-                if (shipperID == -1)
-                {
-                    ModelState.AddModelError("error", "Vui lòng chọn người giao hàng");
-                    return View(data); 
-                }
 
                 OrderDataService.ShipOrder(id, shipperID);
                 return RedirectToAction("Details", new { id });
