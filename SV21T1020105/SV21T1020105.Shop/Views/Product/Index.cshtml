@@ -1,0 +1,110 @@
+﻿@model SV21T1020105.Shop.Models.ProductSearchInput
+@{
+    ViewBag.Title = "Sản phẩm";
+}
+
+<!-- Fruits Shop Start -->
+<div class="container-fluid fruite py-5">
+    <div class="container py-5">
+        <h1 class="mb-4">NYT - SHOP</h1>
+        <div class="row g-4">
+            <!-- Tiêu chí tìm kiếm -->
+            <div class="col-lg-4">
+                <div class="p-4 rounded">
+                    <h4 class="mb-4">Tìm kiếm sản phẩm</h4>
+                    <form id="frmSearchInput" action="~/Product/Search" method="get">
+                        <input type="hidden" name="@nameof(Model.PageSize)" value="@Model.PageSize" />
+
+                        <!-- Loại hàng -->
+                        <div class="mb-3">
+                            <label class="form-label">Loại hàng:</label>
+                            <select class="form-select border" name="@nameof(Model.CategoryID)">
+                                <option value="0">-- Chọn loại hàng --</option>
+                                @foreach (var item in CommonDataService.ListOfCategories())
+                                {
+                                    if (item.CategoryID == Model.CategoryID)
+                                    {
+                                        <option value="@item.CategoryID" selected>@item.CategoryName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.CategoryID">@item.CategoryName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Giá từ và Giá đến -->
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label class="form-label">Giá từ:</label>
+                                <input type="text" class="form-control border number-separator"
+                                       name="@nameof(Model.MinPrice)"
+                                       value="@Model.MinPrice">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">đến:</label>
+                                <input type="text" class="form-control border number-separator"
+                                       name="@nameof(Model.MaxPrice)"
+                                       value="@Model.MaxPrice">
+                            </div>
+                        </div>
+
+                        <!-- Tên sản phẩm -->
+                        <div class="mb-3">
+                            <label class="form-label">Tên mặt hàng:</label>
+                            <div class="input-group">
+                                <input type="text"
+                                       class="form-control border"
+                                       placeholder="Nhập mặt hàng cần tìm"
+                                       name="@nameof(Model.SearchValue)"
+                                       value="@Model.SearchValue">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4">
+                                Tìm Sản Phẩm
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Kết quả tìm kiếm -->
+            <div class="col-12 col-md-8 text-center">
+                <div id="searchResult" class="row g-4">
+                    <!-- Dữ liệu sản phẩm sẽ hiển thị ở đây -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fruits Shop End -->
+@section scripts {
+    <script>
+        function doSearch(page) {
+            var searchCondition = $("#frmSearchInput").serializeArray();
+            searchCondition.push({ name: "page", value: page });
+
+            var action = $("#frmSearchInput").prop("action");
+            var method = $("#frmSearchInput").prop("method");
+
+            $.ajax({
+                url: action,
+                type: method,
+                data: searchCondition,
+                success: function (data) {
+                    $("#searchResult").html(data);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            doSearch(@Model.Page);
+            $("#frmSearchInput").submit(function (e) {
+                e.preventDefault();
+                doSearch(1);
+            });
+        });
+    </script>
+}

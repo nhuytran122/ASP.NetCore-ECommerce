@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -11,6 +11,16 @@
     <Content Remove="wwwroot\themes\fruitables-1.0.0\**" />
     <EmbeddedResource Remove="wwwroot\themes\fruitables-1.0.0\**" />
     <None Remove="wwwroot\themes\fruitables-1.0.0\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SV21T1020105.BusinessLayers\SV21T1020105.BusinessLayers.csproj" />
+    <ProjectReference Include="..\SV21T1020105.DataLayers\SV21T1020105.DataLayers.csproj" />
+    <ProjectReference Include="..\SV21T1020105.DomainModels\SV21T1020105.DomainModels.csproj" />
   </ItemGroup>
 
 </Project>

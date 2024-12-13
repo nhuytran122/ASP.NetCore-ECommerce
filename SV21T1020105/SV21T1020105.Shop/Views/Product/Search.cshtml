@@ -1,0 +1,106 @@
+﻿@model SV21T1020105.Shop.Models.ProductSearchResult
+@{
+    Layout = null;
+}
+
+@if (Model.RowCount == 0)
+{
+    <p style="margin-top: 50px" class="text-danger">
+        Không có mặt hàng nào để hiển thị.
+    </p>
+}
+else
+{
+    <p style="text-align: right;" class="px-5 mb-3">
+        Có <strong>@Model.RowCount</strong> mặt hàng trong tổng số <strong>@Model.PageCount</strong> trang
+    </p>
+
+    <div class="row">
+        @foreach (var product in Model.Data)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="rounded position-relative fruite-item" style="height: 100%;">
+                    <div class="fruite-img">
+                        <img src="~/images/products/@(string.IsNullOrWhiteSpace(product.Photo) ? "no-image.jpg" : product.Photo)"
+                             class="img-fluid w-100 rounded-top" alt="@product.ProductName">
+                    </div>
+                    <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                         style="top: 10px; left: 10px;">
+                        @product.CategoryID
+                    </div>
+                    <div class="p-4 border border-secondary border-top-0 rounded-bottom"
+                         style="min-height: 200px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="height: auto;">
+                            <h4 style="font-size: 15px;">
+                                <a href="~/Product/Details/@product.ProductID">
+                                    @product.ProductName
+                                </a>
+                            </h4>
+                        </div>
+                        <div class="d-flex flex-column align-items-center">
+                            <p style="font-size: 15px; text-align: center; width: 100%;"
+                               class="text-dark fw-bold mb-3">
+                                @product.Price.ToString("N0") đ
+                            </p>
+                            <form action="~/Cart/AddToCart/@product.ProductID" method="post">
+                                <button class="btn border border-secondary rounded-pill px-3 text-primary">
+                                    <i class="fa fa-shopping-bag me-2 text-primary"></i>
+                                    Add to cart
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (Model.PageCount > 0)
+    {
+        <div class="pagination d-flex justify-content-center mt-5">
+            <!-- Nút Previous -->
+            <li class="page-item">
+                <a class="@(Model.Page == 1 ? "btn disabled page-link" : "page-link")"
+                   href="javascript:;" onclick="doSearch(@(Model.Page - 1))" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <!-- Hiển thị tối đa 5 trang -->
+            @{
+                int maxPages = 5;
+                int startPage = Math.Max(1, Model.Page - maxPages / 2);
+                int endPage = Math.Min(Model.PageCount, startPage + maxPages - 1);
+                if (endPage - startPage < maxPages - 1)
+                {
+                    startPage = Math.Max(1, endPage - maxPages + 1);
+                }
+            }
+
+            @for (int p = startPage; p <= endPage; p++)
+            {
+                <li class="page-item">
+                    <a class="@(p == Model.Page ? "active page-link" : "page-link")"
+                       href="javascript:;" onclick="doSearch(@p)">
+                        @p
+                    </a>
+                </li>
+            }
+
+            @if (endPage < Model.PageCount)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="javascript:;" onclick="doSearch(@(endPage + 1))">...</a>
+                </li>
+            }
+
+            <!-- Nút Next -->
+            <li class="page-item">
+                <a class="@(Model.Page == Model.PageCount ? "btn disabled page-link" : "page-link")"
+                   href="javascript:;" onclick="doSearch(@(Model.Page + 1))" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </div>
+    }
+}
