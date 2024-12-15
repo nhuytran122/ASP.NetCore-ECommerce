@@ -9,6 +9,8 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Chọn file ảnh:</label>
                 <div class="col-sm-10">
+                    <input type="hidden" name="@nameof(Model.Photo)" value="@Model.Photo" />
+
                     <input type="file" class="form-control" name="uploadPhoto" accept="image/*"
                            onchange="document.getElementById('Photo').src = window.URL.createObjectURL(this.files[0])" />
                     @Html.ValidationMessage(nameof(Model.Photo))
@@ -17,8 +19,6 @@
 
             <div class="form-group">
                 <div class="col-lg-offset-2 col-sm-10">
-                    <input type="hidden" name="@nameof(Model.Photo)" value="@Model.Photo" />
-                    <!--<img id="Photo" src="~/images/products/macbook.png" class="img img-bordered" style="width:200px" />-->
                     <img id="Photo" src="@(string.IsNullOrWhiteSpace(Model.Photo) ? Url.Content("~/images/products/no-image.jpg") : Url.Content("~/images/products/" + Model.Photo))"
                          class="img img-bordered" style="width:200px" />
                 </div>

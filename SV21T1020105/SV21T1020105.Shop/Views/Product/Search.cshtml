@@ -16,7 +16,7 @@ else
     </p>
 
     <div class="row">
-        @foreach (var product in Model.Data)
+        @foreach (var product in Model.Data.Where(p => p.IsSelling))
         {
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="rounded position-relative fruite-item" style="height: 100%;">
@@ -27,7 +27,7 @@ else
                     </div>
                     <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
                          style="top: 10px; left: 10px;">
-                        @product.CategoryID
+                            @(CommonDataService.GetCategory(product.CategoryID)?.CategoryName ?? "Không xác định")
                     </div>
                     <div class="p-4 border border-secondary border-top-0 rounded-bottom"
                          style="min-height: 200px; display: flex; flex-direction: column; justify-content: space-between;">
@@ -46,14 +46,15 @@ else
                             <form action="~/Cart/AddToCart/@product.ProductID" method="post">
                                 <button class="btn border border-secondary rounded-pill px-3 text-primary">
                                     <i class="fa fa-shopping-bag me-2 text-primary"></i>
-                                    Add to cart
+                                    Thêm vào giỏ hàng
                                 </button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-        }
+            }
+}
     </div>
 
     @if (Model.PageCount > 0)

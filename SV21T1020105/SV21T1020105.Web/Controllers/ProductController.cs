@@ -175,32 +175,42 @@ namespace SV21T1020105.Web.Controllers
         {
             ViewBag.Title = data.PhotoID == 0 ? "Bổ sung ảnh cho mặt hàng" : "Thay đổi ảnh của mặt hàng";
 
+            if (uploadPhoto == null && string.IsNullOrEmpty(data.Photo))
+                ModelState.AddModelError(nameof(data.Photo), "Vui lòng upload ảnh");
+
             if (string.IsNullOrWhiteSpace(data.Description))
                 ModelState.AddModelError(nameof(data.Description), "Mô tả hình ảnh không được để trống");
 
             if (data.DisplayOrder <= 0)
                 ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị không hợp lệ");
 
-            if (ProductDataService.InUsedDisplayOrderOfPhoto(data.ProductID, data.DisplayOrder))
-                ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị hình ảnh đã tồn tại. Vui lòng nhập lại");
+            ProductPhoto? currentPhoto = ProductDataService.GetPhoto(data.PhotoID);
 
-            if (uploadPhoto == null)
-                ModelState.AddModelError(nameof(data.Photo), "Vui lòng upload ảnh");
+            if (currentPhoto != null)
+            {
+                int currentDisplayOrder = currentPhoto.DisplayOrder;
+                if (data.DisplayOrder != currentDisplayOrder && ProductDataService.InUsedDisplayOrderOfPhoto(data.ProductID, data.DisplayOrder))
+                {
+                    ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị đã tồn tại. Vui lòng nhập lại");
+                }
+            }
 
             if (!ModelState.IsValid)
             {
                 return View("Photo", data);
             }
 
-            string fileName = $"{DateTime.Now.Ticks}-{uploadPhoto.FileName}";
-            string filePath = Path.Combine(ApplicationContext.WebRootPath, @"images\products", fileName);
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            if(uploadPhoto != null)
             {
-                uploadPhoto.CopyTo(stream);
-            }
+                string fileName = $"{DateTime.Now.Ticks}-{uploadPhoto.FileName}";
+                string filePath = Path.Combine(ApplicationContext.WebRootPath, @"images\products", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    uploadPhoto.CopyTo(stream);
+                }
                 data.Photo = fileName;
+            }
             
-
             if (data.PhotoID == 0)
             {
                 ProductDataService.AddPhoto(data);
@@ -252,8 +262,17 @@ namespace SV21T1020105.Web.Controllers
 
             if (data.DisplayOrder <= 0)
                 ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị không hợp lệ");
-            if (ProductDataService.InUsedDisplayOrderOfAttribute(data.ProductID, data.DisplayOrder) == true)
-                ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị thuộc tính đã tồn tại. Vui lòng nhập lại");
+
+            ProductAttribute? currentAttribute = ProductDataService.GetAttribute(data.AttributeID);
+
+            if (currentAttribute != null)
+            {
+                int currentDisplayOrder = currentAttribute.DisplayOrder;
+                if (data.DisplayOrder != currentDisplayOrder && ProductDataService.InUsedDisplayOrderOfAttribute(data.ProductID, data.DisplayOrder))
+                {
+                    ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị đã tồn tại. Vui lòng nhập lại");
+                }
+            }
 
             if (!ModelState.IsValid)
             {

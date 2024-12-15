@@ -393,13 +393,14 @@ namespace SV21T1020105.DataLayers.SQLServer
                             set AttributeName = @AttributeName,
 	                        AttributeValue = @AttributeValue,
 	                        DisplayOrder = @DisplayOrder
-                            where ProductID = @ProductID";
+                            where AttributeID = @AttributeID AND ProductID = @ProductID";
                 var parameters = new
                 {
                     ProductID = data.ProductID,
                     AttributeName = data.AttributeName ?? "",
                     AttributeValue = data.AttributeValue ?? "",
-                    DisplayOrder = data.DisplayOrder
+                    DisplayOrder = data.DisplayOrder,
+                    AttributeID = data.AttributeID
                 };
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
                 connection.Close();
@@ -417,19 +418,39 @@ namespace SV21T1020105.DataLayers.SQLServer
 	                        Description = @Description,
 	                        DisplayOrder = @DisplayOrder,
                             IsHidden = @IsHidden
-                            where ProductID = @ProductID";
+                            where PhotoID = @PhotoID AND ProductID = @ProductID";
                 var parameters = new
                 {
                     ProductID = data.ProductID,
                     Photo = data.Photo ?? "",
                     Description = data.Description ?? "",
                     DisplayOrder = data.DisplayOrder,
-                    IsHidden = data.IsHidden
+                    IsHidden = data.IsHidden,
+                    PhotoID = data.PhotoID
                 };
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
                 connection.Close();
             }
             return result;
+        }
+
+        public IList<Product> GetSimilarProducts(int categoryID = 0, int productID = 0)
+        {
+            List<Product> data = new List<Product>();
+
+            using (var connection = OpenConnection())
+            {
+                var sql = @"SELECT TOP 10 *
+                            FROM Products 
+                            WHERE CategoryID = @CategoryID AND ProductID != @ProductID AND IsSelling = 1";
+                var parameters = new
+                {
+                    CategoryID = categoryID,
+                    ProductID = productID
+                };
+                data = connection.Query<Product>(sql: sql, param: parameters, commandType: CommandType.Text).ToList();
+            }
+            return data;
         }
     }
 }

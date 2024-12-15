@@ -1,0 +1,170 @@
+﻿@model ProductDetailModel
+
+<div class="py-5">
+</div>
+<!-- Single Product Start -->
+<div class="container-fluid py-5 mt-5">
+    <div class="container py-5">
+        <div class="row g-4 mb-5">
+            <div class="col-lg-12 col-xl-12">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="border rounded">
+                            <a href="#">
+                                <img src="@WebConfig.IMAGE_SOURE_HOST/images/products/@(string.IsNullOrWhiteSpace(Model.Product.Photo) ? "no-image.jpg" : Model.Product.Photo)"
+                                     class="slide" alt="Main Image" style="height: 450px; width: auto;">
+                            </a>
+                        </div>
+                        <div class="option flex mt-3">
+                            @foreach (var photo in Model.Photos.OrderBy(photo => photo.DisplayOrder))
+                            {
+                                @if (!photo.IsHidden)  
+                                {
+                                    <img src="@WebConfig.IMAGE_SOURE_HOST/images/products/@photo.Photo" 
+                                         onclick="img('@WebConfig.IMAGE_SOURE_HOST/images/products/@photo.Photo')" 
+                                         style="height: 100px; width: auto; cursor: pointer;">
+                                }
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <h4 class="fw-bold mb-3">@Model.Product.ProductName</h4>
+                        <p class="mb-3">
+                            Loại hàng: @Model.CategoryName
+                        </p>
+                        <h5 class="fw-bold mb-3">@Model.Product.Price.ToString("N0") đ</h5>
+                        <div class="input-group quantity mb-5" style="width: 100px;">
+                            <div class="input-group-btn">
+                                <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <input type="text" class="form-control form-control-sm text-center border-0" value="1">
+                            <div class="input-group-btn">
+                                <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        @if (@Model.Product.IsSelling)
+                        {
+                            <a href="~/Cart/AddToCart/@Model.Product.ProductID" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                <i class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ hàng
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-danger fw-bold">Sản phẩm này hiện không được bán</span>
+                        }
+                    </div>
+                    <div class="col-lg-12">
+                        <nav>
+                            <div class="nav nav-tabs mb-3">
+                                <button class="nav-link active border-white border-bottom-0" type="button" role="tab"
+                                        id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#nav-about"
+                                        aria-controls="nav-about" aria-selected="true">
+                                    CHI TIẾT SẢN PHẨM
+                                </button>
+                                
+                            </div>
+                        </nav>
+                        <div class="tab-content mb-5">
+                            <div class="tab-pane active" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+                                <p>
+                                    @Model.Product.ProductDescription
+                                </p>
+                                <div class="row g-4 mb-5">
+
+                                    <div class="px-2">
+                                        <div class="row g-4">
+                                            <div class="col-12">
+                                                    <div class="row py-3">
+                                                        <div class="col-3">
+                                                            <b><p class="mb-0">Loại hàng</p></b>
+                                                        </div>
+                                                        <div class="col-9">
+                                                            <p class="mb-0">@Model.CategoryName</p>
+                                                        </div>
+                                                    </div>
+
+                                                <div class="row py-3">
+                                                    <div class="col-3">
+                                                        <b><p class="mb-0">Đơn vị tính</p></b>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <p class="mb-0">@Model.Product.Unit</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                        <div class="px-2">
+                                            <h4 class="fw-bold py-3 border-bottom">Các thuộc tính của sản  phẩm</h4>
+                                            <div class="row g-4">
+                                                <div class="col-12">
+                                                    @foreach (var item in Model.Attributes.OrderBy(p => p.DisplayOrder))
+                                                    {
+                                                        <div class="row bg-light py-3">
+                                                            <div class="col-3">
+                                                                <b><p class="mb-0">@item.AttributeName</p></b>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <p class="mb-0">@item.AttributeValue</p>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            </div>
+        <h1 class="fw-bold mb-0">Có thể bạn cũng thích</h1>
+        <div class="vesitable">
+            <div class="owl-carousel vegetable-carousel justify-content-center">
+                @foreach (var item in ProductDataService.GetSimilarProducts(Model.Product.CategoryID, Model.Product.ProductID))
+                {
+                    <div class="border border-primary rounded position-relative vesitable-item" style="height: 100%;">
+                        <div class="vesitable-img">
+                            <img src="@WebConfig.IMAGE_SOURE_HOST/images/products/@(string.IsNullOrWhiteSpace(item.Photo) ? "no-image.jpg" : item.Photo)"
+                                 class="img-fluid w-100 rounded-top" alt="@item.ProductName"
+                                 style="height: 182px; object-fit: cover;">
+                        </div>
+                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">
+                            @(CommonDataService.GetCategory(item.CategoryID)?.CategoryName ?? "Không xác định")
+                        </div>
+                        <div class="p-4 border border-primary border-top-0 rounded-bottom d-flex flex-column justify-content-between" style="min-height: 200px;">
+                            <div>
+                                <h6 style="word-wrap: break-word; white-space: normal; max-width: 100%;">
+                                    <a href="~/Product/Details/@item.ProductID">
+                                        @item.ProductName
+                                    </a>
+                                 </h6>
+                            </div>
+                            <div class="d-flex flex-column align-items-center">
+                                <p class="text-dark fs-5 fw-bold mb-3">@item.Price.ToString("N0") đ</p>
+                                <a href="~/Cart/AddToCart/@item.ProductID" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                    <i class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ hàng
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        </div>
+    </div>
+<!-- Single Product End -->
+<script>
+    function img(photoUrl) {
+        document.querySelector('.slide').src = photoUrl;
+    }
+</script>

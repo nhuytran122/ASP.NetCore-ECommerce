@@ -26,6 +26,7 @@ namespace SV21T1020105.Shop.Controllers
             return View(condition);
         }
 
+        //TODO: show CategoryName
         public IActionResult Search(ProductSearchInput condition)
         {
             int rowCount;
@@ -46,6 +47,25 @@ namespace SV21T1020105.Shop.Controllers
             };
 
             ApplicationContext.SetSessionData(PRODUCT_SEARCH_CONDITION, condition);
+
+            return View(model);
+        }
+    
+        public IActionResult Details(int id = 0)
+        {
+            var product = ProductDataService.GetProduct(id);
+            if (product == null)
+                return RedirectToAction("Index");
+
+            var attributes = ProductDataService.ListAttributes(id);
+            var photos = ProductDataService.ListPhotos(id);
+            var model = new ProductDetailModel()
+            {
+                Product = product,
+                Attributes = attributes,
+                Photos = photos,
+                CategoryName = CommonDataService.GetCategory(product.CategoryID).CategoryName
+            };
 
             return View(model);
         }

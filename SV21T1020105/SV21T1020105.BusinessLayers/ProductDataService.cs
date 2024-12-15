@@ -126,7 +126,7 @@ namespace SV21T1020105.BusinessLayers
         /// <summary>
         /// Lấy thông tin thuộc tính của mặt hàng
         /// </summary>
-        public static ProductAttribute? GetAttribute(int attributeID) 
+        public static ProductAttribute? GetAttribute(long attributeID) 
         {  
             return productDB.GetAttribute(attributeID);
         }
@@ -163,6 +163,11 @@ namespace SV21T1020105.BusinessLayers
         public static bool InUsedDisplayOrderOfPhoto(int productID, int displayOrder)
         {
             return productDB.DisplayOrderOfPhotoInUsed(productID, displayOrder);
+        }
+
+        public static List<Product> GetSimilarProducts(int categoryID = 0, int productID = 0)
+        {
+            return productDB.GetSimilarProducts(categoryID, productID).ToList();
         }
     }
 
