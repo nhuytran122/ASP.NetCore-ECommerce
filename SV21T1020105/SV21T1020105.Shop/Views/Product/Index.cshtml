@@ -3,10 +3,11 @@
     ViewBag.Title = "Sản phẩm";
 }
 
+<div class="py-5">
+</div>
 <!-- Fruits Shop Start -->
 <div class="container-fluid fruite py-5">
     <div class="container py-5">
-        <h1 class="mb-4">NYT SHOP</h1>
         <div class="row g-4">
             <!-- Tiêu chí tìm kiếm -->
             <div class="col-lg-4">
@@ -60,6 +61,16 @@
                                        name="@nameof(Model.SearchValue)"
                                        value="@Model.SearchValue">
                             </div>
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Sắp xếp giá:</label>
+                            <select class="form-select border" name="@nameof(Model.SortByPrice)">
+                                <option value="">-- Không sắp xếp --</option>
+                                <option value="ASC" selected="@(Model.SortByPrice == "ASC")">Tăng dần</option>
+                                <option value="DESC" selected="@(Model.SortByPrice == "DESC")">Giảm dần</option>
+                            </select>
+
                         </div>
                         <div class="col-12">
                             <button type="submit" class="border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4">

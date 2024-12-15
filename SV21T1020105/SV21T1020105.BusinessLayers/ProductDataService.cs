@@ -29,10 +29,10 @@ namespace SV21T1020105.BusinessLayers
         /// </summary>
         public static List<Product> ListProducts(out int rowCount, int page = 1, int pageSize = 0,
                                                  string searchValue = "", int categoryId = 0, int supplierId = 0,
-                                                 decimal minPrice = 0, decimal maxPrice = 0)
+                                                 decimal minPrice = 0, decimal maxPrice = 0, string sortByPrice = "")
         { 
             rowCount = productDB.Count(searchValue, categoryId, supplierId, minPrice, maxPrice);
-            return productDB.List(page, pageSize, searchValue, categoryId, supplierId, minPrice, maxPrice).ToList();
+            return productDB.List(page, pageSize, searchValue, categoryId, supplierId, minPrice, maxPrice, sortByPrice).ToList();
         }
 
         /// <summary>

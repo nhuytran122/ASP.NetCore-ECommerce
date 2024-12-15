@@ -265,25 +265,41 @@ namespace SV21T1020105.DataLayers.SQLServer
             return result;
         }
 
-        public IList<Product> List(int page = 1, int pageSize = 0, string searchValue = "", int categoryID = 0, int supplierID = 0, decimal minPrice = 0, decimal maxPrice = 0)
+        public IList<Product> List(int page = 1, int pageSize = 0, string searchValue = "", int categoryID = 0,
+    int supplierID = 0, decimal minPrice = 0, decimal maxPrice = 0, string sortByPrice = "")
         {
             List<Product> data = new List<Product>();
             searchValue = $"%{searchValue}%";
+
+            string orderByClause = "";
+            if (string.IsNullOrEmpty(sortByPrice))
+            {
+                orderByClause = "ORDER BY ProductName ASC";
+            }
+            else if (sortByPrice.Equals("ASC", StringComparison.OrdinalIgnoreCase))
+            {
+                orderByClause = "ORDER BY Price ASC";
+            }
+            else if (sortByPrice.Equals("DESC", StringComparison.OrdinalIgnoreCase))
+            {
+                orderByClause = "ORDER BY Price DESC";
+            }
+
             using (var connection = OpenConnection())
             {
                 var sql = @"SELECT *
-                            FROM (
-                            SELECT *,
-                            ROW_NUMBER() OVER(ORDER BY ProductName) AS RowNumber
-                            FROM Products
-                            WHERE (@SearchValue = N'' OR ProductName LIKE @SearchValue)
-                            AND (@CategoryID = 0 OR CategoryID = @CategoryID)
-                            AND (@SupplierID = 0 OR SupplierID = @SupplierID)
-                            AND (Price >= @MinPrice)
-                            AND (@MaxPrice <= 0 OR Price <= @MaxPrice)
-                            ) AS t
-                            WHERE (@PageSize = 0)
-                            OR (RowNumber BETWEEN (@Page - 1)*@PageSize + 1 AND @Page * @PageSize)";
+                    FROM (
+                    SELECT *,
+                    ROW_NUMBER() OVER (" + orderByClause + @") AS RowNumber
+                    FROM Products
+                    WHERE (@SearchValue = N'' OR ProductName LIKE @SearchValue)
+                    AND (@CategoryID = 0 OR CategoryID = @CategoryID)
+                    AND (@SupplierID = 0 OR SupplierID = @SupplierID)
+                    AND (Price >= @MinPrice)
+                    AND (@MaxPrice <= 0 OR Price <= @MaxPrice)
+                    ) AS t
+                    WHERE (@PageSize = 0)
+                    OR (RowNumber BETWEEN (@Page - 1)*@PageSize + 1 AND @Page * @PageSize)";
                 var parameters = new
                 {
                     Page = page,

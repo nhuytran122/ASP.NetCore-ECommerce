@@ -21,6 +21,7 @@ namespace SV21T1020105.Shop.Controllers
                     SupplierID = 0,
                     MinPrice = 0,
                     MaxPrice = 0,
+                    SortByPrice = ""
                 };
             return View(condition);
         }
@@ -28,7 +29,8 @@ namespace SV21T1020105.Shop.Controllers
         public IActionResult Search(ProductSearchInput condition)
         {
             int rowCount;
-            var data = ProductDataService.ListProducts(out rowCount, condition.Page, condition.PageSize, condition.SearchValue ?? "", condition.CategoryID, condition.SupplierID, condition.MinPrice, condition.MaxPrice);
+            var data = ProductDataService.ListProducts(out rowCount, condition.Page, condition.PageSize, condition.SearchValue ?? "", 
+                condition.CategoryID, condition.SupplierID, condition.MinPrice, condition.MaxPrice, condition.SortByPrice);
             ProductSearchResult model = new ProductSearchResult()
             {
                 Page = condition.Page,
@@ -39,6 +41,7 @@ namespace SV21T1020105.Shop.Controllers
                 SupplierID = condition.SupplierID,
                 MinPrice = condition.MinPrice,
                 MaxPrice = condition.MaxPrice,
+                SortByPrice = condition.SortByPrice,
                 Data = data
             };
 
