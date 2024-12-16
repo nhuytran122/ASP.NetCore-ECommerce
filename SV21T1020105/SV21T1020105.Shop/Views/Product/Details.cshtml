@@ -1,6 +1,7 @@
 ﻿@model ProductDetailModel
 @{
     var product = Model.Product;
+    ViewBag.Title = product.ProductName;
 }
 <div class="py-5">
 </div>
@@ -180,7 +181,6 @@
 
         $(document).ready(function () {
             updateCartCount();
-            // Đảm bảo mã JavaScript này được chạy sau khi trang được tải xong
             
         })
     </script>
