@@ -30,10 +30,10 @@
 
 <body>
 
-    <!-- Spinner Start -->
+    <!-- Spinner Start 
     <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
-    </div>
+    </div>-->
     <!-- Spinner End -->
 
     @{
@@ -62,6 +62,7 @@
 
     <script>
         $(document).ready(function () {
+            updateCartCount();
             // Đảm bảo mã JavaScript này được chạy sau khi trang được tải xong
             $('.number-separator').inputmask({
                 alias: "numeric",
@@ -72,6 +73,37 @@
                 removeMaskOnSubmit: true   // Loại bỏ ký tự phân cách phần nghìn khi submit form
             });
         })
+
+        function updateCartCount() {
+            $.ajax({
+                url: "/Cart/GetCartCount",
+                type: "GET",
+                success: function (data) {
+                    $("#cartCount").html(data);
+                }
+            });
+        }
+
+        $(".frmAddToCart").submit(function (e) {
+            e.preventDefault();
+
+            var url = $(this).prop("action");
+            var method = $(this).prop("method");
+            var data = $(this).serializeArray();
+
+            $.ajax({
+                url: url,
+                type: method,
+                data: data,
+                success: function (result) {
+                    if (result === "") {
+                        updateCartCount();
+                    } else {
+                        alert(result);
+                    }
+                }
+            })
+        });
     </script>
     @RenderSection("scripts", false)
 </body>

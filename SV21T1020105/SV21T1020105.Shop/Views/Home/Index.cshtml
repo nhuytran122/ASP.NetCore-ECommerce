@@ -366,3 +366,42 @@
 @{
     await Html.RenderPartialAsync("_Feature");
 }
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            updateCartCount();
+            // Đảm bảo mã JavaScript này được chạy sau khi trang được tải xong
+            $(".frmAddToCart").submit(function (e) {
+                e.preventDefault();
+
+                var url = $(this).prop("action");
+                var method = $(this).prop("method");
+                var data = $(this).serializeArray();
+
+                $.ajax({
+                    url: url,
+                    type: method,
+                    data: data,
+                    success: function (result) {
+                        if (result === "") {
+                            updateCartCount();
+                        } else {
+                            alert(result);
+                        }
+                    }
+                })
+            });
+        })
+
+        function updateCartCount() {
+            $.ajax({
+                url: "/Cart/GetCartCount",
+                type: "GET",
+                success: function (data) {
+                    $("#cartCount").html(data);
+                }
+            });
+        }
+    </script>
+}
