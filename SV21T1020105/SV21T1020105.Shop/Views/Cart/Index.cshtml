@@ -68,7 +68,7 @@
 
                 <tfoot>
                     <tr>
-                        <th colspan="5" class="text-right">Tổng cộng:</th>
+                            <th colspan="5" class="text-right py-3">Tổng cộng:</th>
                         <th class="text-right" id="cartSubtotal">@sumOfPrice.ToString("N0") đ</th>
                         <th></th>
                     </tr>
@@ -111,14 +111,9 @@
                                 @sumOfPrice.ToString("N0") đ
                             </p>
                         </div>
-                        <form action="/confirm-checkout" method="post">
-                            <div style="display: none;">
-                                
-                            </div>
-                            <button type="submit" class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">
+                            <a href = "~/Order/PlaceOrder" class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">
                                 Đặt mua
-                            </button>
-                        </form>
+                            </a>
                     </div>
                 </div>
             </div>

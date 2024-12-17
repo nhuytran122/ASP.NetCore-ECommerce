@@ -1,0 +1,105 @@
+﻿@model IEnumerable<CartItem>
+@{
+    ViewBag.Title = "Xác nhận mua hàng";
+    decimal sumOfPrice = 0;
+}
+
+@if (Model.Count() > 0)
+{
+    <div class="py-5">
+    </div>
+
+    <!-- Checkout Page Start -->
+    <div class="container-fluid py-5">
+        <div class="container py-5">
+            <h1 class="mb-4">Xác nhận đơn hàng</h1>
+            <div class="row g-5">
+                <div class="col-md-12 col-lg-8 col-xl-8">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="col-2"></th>
+                                    <th scope="col" class="col-5">Sản phẩm</th>
+                                    <th scope="col" class="col-2">Đơn giá</th>
+                                    <th scope="col" class="col-1">Số lượng</th>
+                                    <th scope="col" class="col-2">Số tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    sumOfPrice += item.TotalPrice;
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="d-flex align-items-center mt-2">
+                                                <img style="width: 80px;height: 80px;" src="@WebConfig.IMAGE_SOURE_HOST/images/products/@(string.IsNullOrWhiteSpace(item.Photo) ? "no-image.jpg" : item.Photo)" class="img-fluid me-5 rounded-circle">
+                                            </div>
+                                        </th>
+                                        <td class="py-5">@item.ProductName</td>
+                                        <td class="py-5">@item.SalePrice.ToString("N0") đ</td>
+                                        <td class="py-5">@item.Quantity</td>
+                                        <td class="py-5">@item.TotalPrice.ToString("N0") đ</td>
+                                    </tr>
+                                }
+                                <tr class="bg-light border-top">
+                                    <th scope="row"></th>
+                                    <td class="py-4" colspan="3">
+                                        <p class="mb-0 text-dark fw-bold text-uppercase py-3">Tổng thành tiền</p>
+                                    </td>
+                                    <td class="py-4">
+                                        <p class="mb-0 text-danger fw-bold text-uppercase py-3">@sumOfPrice.ToString("N0") đ</p>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-4">
+                        <i class="fas fa-arrow-left"></i>
+                        <a href="~/Cart">Quay lại giỏ hàng</a>
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-lg-4 col-xl-4">
+                    <form id="frmOrderInit" action="~/Order/Init" method="post">
+                        <h3>Thông tin nhận hàng:</h3>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12">
+                                <div class="form-item w-100">
+                                    <label class="form-label my-3">Tỉnh/thành: <span class="text-danger">*</span></label>
+                                    <select class="form-control select2" name="deliveryProvince">
+                                        <option value="">-- Chọn tỉnh thành --</option>
+                                        @foreach (var item in CommonDataService.ListOfProvinces())
+                                        {
+                                            if (item.ProvinceName == ViewBag.DeliveryProvince)
+                                            {
+                                                <option value="@item.ProvinceName" selected>@item.ProvinceName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ProvinceName">@item.ProvinceName</option>
+                                            }
+                                        }
+                                    </select>
+                                    @Html.ValidationMessage("deliveryProvince")
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 col-lg-12">
+                                <div class="form-item w-100">
+                                    <label class="form-label my-3">Địa chỉ nhận hàng: <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="deliveryAddress" value="@ViewBag.DeliveryAddress" />
+                                    @Html.ValidationMessage("deliveryAddress")
+                                </div>
+                            </div>
+
+                        </div>
+                        <button type="submit" class="btn border-secondary py-3 px-2 text-uppercase w-100 text-primary my-5">Xác nhận mua hàng</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Checkout Page End -->
+}
