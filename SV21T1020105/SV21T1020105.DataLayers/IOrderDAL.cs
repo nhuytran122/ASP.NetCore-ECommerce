@@ -56,5 +56,10 @@ namespace SV21T1020105.DataLayers
         /// Xóa 1 mặt hàng ra khỏi đơn hàng
         /// </summary>
         bool DeleteDetail(int orderID, int productID);
+
+        IList<Order> GetListOrdersByCustomerID(int customerID, int page = 1, int pageSize = 0, 
+            int status = 0, DateTime? fromTime = null, DateTime? toTime = null);
+
+        int CountOrdersByCustomerID(int customerID, int status = 0, DateTime? fromTime = null, DateTime? toTime = null);
     }
 }

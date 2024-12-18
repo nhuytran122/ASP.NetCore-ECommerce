@@ -70,155 +70,162 @@ namespace SV21T1020105.BusinessLayers
     /// <summary>
     /// Hủy bỏ đơn hàng
     /// </summary>
-    public static bool CancelOrder(int orderID)
-    {
-        Order? data = orderDB.Get(orderID);
-        if (data == null)
-            return false;
-        if (data.Status != Constants.ORDER_FINISHED)
+        public static bool CancelOrder(int orderID)
         {
-            data.Status = Constants.ORDER_CANCEL;
+            Order? data = orderDB.Get(orderID);
+            if (data == null)
+                return false;
+            if (data.Status != Constants.ORDER_FINISHED)
+            {
+                data.Status = Constants.ORDER_CANCEL;
 
-            data.FinishedTime = DateTime.Now;
-            return orderDB.Update(data);
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Từ chối đơn hàng
-    /// </summary>
-    public static bool RejectOrder(int orderID)
-    {
-        Order? data = orderDB.Get(orderID);
-        if (data == null)
+                data.FinishedTime = DateTime.Now;
+                return orderDB.Update(data);
+            }
             return false;
+        }
 
-        if (data.Status == Constants.ORDER_INIT || data.Status == Constants.ORDER_ACCEPTED)
+        /// <summary>
+        /// Từ chối đơn hàng
+        /// </summary>
+        public static bool RejectOrder(int orderID)
         {
-            data.Status = Constants.ORDER_REJECTED;
-            data.FinishedTime = DateTime.Now;
-            return orderDB.Update(data);
-        }
-        return false;
-    }
+            Order? data = orderDB.Get(orderID);
+            if (data == null)
+                return false;
 
-    /// <summary>
-    /// Duyệt chấp nhận đơn hàng
-    /// </summary>
-    public static bool AcceptOrder(int orderID)
-    {
-        Order? data = orderDB.Get(orderID);
-        if (data == null)
+            if (data.Status == Constants.ORDER_INIT || data.Status == Constants.ORDER_ACCEPTED)
+            {
+                data.Status = Constants.ORDER_REJECTED;
+                data.FinishedTime = DateTime.Now;
+                return orderDB.Update(data);
+            }
             return false;
-        if (data.Status == Constants.ORDER_INIT)
+        }
+
+        /// <summary>
+        /// Duyệt chấp nhận đơn hàng
+        /// </summary>
+        public static bool AcceptOrder(int orderID)
         {
-            data.Status = Constants.ORDER_ACCEPTED;
-            data.AcceptTime = DateTime.Now;
-            return orderDB.Update(data);
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Xác nhận đã chuyển hàng
-    /// </summary>
-    public static bool ShipOrder(int orderID, int shipperID)
-    {
-        Order? data = orderDB.Get(orderID);
-        if (data == null)
+            Order? data = orderDB.Get(orderID);
+            if (data == null)
+                return false;
+            if (data.Status == Constants.ORDER_INIT)
+            {
+                data.Status = Constants.ORDER_ACCEPTED;
+                data.AcceptTime = DateTime.Now;
+                return orderDB.Update(data);
+            }
             return false;
-        if (data.Status == Constants.ORDER_ACCEPTED || data.Status == Constants.ORDER_SHIPPING)
+        }
+
+        /// <summary>
+        /// Xác nhận đã chuyển hàng
+        /// </summary>
+        public static bool ShipOrder(int orderID, int shipperID)
         {
-            data.Status = Constants.ORDER_SHIPPING;
-            data.ShipperID = shipperID;
-            data.ShippedTime = DateTime.Now;
-            return orderDB.Update(data);
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Ghi nhận kết thúc quá trình xử lý đơn hàng thành công
-    /// </summary>
-    public static bool FinishOrder(int orderID)
-    {
-        Order? data = orderDB.Get(orderID);
-
-        if (data == null)
+            Order? data = orderDB.Get(orderID);
+            if (data == null)
+                return false;
+            if (data.Status == Constants.ORDER_ACCEPTED || data.Status == Constants.ORDER_SHIPPING)
+            {
+                data.Status = Constants.ORDER_SHIPPING;
+                data.ShipperID = shipperID;
+                data.ShippedTime = DateTime.Now;
+                return orderDB.Update(data);
+            }
             return false;
-        if (data.Status == Constants.ORDER_SHIPPING)
+        }
+
+        /// <summary>
+        /// Ghi nhận kết thúc quá trình xử lý đơn hàng thành công
+        /// </summary>
+        public static bool FinishOrder(int orderID)
         {
-            data.Status = Constants.ORDER_FINISHED;
-            data.FinishedTime = DateTime.Now;
-            return orderDB.Update(data);
+            Order? data = orderDB.Get(orderID);
+
+            if (data == null)
+                return false;
+            if (data.Status == Constants.ORDER_SHIPPING)
+            {
+                data.Status = Constants.ORDER_FINISHED;
+                data.FinishedTime = DateTime.Now;
+                return orderDB.Update(data);
+            }
+            return false;
         }
-        return false;
-    }
 
-    /// <summary>
-    /// Xóa đơn hàng và toàn bộ chi tiết của đơn hàng
-    /// </summary>
-    public static bool DeleteOrder(int orderID)
-    {
-        var data = orderDB.Get(orderID);
-        if (data == null)
-            return false;
-        if (data.Status == Constants.ORDER_INIT
-                    || data.Status == Constants.ORDER_CANCEL
-                    || data.Status == Constants.ORDER_REJECTED)
-
-            return orderDB.Delete(orderID);
-        return false;
-    }
-
-    /// <summary>
-    /// Lấy danh sách các mặt hàng được bán trong đơn hàng
-    /// </summary>
-    public static List<OrderDetail> ListOrderDetails(int orderID)
-    {
-        return orderDB.ListDetails(orderID).ToList();
-    }
-
-    /// <summary>
-    /// Lấy thông tin của 1 mặt hàng được bán trong đơn hàng
-    /// </summary>
-    public static OrderDetail? GetOrderDetail(int orderID, int productID)
-    {
-        return orderDB.GetDetail(orderID, productID);
-    }
-
-    /// <summary>
-    /// Lưu thông tin chi tiết của đơn hàng (thêm mặt hàng được bán trong đơn hàng)
-    /// theo nguyên tắc:
-    /// - Nếu mặt hàng chưa có trong chi tiết đơn hàng thì bổ sung
-    /// - Nếu mặt hàng đã có trong chi tiết đơn hàng thì cập nhật lại số lượng và giá bán
-    /// </summary>
-    public static bool SaveOrderDetail(int orderID, int productID, int quantity, decimal salePrice)
-    {
-        Order? data = orderDB.Get(orderID);
-        if (data == null)
-            return false;
-        if (data.Status == Constants.ORDER_INIT || data.Status == Constants.ORDER_ACCEPTED)
+        /// <summary>
+        /// Xóa đơn hàng và toàn bộ chi tiết của đơn hàng
+        /// </summary>
+        public static bool DeleteOrder(int orderID)
         {
-            return orderDB.SaveDetail(orderID, productID, quantity, salePrice);
-        }
-        return false;
-    }
+            var data = orderDB.Get(orderID);
+            if (data == null)
+                return false;
+            if (data.Status == Constants.ORDER_INIT
+                        || data.Status == Constants.ORDER_CANCEL
+                        || data.Status == Constants.ORDER_REJECTED)
 
-    /// <summary>
-    /// Xóa một mặt hàng ra khỏi đơn hàng
-    /// </summary>
-    public static bool DeleteOrderDetail(int orderID, int productID)
-    {
-        Order? data = orderDB.Get(orderID);
-        if (data == null)
+                return orderDB.Delete(orderID);
             return false;
-        if (data.Status == Constants.ORDER_INIT || data.Status == Constants.ORDER_ACCEPTED)
-        {
-            return orderDB.DeleteDetail(orderID, productID);
         }
-        return false;
+
+        /// <summary>
+        /// Lấy danh sách các mặt hàng được bán trong đơn hàng
+        /// </summary>
+        public static List<OrderDetail> ListOrderDetails(int orderID)
+        {
+            return orderDB.ListDetails(orderID).ToList();
+        }
+
+        /// <summary>
+        /// Lấy thông tin của 1 mặt hàng được bán trong đơn hàng
+        /// </summary>
+        public static OrderDetail? GetOrderDetail(int orderID, int productID)
+        {
+            return orderDB.GetDetail(orderID, productID);
+        }
+
+        /// <summary>
+        /// Lưu thông tin chi tiết của đơn hàng (thêm mặt hàng được bán trong đơn hàng)
+        /// theo nguyên tắc:
+        /// - Nếu mặt hàng chưa có trong chi tiết đơn hàng thì bổ sung
+        /// - Nếu mặt hàng đã có trong chi tiết đơn hàng thì cập nhật lại số lượng và giá bán
+        /// </summary>
+        public static bool SaveOrderDetail(int orderID, int productID, int quantity, decimal salePrice)
+        {
+            Order? data = orderDB.Get(orderID);
+            if (data == null)
+                return false;
+            if (data.Status == Constants.ORDER_INIT || data.Status == Constants.ORDER_ACCEPTED)
+            {
+                return orderDB.SaveDetail(orderID, productID, quantity, salePrice);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Xóa một mặt hàng ra khỏi đơn hàng
+        /// </summary>
+        public static bool DeleteOrderDetail(int orderID, int productID)
+        {
+            Order? data = orderDB.Get(orderID);
+            if (data == null)
+                return false;
+            if (data.Status == Constants.ORDER_INIT || data.Status == Constants.ORDER_ACCEPTED)
+            {
+                return orderDB.DeleteDetail(orderID, productID);
+            }
+            return false;
+        }
+
+        public static List<Order> GetListOrdersByCustomerID(out int rowCount, int customerID, int page = 1, int pageSize = 0, int status = 0, DateTime? fromTime = null, DateTime? toTime = null)
+        {
+            rowCount = orderDB.CountOrdersByCustomerID(customerID, status, fromTime, toTime);
+            return orderDB.GetListOrdersByCustomerID(customerID, page, pageSize, status).ToList();
+        }
+
     }
-}
 }

@@ -31,5 +31,12 @@ namespace SV21T1020105.Shop.Models
         public string SortByPrice { get; set; } = "";
         public required List<Product> Data { get; set; }
     }
+
+    public class OrderSearchResult : PaginationSearchResult
+    {
+        public int Status { get; set; } = 0;
+        public string TimeRange { get; set; } = "";
+        public List<OrderDetailModel> Data { get; set; } = new List<OrderDetailModel>();
+    }
 }
 

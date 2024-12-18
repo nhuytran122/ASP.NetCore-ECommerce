@@ -1,6 +1,7 @@
 ﻿using SV21T1020105.DomainModels;
 using System.Data;
 using Dapper;
+using System.Buffers;
 
 namespace SV21T1020105.DataLayers.SQLServer
 {
@@ -276,5 +277,77 @@ namespace SV21T1020105.DataLayers.SQLServer
             }
             return result;
         }
+
+        public IList<Order> GetListOrdersByCustomerID(int customerID, int page = 1, int pageSize = 0,
+            int status = 0, DateTime? fromTime = null, DateTime? toTime = null)
+        {
+            List<Order> list = new List<Order>();
+
+            using (var connection = OpenConnection())
+            {
+                var sql = @"with cte as
+                            (
+                                select row_number() over(order by o.OrderTime desc) as RowNumber,
+                                        o.*, 
+                                        c.CustomerName, 
+                                        e.FullName as EmployeeName, 
+                                        s.ShipperName, s.Phone as ShipperPhone
+                                from Orders as o
+                                        left join Customers as c on o.CustomerID = c.CustomerID
+                                        left join Employees as e on o.EmployeeID = e.EmployeeID
+                                        left join Shippers as s on o.ShipperID = s.ShipperID
+                                 where (@Status = 0 or o.Status = @Status)
+                                        and (@FromTime is null or o.OrderTime >= @FromTime)
+                                        and (@ToTime is null or o.OrderTime <= @ToTime)
+                                        and (o.CustomerID  = @CustomerID)
+                            )
+                            select * from cte
+                            where (@PageSize = 0) 
+                                or (RowNumber between (@Page - 1) * @PageSize + 1 and @Page * @PageSize)
+                            order by RowNumber";
+
+                var parameters = new
+                {
+                    Status = status,
+                    Page = page,
+                    FromTime = fromTime, 
+                    ToTime = toTime, 
+                    PageSize = pageSize,
+                    CustomerID = customerID
+                };
+                list = connection.Query<Order>(sql, parameters, commandType: CommandType.Text).ToList();
+            }
+            return list;
+        }
+
+        public int CountOrdersByCustomerID(int customerID = 0, int status = 0, DateTime? fromTime = null, DateTime? toTime = null)
+        {
+            int count = 0;
+
+            using (var connection = OpenConnection())
+            {
+                var sql = @"select count(*)
+                            from Orders as o
+                                left join Customers as c on o.CustomerID = c.CustomerID
+                                left join Employees as e on o.EmployeeID = e.EmployeeID
+                                left join Shippers as s on o.ShipperID = s.ShipperID
+                            where (@Status = 0 or o.Status = @Status)
+                                and (@FromTime is null or o.OrderTime >= @FromTime)
+                                and (@ToTime is null or o.OrderTime <= @ToTime)
+                                and (o.CustomerID = @CustomerID);";
+
+                var parameters = new
+                {
+                    Status = status,
+                    FromTime = fromTime,
+                    ToTime = toTime,
+                    CustomerID = customerID
+                };
+
+                count = connection.ExecuteScalar<int>(sql, parameters, commandType: CommandType.Text);
+            }
+            return count;
+        }
+
     }
 }
