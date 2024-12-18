@@ -23,8 +23,4 @@
     <ProjectReference Include="..\SV21T1020105.DomainModels\SV21T1020105.DomainModels.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\images\" />
-  </ItemGroup>
-
 </Project>

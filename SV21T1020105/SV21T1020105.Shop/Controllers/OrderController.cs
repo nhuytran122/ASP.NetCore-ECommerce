@@ -53,5 +53,10 @@ namespace SV21T1020105.Shop.Controllers
             return View("Thanks");
         }
 
+        public IActionResult OrderHistory()
+        {
+            return View("OrderHistory");
+        }
+
     }
 }

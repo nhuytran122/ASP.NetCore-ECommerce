@@ -1,0 +1,89 @@
+﻿@{
+    ViewBag.Title = "Lịch sử mua hàng";
+}
+<div class="py-5">
+</div>
+<div class="container py-5">
+    <div class="row">
+        <!-- Sidebar -->
+        @{
+            await Html.RenderPartialAsync("_SidebarProfile");
+        }
+
+        <!-- Order Tabs -->
+        <div class="col-md-9">
+            <ul class="nav nav-tabs mb-4">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Tất cả</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Chờ thanh toán</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Vận chuyển</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Chờ giao hàng (2)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Hoàn thành</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Đã hủy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Trả hàng/Hoàn tiền</a>
+                </li>
+            </ul>
+
+            <!-- Order Items -->
+            <div class="shop-card p-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <span class="badge bg-danger me-2">Yêu thích</span>
+                        <strong>Lekaari Factory Shop</strong>
+                        <button class="btn btn-outline-danger btn-sm ms-2">Chat</button>
+                        <button class="btn btn-outline-secondary btn-sm">Xem Shop</button>
+                    </div>
+                    <span class="text-success">
+                        <i class="bi bi-truck"></i> Đơn hàng đã đến kho phân loại
+                    </span>
+                </div>
+                <div class="d-flex">
+                    <img src="https://via.placeholder.com/80" class="me-3" alt="Product">
+                    <div class="flex-grow-1">
+                        <h6>Ốp điện thoại mờ sáng tạo cho Samsung Galaxy A7 J7 J6 J4 J2 ACE 2018 Grand Prime Plus</h6>
+                        <small class="text-muted">Phân loại: black,Samsung J7 Prime</small>
+                        <p>x1</p>
+                    </div>
+                    <div class="text-end">
+                        <p class="price-text">₫13.810</p>
+                    </div>
+                </div>
+                <div class="border-top mt-3 pt-3">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <span class="me-3">Thành tiền:</span>
+                        <span class="price-text fs-5 fw-bold">₫38.767</span>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button class="btn btn-outline-secondary me-2">Liên Hệ Người Bán</button>
+                        <button class="btn btn-danger">Mua Lại</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles {
+    <style>
+        .shop-card {
+            border: 1px solid #ddd;
+            margin-bottom: 1rem;
+        }
+
+        .price-text {
+            color: #ee4d2d;
+        }
+    </style>
+}

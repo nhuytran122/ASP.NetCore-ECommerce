@@ -19,14 +19,15 @@ namespace SV21T1020105.DataLayers.SQLServer
                                 select -1;
                             else
                                 begin
-                                    insert into Categories(CategoryName, Description)
-                                    values (@CategoryName, @Description);
+                                    insert into Categories(CategoryName, Description, Photo)
+                                    values (@CategoryName, @Description, @Photo);
                                     select SCOPE_IDENTITY();
                                 end";
                 var parameters = new
                 {
                     CategoryName = data.CategoryName ?? "",
-                    Description = data.Description ?? ""
+                    Description = data.Description ?? "",
+                    Photo = data.Photo ?? ""
                 };
                 id = connection.ExecuteScalar<int>(sql, parameters, commandType: CommandType.Text);
                 //Thực thi câu lệnh
@@ -141,14 +142,16 @@ namespace SV21T1020105.DataLayers.SQLServer
                                 begin
                                     update Categories
                                     set CategoryName = @CategoryName,
-	                                    Description = @Description
+	                                    Description = @Description,
+                                        Photo = @Photo
                                     where CategoryID = @CategoryID
                                 end";
                 var parameters = new
                 {
                     CategoryID = data.CategoryID,
                     CategoryName = data.CategoryName,
-                    Description = data.Description ?? ""
+                    Description = data.Description ?? "",
+                    Photo = data.Photo ?? ""
                 };
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
                 connection.Close();

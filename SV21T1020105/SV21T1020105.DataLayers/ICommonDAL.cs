@@ -53,5 +53,9 @@
         /// <param name="id"></param>
         /// <returns></returns>
         bool InUsed(int id);
+
+        bool UpdateCustomerProfile(T data) {
+            throw new NotImplementedException("Phương thức này không bắt buộc.");
+        }
     }
 }

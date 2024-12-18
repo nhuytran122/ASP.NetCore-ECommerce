@@ -1,0 +1,99 @@
+﻿@model Customer
+@{
+    ViewBag.Title = "Cập nhật thông tin"; 
+}
+
+<div class="py-5"></div>
+<div class="container py-5">
+    <div class="row">
+        @{
+            await Html.RenderPartialAsync("_SidebarProfile");
+        }
+
+        <div class="col-md-9 mt-3">
+            <div class="card border">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="m-0">Cập Nhật Thông Tin</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="~/Profile/Save" enctype="multipart/form-data">
+                        <input type="hidden" name="@nameof(Model.CustomerID)" value="@Model.CustomerID" />
+                        <div class="row">
+                            <!-- Cột edit thông tin -->
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="bi bi-person me-2"></i> Tên:</label>
+                                    <input type="text" class="form-control"
+                                           name="@nameof(Model.CustomerName)" value="@Model.CustomerName" />
+                                    @Html.ValidationMessage(nameof(Model.CustomerName))
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="bi bi-envelope me-2"></i> Email:</label>
+                                    <input type="hidden" name="@nameof(Model.Email)" value="@Model.Email" />
+
+                                    <input class="form-control" disabled
+                                           name="@nameof(Model.Email)" value="@Model.Email" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="bi bi-telephone me-2"></i> Số điện thoại:</label>
+                                    <input type="text" class="form-control"
+                                           name="@nameof(Model.Phone)" value="@Model.Phone" />
+                                    @Html.ValidationMessage(nameof(Model.Phone))
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="bi bi-geo-alt me-2"></i> Tỉnh thành:</label>
+                                    <select class="form-control select2" name="@nameof(Model.Province)">
+                                        <option value="">-- Chọn tỉnh thành --</option>
+                                        @foreach (var item in CommonDataService.ListOfProvinces())
+                                        {
+                                            if (item.ProvinceName == Model.Province)
+                                            {
+                                                <option value="@item.ProvinceName" selected>@item.ProvinceName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ProvinceName">@item.ProvinceName</option>
+                                            }
+                                        }
+                                    </select>
+                                    @Html.ValidationMessage(nameof(Model.Province))
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="bi bi-house-door me-2"></i> Địa chỉ:</label>
+                                    <input type="text" class="form-control"
+                                           name="@nameof(Model.Address)" value="@Model.Address" />
+                                    @Html.ValidationMessage(nameof(Model.Address))
+                                </div>
+                            </div>
+
+                            <!-- Cột edit ảnh đại diện -->
+                            <div class="col-md-4 text-center">
+                                <div class="mb-3">
+                                    <img id="PhotoPreview"
+                                         src="@(WebConfig.IMAGE_SOURE_HOST + "/images/customers/" + (string.IsNullOrWhiteSpace(Model.Photo) ? "default-avatar.jpg" : Model.Photo))"
+                                         class="profile-pic-upload rounded-circle border mb-3"
+                                         style="width:150px; height:150px; object-fit:cover;" />
+                                </div>
+                                <input type="hidden" name="@nameof(Model.Photo)" value="@Model.Photo" />
+                                <div class="mb-3">
+                                    <label for="avatarFile" class="form-label">Ảnh đại diện:</label>
+                                    <input type="file" class="form-control" name="uploadPhoto" accept="image/*"
+                                           onchange="document.getElementById('PhotoPreview').src = window.URL.createObjectURL(this.files[0])" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="~/Profile" class="btn btn-danger px-4 me-2">
+                                <i class="bi bi-x me-2"></i> Quay lại
+                            </a>
+
+                            <button type="submit" class="btn btn-warning px-4">
+                                <i class="fa fa-save me-2"></i> Lưu Thay Đổi
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
