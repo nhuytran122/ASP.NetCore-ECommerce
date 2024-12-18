@@ -13,39 +13,22 @@
 
         <!-- Order Tabs -->
         <div class="col-md-9 my-3">
-            <ul class="nav nav-tabs mb-4">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">Tất cả</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="~/Order/Search?Status=@Constants.ORDER_INIT">Đang chờ duyệt </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="~/Order/Search?Status=@Constants.ORDER_ACCEPTED">Đang chờ chuyển hàng</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="~/Order/Search?Status=@Constants.ORDER_SHIPPING">Đang được giao (2)</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="~/Order/Search?Status=@Constants.ORDER_FINISHED">Hoàn thành</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="~/Order/Search?Status=@Constants.ORDER_CANCEL">Đã hủy</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="~/Order/Search?Status=@Constants.ORDER_REJECTED">Bị từ chối</a>
-                </li>
-            </ul>
             <form id="frmSearchInput" action="~/Order/Search" method="get">
-                <input type="hidden" name="@nameof(Model.PageSize)" value="@Model.PageSize" />
-                <input type="hidden" name="@nameof(Model.Status)" value="@Model.Status" />
-                <div class="d-flex justify-content-end align-items-end mb-4">
-                    <input type="text" name="@nameof(Model.TimeRange)" value="@Model.TimeRange" class="form-control daterange-picker me-2 text-center py-2" placeholder="Chọn khoảng thời gian" style="width: 40%">
+                <div class="d-flex mb-4">
+                    <select class="form-select me-2" name="@nameof(Model.Status)">
+                        <option value="">Tất cả</option>
+                        <option value="1" selected="@(Model.Status == 1)">Đơn hàng mới (chờ duyệt)</option>
+                        <option value="2" selected="@(Model.Status == 2)">Đơn hàng đã duyệt (chờ chuyển hàng)</option>
+                        <option value="3" selected="@(Model.Status == 3)">Đơn hàng đang được giao</option>
+                        <option value="4" selected="@(Model.Status == 4)">Đơn hàng đã hoàn tất thành công</option>
+                        <option value="-1" selected="@(Model.Status == -1)">Đơn hàng bị hủy</option>
+                        <option value="-2" selected="@(Model.Status == -2)">Đơn hàng bị từ chối</option>
+                    </select>
+                    <input type="text" name="@nameof(Model.TimeRange)" value="@Model.TimeRange" class="form-control daterange-picker me-2 text-center py-2" placeholder="Chọn khoảng thời gian">
                     <button type="submit" class="btn btn-primary py-2">
                         <i class="bi bi-search"></i>
                     </button>
                 </div>
-
             </form>
             
             <div class="col-12 col-md-12">
