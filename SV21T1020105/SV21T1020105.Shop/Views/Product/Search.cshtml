@@ -25,10 +25,6 @@ else
                              class="img-fluid w-100 rounded-top" alt="@product.ProductName"
                              style="height: 182px; width: auto;">
                     </div>
-                    <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                         style="top: 10px; left: 10px;">
-                        @(CommonDataService.GetCategory(product.CategoryID)?.CategoryName ?? "Không xác định")
-                    </div>
                     <div class="p-4 border border-secondary border-top-0 rounded-bottom"
                          style="min-height: 200px; display: flex; flex-direction: column; justify-content: space-between;">
                         <div style="height: auto;">

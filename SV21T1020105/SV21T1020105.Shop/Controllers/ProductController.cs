@@ -69,5 +69,10 @@ namespace SV21T1020105.Shop.Controllers
 
             return View(model);
         }
+    
+        public IActionResult Filter(int categoryID = 0)
+        {
+            return View();
+        }
     }
 }

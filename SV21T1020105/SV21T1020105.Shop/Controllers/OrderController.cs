@@ -11,7 +11,7 @@ namespace SV21T1020105.Shop.Controllers
     public class OrderController : Controller
     {
         public const string ORDER_SEARCH_CONDITION = "OrderSearchCondition";
-        public const int PAGE_SIZE = 20;
+        public const int PAGE_SIZE = 6;
         public IActionResult OrderHistory()
         {
             var condition = ApplicationContext.GetSessionData<OrderSearchInput>(ORDER_SEARCH_CONDITION);
@@ -66,23 +66,22 @@ namespace SV21T1020105.Shop.Controllers
             }
             int orderID = OrderDataService.InitOrder(null, 4194, deliveryProvince, deliveryAddress, orderDetails);
             ShoppingCartHelper.ClearCart();
-            // TODO: Thay bởi view Show đơn hàng đang chờ duyệt
-            return View("Thanks");
+            return RedirectToAction("OrderHistory");
         }
 
         public IActionResult Search(OrderSearchInput condition)
         {
             int rowCount;
-            var data = OrderDataService.GetListOrdersByCustomerID(out rowCount, 4781, condition.Page, condition.PageSize,
+            var data = OrderDataService.GetListOrdersByCustomerID(out rowCount, 4194, condition.Page, condition.PageSize,
                                                    condition.Status, condition.FromTime, condition.ToTime);
 
             // Tạo một danh sách chứa chi tiết các đơn hàng
             var orderDetailModels = new List<OrderDetailModel>();
 
-            // Lặp qua từng đơn hàng và lấy các chi tiết của từng đơn hàng
+            // Lặp qua từng đơn hàng và lấy các CTHD
             foreach (var order in data)
             {
-                var orderDetails = OrderDataService.ListOrderDetails(order.OrderID); // Lấy chi tiết đơn hàng
+                var orderDetails = OrderDataService.ListOrderDetails(order.OrderID); // Lấy CTHD
                 var orderDetailModel = new OrderDetailModel
                 {
                     Order = order, // gán đơn hàng hiện tại
@@ -91,7 +90,6 @@ namespace SV21T1020105.Shop.Controllers
                 orderDetailModels.Add(orderDetailModel); 
             }
 
-            // Tạo model cho kết quả tìm kiếm
             var model = new OrderSearchResult()
             {
                 Page = condition.Page,
@@ -103,24 +101,33 @@ namespace SV21T1020105.Shop.Controllers
             };
 
             ApplicationContext.SetSessionData(ORDER_SEARCH_CONDITION, condition);
-            return View(model); // Trả về view với model chứa thông tin chi tiết
+            return View(model);
         }
 
-        //public IActionResult OrderHistory()
-        //{
-        //    //var order = OrderDataService.GetOrder(1477);
-        //    //if (order == null)
-        //    //    return RedirectToAction("Index");
+        public IActionResult Details(int id = 0)
+        {
+            var order = OrderDataService.GetOrder(id);
+            if (order == null)
+                return RedirectToAction("Index");
 
-        //    //var details = OrderDataService.GetListOrdersByCustomerID(1477);
-        //    //var model = new OrderDetailModel()
-        //    //{
-        //    //    Order = order,
-        //    //    Details = details
-        //    //};
+            var details = OrderDataService.ListOrderDetails(id);
+            var model = new OrderDetailModel()
+            {
+                Order = order,
+                Details = details
+            };
 
-        //    return View();
-        //}
+            return View(model);
+        }
 
+        public IActionResult Cancel(int id)
+        {
+            var order = OrderDataService.GetOrder(id);
+            if (order == null)
+                return RedirectToAction("OrderHistory");
+
+            OrderDataService.CancelOrder(id);
+            return RedirectToAction("Details", new { id = id });
+        }
     }
 }

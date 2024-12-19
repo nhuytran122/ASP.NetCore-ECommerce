@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SV21T1020105.BusinessLayers;
 using SV21T1020105.Shop.Models;
 using System.Diagnostics;
 
@@ -15,7 +16,9 @@ namespace SV21T1020105.Shop.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            ViewBag.ListCategories = CommonDataService.ListOfCategories();
+            var data = ProductDataService.ListProducts();
+            return View(data);
         }
 
         public IActionResult Privacy()

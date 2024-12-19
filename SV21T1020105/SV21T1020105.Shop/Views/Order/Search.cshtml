@@ -17,34 +17,48 @@ else
     {
         <div class="shop-card p-3">
             <div class="d-flex justify-content-end mb-3">
-                <span class="text-success">
-                    <i class="bi bi-truck"></i> @orderDetailModel.Order.StatusDescription
-                </span>
+                @if (orderDetailModel.Order.Status != Constants.ORDER_CANCEL 
+                    && orderDetailModel.Order.Status != Constants.ORDER_REJECTED)
+                {
+                    <span class="text-success">
+                        <i class="bi bi-truck"></i> @orderDetailModel.Order.StatusDescription
+                    </span>
+                }
+                else
+                {
+                    <span class="text-danger">
+                        @orderDetailModel.Order.StatusDescription
+                    </span>
+                }
+
             </div>
 
-            <!-- Loop through each OrderDetail for this order -->
-            @foreach (var detailItem in orderDetailModel.Details)
+            @foreach (var item in orderDetailModel.Details)
             {
                 <div class="d-flex py-3 border-top">
 
-                    <img src="@WebConfig.IMAGE_SOURE_HOST/images/products/@(string.IsNullOrWhiteSpace(detailItem.Photo) ? "no-image.jpg" : detailItem.Photo)" class="me-3" alt="Product" height="80" width="80">
+                    <img src="@WebConfig.IMAGE_SOURE_HOST/images/products/@(string.IsNullOrWhiteSpace(item.Photo) ? "no-image.jpg" : item.Photo)" class="me-3" alt="Product" height="80" width="80">
 
                     <div class="flex-grow-1">
-                        <h6>@detailItem.ProductName</h6>
-                        <p>x @detailItem.Quantity</p>
+                        <a href="~/Product/Details/@item.ProductID"><h6>@item.ProductName</h6></a>
+                        <p>x @item.Quantity</p>
                     </div>
                     <div class="text-end">
-                        <p class="price-text number-separator">@detailItem.TotalPrice</p>
+                        <p class="price-text number-separator">@item.TotalPrice</p>
                     </div>
                 </div>
             }
 
             <div class="border-top pt-3">
-                <div class="d-flex justify-content-end align-items-center">
-                    <span class="me-3">Thành tiền:</span>
-                    <span class="price-text fs-5 fw-bold number-separator">@orderDetailModel.Details.Sum(d => d.TotalPrice)</span>
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="~/Order/Details?id=@orderDetailModel.Order.OrderID" class="btn btn-primary btn-sm">Xem chi tiết</a>
+                    <div class="d-flex align-items-center">
+                        <span class="me-3">Thành tiền:</span>
+                        <span class="price-text fs-5 fw-bold number-separator">@orderDetailModel.Details.Sum(d => d.TotalPrice)</span>
+                    </div>
                 </div>
             </div>
+
         </div>
     }
 

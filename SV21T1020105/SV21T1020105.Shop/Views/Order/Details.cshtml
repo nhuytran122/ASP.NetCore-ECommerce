@@ -1,0 +1,217 @@
+﻿@model OrderDetailModel
+@{
+    ViewBag.Title = "Chi tiết đơn hàng";
+    var order = Model.Order;
+}
+<div class="py-5">
+</div>
+<div class="container py-5">
+    <div class="row">
+        @{
+            await Html.RenderPartialAsync("Tmp_SidebarProfile");
+        }
+
+        <div class="col-md-9 mt-2">
+            <div class="container">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex align-items-center">
+                        <a href="~/Order/OrderHistory" class="text-dark text-decoration-none">
+                            <i class="bi bi-arrow-left me-2"></i>TRỞ LẠI
+                        </a>
+                    </div>
+                    <div>
+                        <span class="me-2 text-uppercase">
+                            Mã đơn hàng: @order.OrderID |
+                        </span>
+                        @if (order.Status != Constants.ORDER_CANCEL
+                        && order.Status != Constants.ORDER_REJECTED)
+                        {
+                            <span class="text-uppercase text-primary">@order.StatusDescription</span>
+                        }
+                        else
+                        {
+                            <span class="text-uppercase text-danger">@order.StatusDescription</span>
+                        }
+                    </div>
+                </div>
+
+                
+                <!-- Delivery Info -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Địa Chỉ Nhận Hàng</h5>
+                        <div class="mb-4">
+                            <h6>@order.CustomerName</h6>
+                            <p class="mb-1">@order.CustomerPhone</p>
+                            <p class="mb-0">@order.DeliveryAddress</p>
+                        </div>
+
+                        <div class="timeline">
+                            @if (order.FinishedTime != null)
+                            {
+                                <div class="timeline-item">
+                                    <div class="timeline-dot"></div>
+                                    <div>
+                                        <div class="timeline-time">
+                                            @DateTimeHelper.FormatDateTime(order.FinishedTime)
+                                        </div>
+                                        <div class="timeline-status">Đã hoàn tất đơn hàng</div>
+                                    </div>
+                                </div>
+                            }
+
+                            @if (order.ShippedTime != null)
+                            {
+                                <div class="timeline-item">
+                                    <div class="timeline-dot"></div>
+                                    <div>
+                                        <div class="timeline-time">@DateTimeHelper.FormatDateTime(order.ShippedTime)</div>
+                                        <p class="timeline-details">Đang được giao</p>
+                                        <p class="timeline-details">Đơn vị vận chuyển: @order.ShipperName</p>
+                                        <p class="timeline-details">Số điện thoại vận chuyển: @order.ShipperPhone</p>
+                                    </div>
+                                </div>
+                            }
+
+                            @if (order.AcceptTime != null)
+                            {
+                                <div class="timeline-item">
+                                    <div class="timeline-dot"></div>
+                                    <div>
+                                        <div class="timeline-time">@DateTimeHelper.FormatDateTime(order.AcceptTime)</div>
+                                        <p class="timeline-details">Đang chờ chuyển hàng</p>
+                                    </div>
+                                </div>
+                            }
+
+                            @if (order.OrderTime != null)
+                            {
+                                <div class="timeline-item">
+                                    <div class="timeline-dot"></div>
+                                    <div>
+                                        <div class="timeline-time">@DateTimeHelper.FormatDateTime(order.OrderTime)</div>
+                                        <p class="timeline-details">
+                                            Đặt hàng thành công
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Details -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="border-bottom pb-3 mb-3">
+                            @foreach(var item in Model.Details)
+                            {
+                                <div class="d-flex mb-3">
+                                    <img src="@WebConfig.IMAGE_SOURE_HOST/images/products/@(string.IsNullOrWhiteSpace(item.Photo) ? "no-image.jpg" : item.Photo)" class="product-img me-3" alt="Product">
+                                    <div class="flex-grow-1">
+                                        <a href="~/Product/Details/@item.ProductID"><h6 class="mb-1">@item.ProductName</h6></a>
+                                        <p class="mb-0">x @item.Quantity</p>
+                                    </div>
+                                    <div class="text-end">
+                                        <p class="mb-0 text-danger number-separator">@item.TotalPrice</p>
+                                    </div>
+                                </div>
+                            }
+                            
+                        </div>
+
+                        <div class="price-summary mt-3">
+                            <div class="price-row border-top pt-2">
+                                <strong>Thành tiền</strong>
+                                <strong class="text-danger number-separator">@Model.Details.Sum(d => d.TotalPrice)</strong>
+                            </div>
+                            <div class="price-row">
+                                <span>Phương thức Thanh toán</span>
+                                <span>Thanh toán khi nhận hàng</span>
+                            </div>
+                        </div>
+                        @if (order.Status != Constants.ORDER_ACCEPTED && order.Status != Constants.ORDER_SHIPPING
+                            && order.Status != Constants.ORDER_FINISHED && order.Status !=  Constants.ORDER_CANCEL 
+                            && order.Status != Constants.ORDER_REJECTED
+
+                        )
+                        {
+                            <div class="text-end mt-3">
+                                <a href="~/Order/Cancel/@order.OrderID" class="btn btn-danger">Hủy Đơn Hàng</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+@section styles {
+    <style>
+        .status-line {
+            height: 2px;
+            background-color: #00bfa5;
+            flex-grow: 1;
+            margin: 0 10px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 45px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 15px;
+            bottom: 0;
+            width: 2px;
+            background: #e8e8e8;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -45px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #26aa99;
+            border: 2px solid #ccc;
+        }
+
+        .timeline-time {
+            color: rgba(0,0,0,.54);
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .timeline-status {
+            color: #26aa99;
+            margin-bottom: 4px;
+        }
+
+        .timeline-details {
+            margin-bottom: 0;
+        }
+
+        .product-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+    </style>
+}

@@ -19,13 +19,22 @@
                             </a>
                         </div>
                         <div class="option flex mt-3">
+                            @if (!string.IsNullOrWhiteSpace(product.Photo))
+                            {
+                                 <img src="@WebConfig.IMAGE_SOURE_HOST/images/products/@product.Photo" 
+                                         onclick="img('@WebConfig.IMAGE_SOURE_HOST/images/products/@product.Photo')" 
+                                         style="height: 100px; width: auto; cursor: pointer;"
+                                         class="thumb-img border rounded">
+                            }
+
                             @foreach (var photo in Model.Photos.OrderBy(photo => photo.DisplayOrder))
                             {
                                 @if (!photo.IsHidden)  
                                 {
                                     <img src="@WebConfig.IMAGE_SOURE_HOST/images/products/@photo.Photo" 
                                          onclick="img('@WebConfig.IMAGE_SOURE_HOST/images/products/@photo.Photo')" 
-                                         style="height: 100px; width: auto; cursor: pointer;">
+                                         style="height: 100px; width: auto; cursor: pointer;"
+                                         class="thumb-img border rounded">
                                 }
                             }
                         </div>
@@ -101,7 +110,7 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                        @if(Model.Attributes.Count() != 0){
                                         <div class="px-2">
                                             <h4 class="fw-bold py-3 border-bottom">Các thuộc tính của sản  phẩm</h4>
                                             <div class="row g-4">
@@ -120,6 +129,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    }
                                     </div>
                                 </div>
 
@@ -139,9 +149,6 @@
                                  class="img-fluid w-100 rounded-top" alt="@item.ProductName"
                                  style="height: 182px; object-fit: cover;">
                         </div>
-                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">
-                            @(CommonDataService.GetCategory(item.CategoryID)?.CategoryName ?? "Không xác định")
-                        </div>
                         <div class="p-4 border border-primary border-top-0 rounded-bottom d-flex flex-column justify-content-between" style="min-height: 200px;">
                             <div>
                                 <h6 style="word-wrap: break-word; white-space: normal; max-width: 100%;">
@@ -151,7 +158,7 @@
                                  </h6>
                             </div>
                             <div class="d-flex flex-column align-items-center">
-                                <p class="text-dark fs-5 fw-bold mb-3">@item.Price.ToString("N0") đ</p>
+                                <p class="text-dark fs-5 fw-bold mb-3 number-separator">@item.Price đ</p>
                                 <form class="frmAddToCart" action="~/Cart/AddToCart" method="post">
                                     <input type="hidden" name="Quantity" value="1" />
                                     <input type="hidden" name="@nameof(item.ProductID)" value="@item.ProductID" />
@@ -184,4 +191,14 @@
             
         })
     </script>
+}
+
+@section styles{
+    <style>
+        .thumb-img:hover {
+            border: 2px solid #007bff;
+            opacity: 0.8;
+        }
+    </style>
+    
 }

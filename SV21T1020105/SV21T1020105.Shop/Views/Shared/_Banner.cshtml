@@ -1,4 +1,7 @@
-﻿<div class="container-fluid py-5 mb-5 hero-header">
+﻿@{
+    List<Category> categories = ViewBag.ListCategories;
+}
+<div class="container-fluid py-5 mb-5 hero-header">
     <div class="container py-5">
         <div class="row g-5 align-items-center">
             <div class="col-md-12 col-lg-7">
@@ -10,14 +13,12 @@
             <div class="col-md-12 col-lg-5">
                 <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">
                     <div class="carousel-inner" role="listbox">
-                        <div class="carousel-item active rounded">
-                            <img src="~/themes/img/hero-img-1.png" class="~/themes/img-fluid w-100 h-100 bg-secondary rounded" alt="First slide">
-                            <a href="#" class="btn px-4 py-2 text-white rounded">Fruites</a>
-                        </div>
-                        <div class="carousel-item rounded">
-                            <img src="~/themes/img/hero-img-2.jpg" class="~/themes/img-fluid w-100 h-100 rounded" alt="Second slide">
-                            <a href="#" class="btn px-4 py-2 text-white rounded">Vesitables</a>
-                        </div>
+                        @foreach(var category in categories){
+                            <div class="carousel-item @(category == categories.First() ? "active" : "") rounded">
+                                <img src="@WebConfig.IMAGE_SOURE_HOST/images/categories/@(string.IsNullOrWhiteSpace(category.Photo) ? "no-image.jpg" : category.Photo)" class="d-block w-100 h-100 bg-secondary rounded">
+                                <a href="~/Product/Filter?category=@category.CategoryID" class="btn px-4 py-2 text-white rounded">@category.CategoryName</a>
+                            </div>
+                        }
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
