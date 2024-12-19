@@ -1,0 +1,178 @@
+﻿@model IEnumerable<CartItem>
+@{
+    Layout = null;
+    decimal sumOfPrice = 0;
+}
+
+<div class="container py-5">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Sản phẩm</th>
+                    <th scope="col">Đơn Giá</th>
+                    <th scope="col">Số Lượng</th>
+                    <th scope="col">Số Tiền</th>
+                    <th scope="col">Thao Tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    sumOfPrice += item.TotalPrice;
+                    <tr>
+                        <th scope="row">
+                            <div class="d-flex align-items-center">
+                                <img style="width:80px;height: 80px;" src="@WebConfig.IMAGE_SOURE_HOST/images/products/@(string.IsNullOrWhiteSpace(item.Photo) ? "no-image.jpg" : item.Photo)" class="img-fluid me-5 rounded-circle">
+                            </div>
+                        </th>
+                        <td>
+                            <a href="~/Product/Details/@item.ProductID">
+                                <div class="product-name mb-0 my-4" style="max-width: 360px;">
+                                    @item.ProductName
+                                </div>
+                            </a>
+                        </td>
+
+                        <td>
+                            <p class="mb-0 mt-4 number-separator">@item.SalePrice.ToString("N0") đ</p>
+                        </td>
+                        <td>
+                            <form action="~/Cart/UpdateQuantity" method="post" class="ajax-form">
+                                <input type="hidden" name="productID" value="@item.ProductID" />
+                                <div class="input-group mt-4" style="width: 200px;">
+                                    <input class="form-control text-center form-control-sm text-center border-1"
+                                           type="number" value="@item.Quantity" min="1"
+                                           name="quantity" />
+                                    <button type="submit" class="btn btn-primary btn-sm ms-2">Cập nhật</button>
+                                </div>
+                            </form>
+                        </td>
+
+                        <td>
+                            <p class="mb-0 mt-4 number-separator">@item.TotalPrice.ToString("N0") đ</p>
+                        </td>
+                        <td>
+                            <a href="~/Cart/RemoveFromCart/@item.ProductID" data-product-name="@item.ProductName" class="btn btn-md rounded-circle bg-light border mt-4
+                                        ajax-link">
+                                <i class="fa fa-times text-danger"></i>
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <th colspan="5" class="text-right py-3">Tổng cộng:</th>
+                    <th class="text-right number-separator">@sumOfPrice.ToString("N0") đ</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+
+        </table>
+
+        <div class="d-flex justify-content-end mt-3 mx-5">
+            <a href="~/Cart/ClearCart" class="btn btn-sm btn-danger ajax-link">
+                <i class="fa fa-trash"></i> Xóa giỏ hàng
+            </a>
+        </div>
+
+    </div>
+    @if (Model.Count() > 0)
+    {
+        <div class="mt-5 row g-4 justify-content-start">
+            <div class="col-12 col-md-8">
+                <div class="bg-light rounded">
+                    <div class="p-4">
+                        <h1 class="display-6 mb-5">Thông tin đơn hàng</h1>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="mb-0 mb-4">Tạm tính</h5>
+                            <div>
+                                <p class="mb-0 đ number-separator">
+                                    @sumOfPrice.ToString("N0") đ
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
+                        <h5 class="mb-0 ps-4 me-4">Tổng số tiền</h5>
+                        <p class="mb-0 pe-4 number-separator">
+                            @sumOfPrice.ToString("N0") đ
+                        </p>
+                    </div>
+                    <a href="~/Order/PlaceOrder" class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">
+                        Đặt mua
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+<script>
+    $(document).ready(function () {
+        $(".ajax-link").click(function (e) {
+            e.preventDefault();
+
+            var productName = $(this).data('product-name');
+            var confirmDelete = false;
+
+            if ($(this).attr('href').includes('RemoveFromCart')) {
+                confirmDelete = confirm('Xóa mặt hàng ' + productName + ' ra khỏi giỏ hàng?');
+            } else if ($(this).attr('href').includes('ClearCart')) {
+                confirmDelete = confirm('Bạn muốn xóa giỏ hàng không?');
+            }
+
+            if (confirmDelete) {
+                $.ajax({
+                    url: $(this).prop("href"),
+                    type: "GET",
+                    success: function (data) {
+                        if (data !== "") {
+                            alert(data);
+                        } else {
+                            showShoppingCart();
+                        }
+                    }
+                });
+            }
+        });
+
+
+        $(".ajax-form").submit(function (e) {
+            e.preventDefault();
+            var inputData = $(this).serializeArray();
+            $.ajax({
+                url: $(this).attr("action"),
+                type: $(this).attr("method"),
+                data: inputData,
+                success: function (data) {
+                    if (data !== "") {
+                        alert(data);
+                    } else {
+                        showShoppingCart();
+                    }
+                    if ($('#shoppingCart').find('#empty-cart').length > 0) {
+                        $('#shoppingCart').replaceWith(data);
+                    }
+                }
+            });
+        });
+
+    });
+
+    function showShoppingCart() {
+        $.ajax({
+            url: "Cart/ShoppingCart",
+            type: 'GET',
+            success: function (data) {
+                updateCartCount();
+                $('#shoppingCart').html(data);
+            }
+        });
+    }
+</script>

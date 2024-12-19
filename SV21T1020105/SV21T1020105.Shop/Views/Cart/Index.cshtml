@@ -1,195 +1,33 @@
 ﻿@model IEnumerable<CartItem>
 @{
     ViewBag.Title = "Giỏ hàng";
-    decimal sumOfPrice = 0;
 }
 <div class="pt-5">
 </div>
 
-@if(Model.Count() > 0){
-<!-- Cart Page Start -->
-<div class="container-fluid pt-5" id="shoppingCart">
-    <div class="container py-5">
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col"></th>
-                        <th scope="col">Sản phẩm</th>
-                        <th scope="col">Đơn Giá</th>
-                        <th scope="col">Số Lượng</th>
-                        <th scope="col">Số Tiền</th>
-                        <th scope="col">Thao Tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                        @foreach (var item in Model)
-                        {
-                            sumOfPrice += item.TotalPrice;
-                            <tr>
-                                <th scope="row">
-                                    <div class="d-flex align-items-center">
-                                        <img style="width:80px;height: 80px;" src="@WebConfig.IMAGE_SOURE_HOST/images/products/@(string.IsNullOrWhiteSpace(item.Photo) ? "no-image.jpg" : item.Photo)" class="img-fluid me-5 rounded-circle">
-                                    </div>
-                                </th>
-                                <td>
-                                    <a href="~/Product/Details/@item.ProductID">
-                                        <div class="product-name mb-0 my-4" style="max-width: 360px;">
-                                            @item.ProductName
-                                        </div>
-                                    </a>
-                                </td>
+@if (Model.Count() > 0)
+{
+    <div class="container-fluid pt-5" id="shoppingCart">
 
-                                <td>
-                                        <p class="mb-0 mt-4">@item.SalePrice.ToString("N0") đ</p>
-                                </td>
-                                <td>
-                                    <div class="input-group quantity mt-4" style="width: 100px;">
-                                        <input class="form-control text-center form-control-sm text-center border-1 quantity-input"
-                                               type="number" value="@item.Quantity" min="1"
-                                               data-price="@item.SalePrice"
-                                               data-total-selector="#total-@item.ProductID" />
-
-                                    </div>
-                                </td>
-                                <td>
-                                    <p class="mb-0 mt-4" id="total-@item.ProductID">@item.TotalPrice.ToString("N0") đ</p>
-                                </td>
-                                <td>
-                                    <a href="~/Cart/RemoveFromCart/@item.ProductID" data-product-name="@item.ProductName" class="btn btn-md rounded-circle bg-light border mt-4
-                                        ajax-link">
-                                        <i class="fa fa-times text-danger"></i>
-                                    </a>
-                                </td>
-
-                            </tr>
-                        }
-                </tbody>
-
-                <tfoot>
-                    <tr>
-                            <th colspan="5" class="text-right py-3">Tổng cộng:</th>
-                        <th class="text-right" id="cartSubtotal">@sumOfPrice.ToString("N0") đ</th>
-                        <th></th>
-                    </tr>
-                </tfoot>
-
-            </table>
-
-            <div class="d-flex justify-content-end mt-3 mx-5">
-                <a href="~/Cart/ClearCart" class="btn btn-sm btn-danger ajax-link">
-                    <i class="fa fa-trash"></i> Xóa giỏ hàng
-                </a>
-            </div>
-
-        </div>
-        @if(Model.Count() > 0){
-            <div class="mt-5 row g-4 justify-content-start">
-                <div class="col-12 col-md-8">
-                    <div class="bg-light rounded">
-                        <div class="p-4">
-                            <h1 class="display-6 mb-5">Thông tin đơn hàng</h1>
-                            <div class="d-flex justify-content-between">
-                                <h5 class="mb-0 mb-4">Tạm tính</h5>
-                                <div>
-                                    <p class="mb-0" id="cartSubtotal">
-                                        @sumOfPrice.ToString("N0") đ
-                                    </p>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                            <h5 class="mb-0 ps-4 me-4">Tổng số tiền</h5>
-                            <p class="mb-0 pe-4" id="cartSubtotal">
-                                @sumOfPrice.ToString("N0") đ
-                            </p>
-                        </div>
-                            <a href = "~/Order/PlaceOrder" class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">
-                                Đặt mua
-                            </a>
-                    </div>
-                </div>
-            </div>
-        }
-        
     </div>
-</div>
-    <!-- Cart Page End -->
 }
 else
 {
-    <div class="container-fluid py-5" style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-        <span class="text-danger">Giỏ hàng hiện không có sản phẩm!</span>
-        <a href="~/Product" class="btn btn-primary mt-4">Tiếp tục mua sắm</a>
-    </div>
-
+    await Html.RenderPartialAsync("_EmptyCart");
 }
 @section scripts {
     <script>
         $(document).ready(function () {
-            $(".ajax-link").click(function (e) {
-                e.preventDefault();
+            showShoppingCart();
 
-                var productName = $(this).data('product-name');
-                var confirmDelete = false;
-
-                if ($(this).attr('href').includes('RemoveFromCart')) {
-                    confirmDelete = confirm('Xóa mặt hàng ' + productName + ' ra khỏi giỏ hàng?');
-                } else if ($(this).attr('href').includes('ClearCart')) {
-                    confirmDelete = confirm('Có muốn xóa giỏ hàng không?');
-                }
-
-                if (confirmDelete) {
-                    $.ajax({
-                        url: $(this).prop("href"),
-                        type: "GET",
-                        success: function (data) {
-                            if (data !== "") {
-                                alert(data);
-                            } else {
-                                showShoppingCart();
-                            }
-                        }
-                    });
-                }
-            });
-
-
-            $('.quantity-input').on('change', function () {
-                let quantity = parseInt($(this).val());
-                if (quantity < 1) {
-                    $(this).val(1);
-                    quantity = 1;
-                }
-
-                let price = parseFloat($(this).data('price'));
-                let totalSelector = $(this).data('total-selector');
-
-                let newTotal = price * quantity;
-                $(totalSelector).text(newTotal.toLocaleString() + ' đ');
-
-                updateCartTotal();
-            });
-
-            function updateCartTotal() {
-                let sum = 0;
-                $('.quantity-input').each(function () {
-                    let quantity = parseInt($(this).val());
-                    let price = parseFloat($(this).data('price'));
-                    sum += quantity * price;
-                });
-
-                $('#cartSubtotal').text(sum.toLocaleString() + ' đ');
-                $('#cartTotal').text(sum.toLocaleString() + ' đ');
-            }
         });
 
         function showShoppingCart() {
             $.ajax({
-                url: "Cart/Index",
+                url: "Cart/ShoppingCart",
                 type: 'GET',
                 success: function (data) {
+                    updateCartCount();
                     $('#shoppingCart').html(data);
                 }
             });

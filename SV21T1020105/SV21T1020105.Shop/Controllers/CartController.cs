@@ -11,6 +11,15 @@ namespace SV21T1020105.Shop.Controllers
             return View(GetShoppingCart());
         }
 
+        public IActionResult ShoppingCart()
+        {
+            if (GetShoppingCart() == null || GetShoppingCart().Count() == 0)
+            {
+                return PartialView("_EmptyCart");
+            }
+            return View(GetShoppingCart());
+        }
+
         private List<CartItem> GetShoppingCart()
         {
             var shoppingCart = ApplicationContext.GetSessionData<List<CartItem>>(SHOPPING_CART);
@@ -24,8 +33,8 @@ namespace SV21T1020105.Shop.Controllers
 
         public IActionResult AddToCart(CartItem item)
         {
-            if (item.SalePrice < 0 || item.Quantity <= 0)
-                return Json("Giá bán và số lượng không hợp lệ");
+            if (item.Quantity <= 0)
+                return Json("Số lượng không hợp lệ");
 
             var shoppingCart = GetShoppingCart();
             var existsProduct = shoppingCart.FirstOrDefault(m => m.ProductID == item.ProductID);
@@ -66,5 +75,19 @@ namespace SV21T1020105.Shop.Controllers
             return Content(shoppingCart.Count.ToString());
         }
 
+        public IActionResult UpdateQuantity(int productID, int quantity)
+        {
+            if (quantity <= 0)
+                return Json("Số lượng không hợp lệ");
+            var shoppingCart = GetShoppingCart();
+
+            var existsProduct = shoppingCart.FirstOrDefault(m => m.ProductID == productID);
+            if (existsProduct != null)
+            {
+                existsProduct.Quantity = quantity;
+            }
+            ApplicationContext.SetSessionData(SHOPPING_CART, shoppingCart);
+            return Json("");
+        }
     }
 }
