@@ -452,6 +452,25 @@ namespace SV21T1020105.DataLayers.SQLServer
             }
             return data;
         }
+
+        public IList<Product> GetBestSellerProducts()
+        {
+            List<Product> data = new List<Product>();
+
+            using (var connection = OpenConnection())
+            {
+                var sql = @"SELECT TOP (8) p.ProductID, p.ProductName, p.Price, p.Photo
+                            FROM     dbo.Products AS p INNER JOIN
+                                              dbo.OrderDetails AS od ON p.ProductID = od.ProductID INNER JOIN
+                                              dbo.Orders AS o ON od.OrderID = o.OrderID
+                            WHERE  (o.Status = 4)
+                            GROUP BY p.ProductID, p.ProductName, p.Price, p.Photo
+                            ORDER BY SUM(od.Quantity) DESC";
+
+                data = connection.Query<Product>(sql).ToList();
+            }
+            return data;
+        }
     }
 }
 

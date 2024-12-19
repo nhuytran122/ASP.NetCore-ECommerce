@@ -169,6 +169,12 @@ namespace SV21T1020105.BusinessLayers
         {
             return productDB.GetSimilarProducts(categoryID, productID).ToList();
         }
+
+
+        public static List<Product> GetBestSellerProducts()
+        {
+            return productDB.GetBestSellerProducts().ToList();
+        }
     }
 
 }

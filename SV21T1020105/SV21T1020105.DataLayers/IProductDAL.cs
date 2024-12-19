@@ -143,5 +143,7 @@ namespace SV21T1020105.DataLayers
         bool DeleteAttribute(long attributeID);
 
         IList<Product> GetSimilarProducts(int categoryID = 0, int productID = 0);
+
+        IList<Product> GetBestSellerProducts();
     }
 }
