@@ -17,7 +17,7 @@ namespace SV21T1020105.Shop.Controllers
         public IActionResult Index()
         {
             ViewBag.ListCategories = CommonDataService.ListOfCategories();
-            var data = ProductDataService.ListProducts();
+            var data = ProductDataService.GetBestSellerProducts();
             return View(data);
         }
 
