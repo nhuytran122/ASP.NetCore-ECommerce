@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SV21T1020105.BusinessLayers;
+using SV21T1020105.DomainModels;
 using SV21T1020105.Shop.Models;
+using System.Buffers;
 
 namespace SV21T1020105.Shop.Controllers
 {
@@ -26,7 +28,6 @@ namespace SV21T1020105.Shop.Controllers
             return View(condition);
         }
 
-        //TODO: show CategoryName
         public IActionResult Search(ProductSearchInput condition)
         {
             int rowCount;
@@ -69,10 +70,24 @@ namespace SV21T1020105.Shop.Controllers
 
             return View(model);
         }
-    
+
         public IActionResult Filter(int categoryID = 0)
         {
-            return View();
+            var condition = ApplicationContext.GetSessionData<ProductSearchInput>(PRODUCT_SEARCH_CONDITION)
+                            ?? new ProductSearchInput();
+
+            condition.Page = 1;
+            condition.PageSize = PAGE_SIZE;
+            condition.SearchValue = "";
+            condition.CategoryID = categoryID;
+            condition.SupplierID = 0;
+            condition.MinPrice = 0;
+            condition.MaxPrice = 0;
+            condition.SortByPrice = "";
+
+            ApplicationContext.SetSessionData(PRODUCT_SEARCH_CONDITION, condition);
+
+            return RedirectToAction("Index");
         }
     }
 }
