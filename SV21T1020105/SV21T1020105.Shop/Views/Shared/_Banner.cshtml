@@ -7,7 +7,7 @@
             <div class="col-md-12 col-lg-7">
                 <h4 class="mb-3 text-secondary">100% Sản Phẩm Chính Hãng</h4>
                 <h1 class="mb-5 display-3 text-primary">
-                    Hàng cao cấp<br /> Rẻ vô địch
+                    Chất lượng tuyệt vời<br /> Giá cả hợp lý!
                 </h1>
             </div>
             <div class="col-md-12 col-lg-5">
@@ -15,7 +15,7 @@
                     <div class="carousel-inner" role="listbox">
                         @foreach(var category in categories){
                             <div class="carousel-item @(category == categories.First() ? "active" : "") rounded">
-                                <img src="@WebConfig.IMAGE_SOURE_HOST/images/categories/@(string.IsNullOrWhiteSpace(category.Photo) ? "no-image.jpg" : category.Photo)" class="d-block w-100 h-100 bg-secondary rounded">
+                                <img src="@WebConfig.IMAGE_SOURE_HOST/images/categories/@(string.IsNullOrWhiteSpace(category.Photo) ? "no-image.jpg" : category.Photo)" class="d-block bg-secondary rounded" style="height: 420px; width: auto">
                                 <a href="~/Product/Filter/?categoryID=@category.CategoryID" class="btn px-4 py-2 text-white rounded">@category.CategoryName</a>
                             </div>
                         }

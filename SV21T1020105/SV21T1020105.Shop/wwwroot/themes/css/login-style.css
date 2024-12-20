@@ -1,11 +1,11 @@
 ﻿:root {
-  --color-background-light: #f2f2f2;
-  --color-background-form: #ecf0f3;
-  --color-primary: #81c408;
-  --color-shadow-dark: #cbced1;
-  --color-shadow-light: #fff;
-  --color-text: #333;
-  --color-placeholder: #808080;
+    --color-background-light: #f2f2f2;
+    --color-background-form: #ecf0f3;
+    --color-primary: #2d98da;
+    --color-shadow-dark: #cbced1;
+    --color-shadow-light: #fff;
+    --color-text: #333;
+    --color-placeholder: #808080;
 }
 
 .demo {
