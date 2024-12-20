@@ -14,17 +14,6 @@ namespace SV21T1020105.Shop.Controllers
         public const string ORDER_SEARCH_CONDITION = "OrderSearchCondition";
         public const int PAGE_SIZE = 6;
 
-        private void SetCustomerToViewBag()
-        {
-            var userData = User.GetUserData(); 
-            int customerID = int.Parse(userData.UserId.ToString());
-
-            var data = CommonDataService.GetCustomer(customerID);  
-            if (data != null)
-            {
-                ViewBag.Customer = data; 
-            }
-        }
         public IActionResult OrderHistory()
         {
             var condition = ApplicationContext.GetSessionData<OrderSearchInput>(ORDER_SEARCH_CONDITION);
@@ -40,8 +29,6 @@ namespace SV21T1020105.Shop.Controllers
                     TimeRange = $"{DateTime.Today.AddYears(-2).ToString("dd/MM/yyyy", cultureInfo)} - {DateTime.Today.ToString("dd/MM/yyyy", cultureInfo)}"
                 };
             }
-
-            SetCustomerToViewBag();
             return View(condition);
         }
 
@@ -133,8 +120,6 @@ namespace SV21T1020105.Shop.Controllers
                 Order = order,
                 Details = details
             };
-
-            SetCustomerToViewBag();
 
             return View(model);
         }

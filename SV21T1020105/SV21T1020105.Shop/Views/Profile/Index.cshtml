@@ -1,6 +1,6 @@
-﻿@{
+﻿@model Customer
+@{
     ViewBag.Title = "Tài khoản của tôi";
-    var customer = ViewBag.Customer;
 }
 
 <div class="py-5">
@@ -22,30 +22,30 @@
                         <div class="col-md-8">
                             <div class="mb-4">
                                 <h6 class="text-muted"><i class="bi bi-person me-2"></i> Tên:</h6>
-                                <p class="fs-5">@customer.CustomerName</p>
+                                <p class="fs-5">@Model.CustomerName</p>
                             </div>
                             <div class="mb-4">
                                 <h6 class="text-muted"><i class="bi bi-envelope me-2"></i> Email:</h6>
-                                <p class="fs-5">@customer.Email</p>
+                                <p class="fs-5">@Model.Email</p>
                             </div>
                             <div class="mb-4">
                                 <h6 class="text-muted"><i class="bi bi-telephone me-2"></i> Số điện thoại:</h6>
-                                <p class="fs-5">@customer.Phone</p>
+                                <p class="fs-5">@Model.Phone</p>
                             </div>
                             <div class="mb-4">
                                 <h6 class="text-muted"><i class="bi bi-geo-alt me-2"></i> Tỉnh thành:</h6>
-                                <p class="fs-5">@customer.Province</p>
+                                <p class="fs-5">@Model.Province</p>
                             </div>
                             <div class="mb-4">
                                 <h6 class="text-muted"><i class="bi bi-house-door me-2"></i> Địa chỉ:</h6>
-                                <p class="fs-5">@customer.Address</p>
+                                <p class="fs-5">@Model.Address</p>
                             </div>
                         </div>
 
                         <!-- Cột hiển thị ảnh đại diện -->
                         <div class="col-md-4 text-center">
                             <img id="PhotoPreview"
-                                 src="@(WebConfig.IMAGE_SOURE_HOST + "/images/customers/" + (string.IsNullOrWhiteSpace(customer.Photo) ? "default-avatar.jpg" : customer.Photo))"
+                                 src="@(WebConfig.IMAGE_SOURE_HOST + "/images/customers/" + (string.IsNullOrWhiteSpace(Model.Photo) ? "default-avatar.jpg" : Model.Photo))"
                                  class="rounded-circle mb-3"
                                  style="width:150px; height:150px; object-fit:cover;" />
                             <h6 class="mt-3">Ảnh đại diện</h6>

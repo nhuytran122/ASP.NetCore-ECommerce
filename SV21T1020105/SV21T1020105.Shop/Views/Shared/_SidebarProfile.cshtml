@@ -1,23 +1,27 @@
 ﻿@{
-    var data = ViewBag.Customer;
-}
-<div class="col-md-3 mt-2">
-    <div class="d-flex align-items-center mb-4">
-        <img src="@WebConfig.IMAGE_SOURE_HOST/images/customers/@(string.IsNullOrWhiteSpace(data.Photo) ? "default-avatar.jpg" : data.Photo)" class="rounded-circle me-2" alt="Profile" height="50" width="50">
-        <div>
-            <h6 class="mb-0">@data.Email</h6>
-            <a href="~/Profile/Edit"><small><i class="bi bi-pencil"></i> Cập nhật thông tin</small></a>
+    var userData = User.GetUserData();
+    if (userData != null)
+    {
+        <div class="col-md-3 mt-2">
+            <div class="d-flex align-items-center mb-4">
+                <img src="@WebConfig.IMAGE_SOURE_HOST/images/customers/@(string.IsNullOrWhiteSpace(userData.Photo) ? "default-avatar.jpg" : userData.Photo)" class="rounded-circle me-2" alt="Profile" height="50" width="50">
+                <div>
+                    <h6 class="mb-0">@userData.DisplayName</h6>
+                    <a href="~/Profile/Edit"><small><i class="bi bi-pencil"></i> Cập nhật thông tin</small></a>
+                </div>
+            </div>
+            <div class="list-group">
+                <a href="~/Profile" class="list-group-item list-group-item-action @(ViewBag.Title == "Tài khoản của tôi" ? "active" : "")">
+                    <i class="bi bi-person me-2"></i> Tài Khoản Của Tôi
+                </a>
+                <a href="~/Account/ChangePassword" class="list-group-item list-group-item-action @(ViewBag.Title == "Đổi mật khẩu" ? "active" : "")">
+                    <i class="bi bi-key me-2"></i> Đổi mật khẩu
+                </a>
+                <a href="~/Order/OrderHistory" class="list-group-item list-group-item-action @(ViewBag.Title == "Lịch sử mua hàng" ? "active" : "")">
+                    <i class="bi bi-receipt me-2"></i> Đơn Mua
+                </a>
+            </div>
         </div>
-    </div>
-    <div class="list-group">
-        <a href="~/Profile" class="list-group-item list-group-item-action @(ViewBag.Title == "Tài khoản của tôi" ? "active" : "")">
-            <i class="bi bi-person me-2"></i> Tài Khoản Của Tôi
-        </a>
-        <a href="~/Profile/ChangePassword" class="list-group-item list-group-item-action @(ViewBag.Title == "Đổi mật khẩu" ? "active" : "")">
-            <i class="bi bi-key me-2"></i> Đổi mật khẩu
-        </a>
-        <a href="~/Order/OrderHistory" class="list-group-item list-group-item-action @(ViewBag.Title == "Lịch sử mua hàng" ? "active" : "")">
-            <i class="bi bi-receipt me-2"></i> Đơn Mua
-        </a>
-    </div>
-</div>
+    }
+}
+    

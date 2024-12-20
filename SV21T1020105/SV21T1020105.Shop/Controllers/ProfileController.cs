@@ -11,25 +11,27 @@ namespace SV21T1020105.Shop.Controllers
         public IActionResult Index()
         {
             var userData = User.GetUserData();
+            if (userData == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             int customerID = int.Parse(userData.UserId.ToString());
             var data = CommonDataService.GetCustomer(customerID);
-            if (data != null)
-            {
-                ViewBag.Customer = data;
-            }
-            return View();
+            return View(data);
         }
 
         public IActionResult Edit()
         {
             var userData = User.GetUserData();
+            if (userData == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             int customerID = int.Parse(userData.UserId.ToString());
             var data = CommonDataService.GetCustomer(customerID);
-            if (data != null)
-            {
-                ViewBag.Customer = data;
-            }
-            return View();
+            return View(data);
         }
 
         [HttpPost]
