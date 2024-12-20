@@ -1,8 +1,11 @@
-﻿<div class="col-md-3 mt-2">
+﻿@{
+    var data = ViewBag.Customer;
+}
+<div class="col-md-3 mt-2">
     <div class="d-flex align-items-center mb-4">
-        <img src="@WebConfig.IMAGE_SOURE_HOST/images/customers/@(string.IsNullOrWhiteSpace(Model.Photo) ? "default-avatar.jpg" : Model.Photo)" class="rounded-circle me-2" alt="Profile" height="50" width="50">
+        <img src="@WebConfig.IMAGE_SOURE_HOST/images/customers/@(string.IsNullOrWhiteSpace(data.Photo) ? "default-avatar.jpg" : data.Photo)" class="rounded-circle me-2" alt="Profile" height="50" width="50">
         <div>
-            <h6 class="mb-0">@Model.Email</h6>
+            <h6 class="mb-0">@data.Email</h6>
             <a href="~/Profile/Edit"><small><i class="bi bi-pencil"></i> Cập nhật thông tin</small></a>
         </div>
     </div>

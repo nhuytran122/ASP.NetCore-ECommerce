@@ -1,6 +1,6 @@
-﻿@model Customer
-@{
-    ViewBag.Title = "Cập nhật thông tin"; 
+﻿@{
+    ViewBag.Title = "Cập nhật thông tin";
+    var customer = ViewBag.Customer;
 }
 
 <div class="py-5"></div>
@@ -17,36 +17,36 @@
                 </div>
                 <div class="card-body">
                     <form method="post" action="~/Profile/Save" enctype="multipart/form-data">
-                        <input type="hidden" name="@nameof(Model.CustomerID)" value="@Model.CustomerID" />
+                        <input type="hidden" name="@nameof(customer.CustomerID)" value="@customer.CustomerID" />
                         <div class="row">
                             <!-- Cột edit thông tin -->
                             <div class="col-md-8">
                                 <div class="mb-3">
                                     <label class="form-label"><i class="bi bi-person me-2"></i> Tên:</label>
                                     <input type="text" class="form-control"
-                                           name="@nameof(Model.CustomerName)" value="@Model.CustomerName" />
-                                    @Html.ValidationMessage(nameof(Model.CustomerName))
+                                           name="@nameof(customer.CustomerName)" value="@customer.CustomerName" />
+                                    @Html.ValidationMessage(nameof(customer.CustomerName))
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label"><i class="bi bi-envelope me-2"></i> Email:</label>
-                                    <input type="hidden" name="@nameof(Model.Email)" value="@Model.Email" />
+                                    <input type="hidden" name="@nameof(customer.Email)" value="@customer.Email" />
 
                                     <input class="form-control" disabled
-                                           name="@nameof(Model.Email)" value="@Model.Email" />
+                                           name="@nameof(customer.Email)" value="@customer.Email" />
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label"><i class="bi bi-telephone me-2"></i> Số điện thoại:</label>
                                     <input type="text" class="form-control"
-                                           name="@nameof(Model.Phone)" value="@Model.Phone" />
-                                    @Html.ValidationMessage(nameof(Model.Phone))
+                                           name="@nameof(customer.Phone)" value="@customer.Phone" />
+                                    @Html.ValidationMessage(nameof(customer.Phone))
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label"><i class="bi bi-geo-alt me-2"></i> Tỉnh thành:</label>
-                                    <select class="form-control select2" name="@nameof(Model.Province)">
+                                    <select class="form-control select2" name="@nameof(customer.Province)">
                                         <option value="">-- Chọn tỉnh thành --</option>
                                         @foreach (var item in CommonDataService.ListOfProvinces())
                                         {
-                                            if (item.ProvinceName == Model.Province)
+                                            if (item.ProvinceName == customer.Province)
                                             {
                                                 <option value="@item.ProvinceName" selected>@item.ProvinceName</option>
                                             }
@@ -56,13 +56,13 @@
                                             }
                                         }
                                     </select>
-                                    @Html.ValidationMessage(nameof(Model.Province))
+                                    @Html.ValidationMessage(nameof(customer.Province))
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label"><i class="bi bi-house-door me-2"></i> Địa chỉ:</label>
                                     <input type="text" class="form-control"
-                                           name="@nameof(Model.Address)" value="@Model.Address" />
-                                    @Html.ValidationMessage(nameof(Model.Address))
+                                           name="@nameof(customer.Address)" value="@customer.Address" />
+                                    @Html.ValidationMessage(nameof(customer.Address))
                                 </div>
                             </div>
 
@@ -70,11 +70,11 @@
                             <div class="col-md-4 text-center">
                                 <div class="mb-3">
                                     <img id="PhotoPreview"
-                                         src="@(WebConfig.IMAGE_SOURE_HOST + "/images/customers/" + (string.IsNullOrWhiteSpace(Model.Photo) ? "default-avatar.jpg" : Model.Photo))"
+                                         src="@(WebConfig.IMAGE_SOURE_HOST + "/images/customers/" + (string.IsNullOrWhiteSpace(customer.Photo) ? "default-avatar.jpg" : customer.Photo))"
                                          class="profile-pic-upload rounded-circle border mb-3"
                                          style="width:150px; height:150px; object-fit:cover;" />
                                 </div>
-                                <input type="hidden" name="@nameof(Model.Photo)" value="@Model.Photo" />
+                                <input type="hidden" name="@nameof(customer.Photo)" value="@customer.Photo" />
                                 <div class="mb-3">
                                     <label for="avatarFile" class="form-label">Ảnh đại diện:</label>
                                     <input type="file" class="form-control" name="uploadPhoto" accept="image/*"

@@ -1,21 +1,35 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SV21T1020105.BusinessLayers;
 using SV21T1020105.DomainModels;
 
 namespace SV21T1020105.Shop.Controllers
 {
+    [Authorize]
     public class ProfileController : Controller
     {
         public IActionResult Index()
         {
-            //TODO: Thay thế bới user đang login
-            return View(CommonDataService.GetCustomer(4194));
+            var userData = User.GetUserData();
+            int customerID = int.Parse(userData.UserId.ToString());
+            var data = CommonDataService.GetCustomer(customerID);
+            if (data != null)
+            {
+                ViewBag.Customer = data;
+            }
+            return View();
         }
 
         public IActionResult Edit()
         {
-            //TODO: Thay thế bới user đang login
-            return View(CommonDataService.GetCustomer(4194));
+            var userData = User.GetUserData();
+            int customerID = int.Parse(userData.UserId.ToString());
+            var data = CommonDataService.GetCustomer(customerID);
+            if (data != null)
+            {
+                ViewBag.Customer = data;
+            }
+            return View();
         }
 
         [HttpPost]

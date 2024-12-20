@@ -1,17 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SV21T1020105.BusinessLayers;
 using SV21T1020105.DomainModels;
-using SV21T1020105.Shop.Models;
 using SV21T1020105.Shop.AppCodes;
+using SV21T1020105.Shop.Models;
 using System.Globalization;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SV21T1020105.Shop.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         public const string ORDER_SEARCH_CONDITION = "OrderSearchCondition";
         public const int PAGE_SIZE = 6;
+
+        private void SetCustomerToViewBag()
+        {
+            var userData = User.GetUserData(); 
+            int customerID = int.Parse(userData.UserId.ToString());
+
+            var data = CommonDataService.GetCustomer(customerID);  
+            if (data != null)
+            {
+                ViewBag.Customer = data; 
+            }
+        }
         public IActionResult OrderHistory()
         {
             var condition = ApplicationContext.GetSessionData<OrderSearchInput>(ORDER_SEARCH_CONDITION);
@@ -27,6 +40,8 @@ namespace SV21T1020105.Shop.Controllers
                     TimeRange = $"{DateTime.Today.AddYears(-2).ToString("dd/MM/yyyy", cultureInfo)} - {DateTime.Today.ToString("dd/MM/yyyy", cultureInfo)}"
                 };
             }
+
+            SetCustomerToViewBag();
             return View(condition);
         }
 
@@ -50,9 +65,9 @@ namespace SV21T1020105.Shop.Controllers
                 ViewBag.DeliveryAddress = deliveryAddress;
                 return View("PlaceOrder", shoppingCart);
             }
-            //TODO:  Thay bởi userID đang login
-            //var userData = User.GetUserData();
-            //int customerID = int.Parse(userData.UserId.ToString());
+
+            var userData = User.GetUserData();
+            int customerID = int.Parse(userData.UserId.ToString());
 
             List<OrderDetail> orderDetails = new List<OrderDetail>();
             foreach (var item in shoppingCart)
@@ -64,7 +79,7 @@ namespace SV21T1020105.Shop.Controllers
                     SalePrice = item.SalePrice
                 });
             }
-            int orderID = OrderDataService.InitOrder(null, 4194, deliveryProvince, deliveryAddress, orderDetails);
+            int orderID = OrderDataService.InitOrder(null, customerID, deliveryProvince, deliveryAddress, orderDetails);
             ShoppingCartHelper.ClearCart();
             return RedirectToAction("OrderHistory");
         }
@@ -72,7 +87,9 @@ namespace SV21T1020105.Shop.Controllers
         public IActionResult Search(OrderSearchInput condition)
         {
             int rowCount;
-            var data = OrderDataService.GetListOrdersByCustomerID(out rowCount, 4194, condition.Page, condition.PageSize,
+            var userData = User.GetUserData();
+            int customerID = int.Parse(userData.UserId.ToString());
+            var data = OrderDataService.GetListOrdersByCustomerID(out rowCount, customerID, condition.Page, condition.PageSize,
                                                    condition.Status, condition.FromTime, condition.ToTime);
 
             // Tạo một danh sách chứa chi tiết các đơn hàng
@@ -116,6 +133,8 @@ namespace SV21T1020105.Shop.Controllers
                 Order = order,
                 Details = details
             };
+
+            SetCustomerToViewBag();
 
             return View(model);
         }

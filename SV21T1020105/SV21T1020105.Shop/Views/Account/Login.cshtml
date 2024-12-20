@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Đăng nhập";
+}
+<div class="py-5">
+</div>
+<div class="container my-5">
+    <div class="row w-100">
+        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
+            <h2 class="mb-4 display-3 text-primary text-center">NTY SHOP</h2>
+            <h2 class="mb-4 text-secondary">100% Sản Phẩm Chính Hãng</h2>
+            <h2 class="mb-4 text-primary text-center">
+                Hàng cao cấp<br />Rẻ vô địch
+            </h2>
+        </div>
+
+
+        <div class="col-md-5">
+            <div class="form-bg">
+                <div class="form-container mt-3">
+                    <div class="form-icon"><i class="bi bi-person-circle"></i></div>
+                    <h3 class="title">Đăng nhập</h3>
+                    <form action="~/Account/Login" class="form-horizontal" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <input name="username" class="form-control mt-2" type="email"
+                                   placeholder="Tên đăng nhập" value="@ViewBag.UserName" autofocus/>
+                        </div>
+                        <div class="form-group">
+                            <input name="password" class="form-control mt-2" type="password" placeholder="Mật khẩu">
+                        </div>
+                        @Html.ValidationMessage("Error", new { style = "color: #f00" })
+                        <button name="btn-login" type="submit" class="btn btn-default mt-3">Đăng nhập</button>
+                    </form>
+                    <p class="mt-4 text-center">
+                        Bạn chưa có tài khoản?
+                        <a href="~/Account/SignUp" class="text-primary fw-bold">Đăng ký</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles{
+    <link href="~/themes/css/login-style.css" rel="stylesheet">
+}
