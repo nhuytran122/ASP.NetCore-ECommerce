@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SV21T1020105.BusinessLayers;
-using SV21T1020105.DomainModels;
 using SV21T1020105.Shop.Models;
-using System.Buffers;
 
 namespace SV21T1020105.Shop.Controllers
 {
@@ -67,11 +65,12 @@ namespace SV21T1020105.Shop.Controllers
                 Photos = photos,
                 CategoryName = CommonDataService.GetCategory(product.CategoryID).CategoryName
             };
+            ViewBag.SimilarProducts = ProductDataService.GetSimilarProducts(product.CategoryID, product.ProductID);
 
             return View(model);
         }
 
-        public IActionResult Filter(int categoryID = 0)
+        public IActionResult FilterByCategory(int categoryID = 0)
         {
             var condition = ApplicationContext.GetSessionData<ProductSearchInput>(PRODUCT_SEARCH_CONDITION)
                             ?? new ProductSearchInput();

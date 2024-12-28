@@ -27,7 +27,6 @@ else
                 url: "Cart/ShoppingCart",
                 type: 'GET',
                 success: function (data) {
-                    updateCartCount();
                     $('#shoppingCart').html(data);
                 }
             });

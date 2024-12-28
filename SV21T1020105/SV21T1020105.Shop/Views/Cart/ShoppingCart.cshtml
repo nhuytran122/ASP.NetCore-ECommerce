@@ -36,7 +36,7 @@
                         </td>
 
                         <td>
-                            <p class="mb-0 mt-4 number-separator">@item.SalePrice.ToString("N0") đ</p>
+                            <p class="mb-0 mt-4">@item.SalePrice.ToString("N0") đ</p>
                         </td>
                         <td>
                             <form action="~/Cart/UpdateQuantity" method="post" class="ajax-form">
@@ -51,7 +51,7 @@
                         </td>
 
                         <td>
-                            <p class="mb-0 mt-4 number-separator">@item.TotalPrice.ToString("N0") đ</p>
+                            <p class="mb-0 mt-4">@item.TotalPrice.ToString("N0") đ</p>
                         </td>
                         <td>
                             <a href="~/Cart/RemoveFromCart/@item.ProductID" data-product-name="@item.ProductName" class="btn btn-md rounded-circle bg-light border mt-4
@@ -67,7 +67,7 @@
             <tfoot>
                 <tr>
                     <th colspan="5" class="text-right py-3">Tổng cộng:</th>
-                    <th class="text-right number-separator">@sumOfPrice.ToString("N0") đ</th>
+                    <th class="text-right">@sumOfPrice.ToString("N0") đ</th>
                     <th></th>
                 </tr>
             </tfoot>
@@ -91,7 +91,7 @@
                         <div class="d-flex justify-content-between">
                             <h5 class="mb-0 mb-4">Tạm tính</h5>
                             <div>
-                                <p class="mb-0 đ number-separator">
+                                <p class="mb-0">
                                     @sumOfPrice.ToString("N0") đ
                                 </p>
                             </div>
@@ -100,7 +100,7 @@
                     </div>
                     <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                         <h5 class="mb-0 ps-4 me-4">Tổng số tiền</h5>
-                        <p class="mb-0 pe-4 number-separator">
+                        <p class="mb-0 pe-4">
                             @sumOfPrice.ToString("N0") đ
                         </p>
                     </div>
@@ -155,9 +155,6 @@
                         alert(data);
                     } else {
                         showShoppingCart();
-                    }
-                    if ($('#shoppingCart').find('#empty-cart').length > 0) {
-                        $('#shoppingCart').replaceWith(data);
                     }
                 }
             });

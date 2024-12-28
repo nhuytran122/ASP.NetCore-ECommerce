@@ -72,13 +72,6 @@ namespace SV21T1020105.Shop.Controllers
         public IActionResult ChangePassword(string oldPassword, string newPassword, string confirmPassword)
         {
             var userData = User.GetUserData();
-            int customerID = int.Parse(userData.UserId.ToString());
-
-            var data = CommonDataService.GetCustomer(customerID);
-            if (data != null)
-            {
-                ViewBag.Customer = data;
-            }
 
             if (string.IsNullOrWhiteSpace(oldPassword) || string.IsNullOrWhiteSpace(newPassword) || string.IsNullOrWhiteSpace(confirmPassword))
             {
@@ -100,11 +93,6 @@ namespace SV21T1020105.Shop.Controllers
             }
 
             return RedirectToAction("Index", "Profile");
-        }
-
-        public IActionResult AccessDenied()
-        {
-            return View();
         }
     }
 }

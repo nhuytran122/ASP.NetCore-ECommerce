@@ -36,7 +36,7 @@
                     </div>
                 </div>
 
-                
+
                 <!-- Delivery Info -->
                 <div class="card mb-4">
                     <div class="card-body">
@@ -56,10 +56,22 @@
                                         <div class="timeline-time">
                                             @DateTimeHelper.FormatDateTime(order.FinishedTime)
                                         </div>
-                                        <div class="timeline-status">Đã hoàn tất đơn hàng</div>
+                                        @if (order.Status == Constants.ORDER_CANCEL)
+                                        {
+                                            <div class="timeline-status text-danger">Đơn hàng đã bị hủy</div>
+                                        }
+                                        else if (order.Status == Constants.ORDER_REJECTED)
+                                        {
+                                            <div class="timeline-status text-danger">Đơn hàng đã bị từ chối</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="timeline-status">Đã hoàn tất đơn hàng</div>
+                                        }
                                     </div>
                                 </div>
                             }
+
 
                             @if (order.ShippedTime != null)
                             {
@@ -105,7 +117,7 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="border-bottom pb-3 mb-3">
-                            @foreach(var item in Model.Details)
+                            @foreach (var item in Model.Details)
                             {
                                 <div class="d-flex mb-3">
                                     <img src="@WebConfig.IMAGE_SOURE_HOST/images/products/@(string.IsNullOrWhiteSpace(item.Photo) ? "no-image.jpg" : item.Photo)" class="product-img me-3" alt="Product">
@@ -118,7 +130,7 @@
                                     </div>
                                 </div>
                             }
-                            
+
                         </div>
 
                         <div class="price-summary mt-3">
@@ -132,8 +144,8 @@
                             </div>
                         </div>
                         @if (order.Status != Constants.ORDER_ACCEPTED && order.Status != Constants.ORDER_SHIPPING
-                            && order.Status != Constants.ORDER_FINISHED && order.Status !=  Constants.ORDER_CANCEL 
-                            && order.Status != Constants.ORDER_REJECTED
+                        && order.Status != Constants.ORDER_FINISHED && order.Status != Constants.ORDER_CANCEL
+                        && order.Status != Constants.ORDER_REJECTED
 
                         )
                         {
@@ -144,13 +156,11 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </div>
 
 @section styles {
-    <style>
-        <link href="~/themes/css/details-order-style.css" rel="stylesheet">
-    </style>
+    <link href="~/themes/css/details-order-style.css" rel="stylesheet">
 }

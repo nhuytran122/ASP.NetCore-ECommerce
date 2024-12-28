@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SV21T1020105.DomainModels;
+using SV21T1020105.Shop.AppCodes;
 
 namespace SV21T1020105.Shop.Controllers
 {
@@ -8,35 +9,25 @@ namespace SV21T1020105.Shop.Controllers
         private const string SHOPPING_CART = "ShoppingCart";
         public IActionResult Index()
         {
-            return View(GetShoppingCart());
+            return View(ShoppingCartHelper.GetShoppingCart());
         }
 
         public IActionResult ShoppingCart()
         {
-            if (GetShoppingCart() == null || GetShoppingCart().Count() == 0)
+            if (ShoppingCartHelper.GetShoppingCart() == null || ShoppingCartHelper.GetShoppingCart().Count() == 0)
             {
                 return PartialView("_EmptyCart");
             }
-            return View(GetShoppingCart());
+            return View(ShoppingCartHelper.GetShoppingCart());
         }
 
-        private List<CartItem> GetShoppingCart()
-        {
-            var shoppingCart = ApplicationContext.GetSessionData<List<CartItem>>(SHOPPING_CART);
-            if (shoppingCart == null)
-            {
-                shoppingCart = new List<CartItem>();
-                ApplicationContext.SetSessionData(SHOPPING_CART, shoppingCart);
-            }
-            return shoppingCart;
-        }
 
         public IActionResult AddToCart(CartItem item)
         {
             if (item.Quantity <= 0)
                 return Json("Số lượng không hợp lệ");
 
-            var shoppingCart = GetShoppingCart();
+            var shoppingCart = ShoppingCartHelper.GetShoppingCart();
             var existsProduct = shoppingCart.FirstOrDefault(m => m.ProductID == item.ProductID);
             if (existsProduct == null)
             {
@@ -53,7 +44,7 @@ namespace SV21T1020105.Shop.Controllers
 
         public IActionResult RemoveFromCart(int id = 0)
         {
-            var shoppingCart = GetShoppingCart();
+            var shoppingCart = ShoppingCartHelper.GetShoppingCart();
             int index = shoppingCart.FindIndex(m => m.ProductID == id);
             if (index >= 0)
                 shoppingCart.RemoveAt(index);
@@ -63,7 +54,7 @@ namespace SV21T1020105.Shop.Controllers
 
         public IActionResult ClearCart()
         {
-            var shoppingCart = GetShoppingCart();
+            var shoppingCart = ShoppingCartHelper.GetShoppingCart();
             shoppingCart.Clear();
             ApplicationContext.SetSessionData(SHOPPING_CART, shoppingCart);
             return Json("");
@@ -71,7 +62,7 @@ namespace SV21T1020105.Shop.Controllers
 
         public IActionResult GetCartCount()
         {
-            var shoppingCart = GetShoppingCart();
+            var shoppingCart = ShoppingCartHelper.GetShoppingCart();
             return Content(shoppingCart.Count.ToString());
         }
 
@@ -79,7 +70,7 @@ namespace SV21T1020105.Shop.Controllers
         {
             if (quantity <= 0)
                 return Json("Số lượng không hợp lệ");
-            var shoppingCart = GetShoppingCart();
+            var shoppingCart = ShoppingCartHelper.GetShoppingCart();
 
             var existsProduct = shoppingCart.FirstOrDefault(m => m.ProductID == productID);
             if (existsProduct != null)

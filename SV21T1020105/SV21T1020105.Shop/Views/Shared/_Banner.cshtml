@@ -16,7 +16,7 @@
                         @foreach(var category in categories){
                             <div class="carousel-item @(category == categories.First() ? "active" : "") rounded">
                                 <img src="@WebConfig.IMAGE_SOURE_HOST/images/categories/@(string.IsNullOrWhiteSpace(category.Photo) ? "no-image.jpg" : category.Photo)" class="d-block bg-secondary rounded" style="height: 420px; width: auto">
-                                <a href="~/Product/Filter/?categoryID=@category.CategoryID" class="btn px-4 py-2 text-white rounded">@category.CategoryName</a>
+                                <a href="~/Product/FilterByCategory/?categoryID=@category.CategoryID" class="btn px-4 py-2 text-white rounded">@category.CategoryName</a>
                             </div>
                         }
                     </div>
