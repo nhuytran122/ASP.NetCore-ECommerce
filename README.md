@@ -47,7 +47,7 @@ To run this project locally, follow these steps:
 
 2. **Set up the database:**
 
-    Create a database named LiteCommerce and run the provided SQL script to set up the schema and sample data.
+    Create a database named `LiteCommerceDB` and run the provided SQL script to set up the schema and sample data.
 
    In `appsettings.json`, configure the connection string for your SQL Server database.
 
