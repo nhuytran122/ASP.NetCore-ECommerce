@@ -81,7 +81,7 @@
         </div>
 
     </div>
-    @if (Model.Count() > 0)
+    @if (Model.Any())
     {
         <div class="mt-5 row g-4 justify-content-start">
             <div class="col-12 col-md-8">
@@ -164,7 +164,7 @@
 
     function showShoppingCart() {
         $.ajax({
-            url: "Cart/ShoppingCart",
+            url: "/Cart/ShoppingCart",
             type: 'GET',
             success: function (data) {
                 updateCartCount();

@@ -26,8 +26,8 @@ namespace SV21T1020105.DataLayers.SQLServer
                                 select -1;
                             else
                                 begin
-                                    insert into Customers(CustomerName, ContactName, Province, Address, Phone, Email, IsLocked, Photo)
-                                    values (@CustomerName, @ContactName, @Province, @Address, @Phone, @Email, @IsLocked, @Photo);
+                                    insert into Customers(CustomerName, ContactName, Province, Address, Phone, Email, IsLocked, Photo, Password)
+                                    values (@CustomerName, @ContactName, @Province, @Address, @Phone, @Email, @IsLocked, @Photo, @Password);
                                     select SCOPE_IDENTITY();
                                 end";
                 var parameters = new
@@ -39,7 +39,8 @@ namespace SV21T1020105.DataLayers.SQLServer
                     Phone = data.Phone ?? "",
                     Email = data.Email ?? "",
                     IsLocked = data.IsLocked,
-                    Photo = data.Photo ?? ""
+                    Photo = data.Photo ?? "",
+                    Password = data.Password ?? ""
                 };
                 id = connection.ExecuteScalar<int>(sql, parameters, commandType: CommandType.Text);
                 //Thực thi câu lệnh

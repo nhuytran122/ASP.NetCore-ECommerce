@@ -3,7 +3,7 @@
     Layout = null;
 }
 
-@if (Model.RowCount == 0)
+@if (!Model.Data.Any())
 {
     <p style="margin-top: 50px" class="text-danger">
         Không có mặt hàng nào để hiển thị.
@@ -44,9 +44,9 @@ else
                                 <form class="frmAddToCart" action="~/Cart/AddToCart" method="post">
                                     <input type="hidden" name="Quantity" value="1" />
                                     <input type="hidden" name="@nameof(product.ProductID)" value="@product.ProductID" />
-                                    <input type="hidden" name="ProductName" value="@product.ProductName" />
-                                    <input type="hidden" name="Photo" value="@product.Photo" />
-                                    <input type="hidden" name="Unit" value="@product.Unit" />
+                                    <input type="hidden" name="@nameof(product.ProductName)" value="@product.ProductName" />
+                                    <input type="hidden" name="@nameof(product.Photo)" value="@product.Photo" />
+                                    <input type="hidden" name="@nameof(product.Unit)" value="@product.Unit" />
                                     <input type="hidden" name="SalePrice" value="@product.Price" />
                                     <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
                                         <i class="fa fa-shopping-bag me-2 text-primary"></i>

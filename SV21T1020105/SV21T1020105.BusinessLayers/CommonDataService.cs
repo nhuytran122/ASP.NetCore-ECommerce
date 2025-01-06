@@ -152,7 +152,6 @@ namespace SV21T1020105.BusinessLayers
             return categoryDB.InUsed(id);
         }
 
-
         public static List<Supplier> ListOfSuppliers(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "")
         {
             rowCount = supplierDB.Count(searchValue);
@@ -259,6 +258,7 @@ namespace SV21T1020105.BusinessLayers
             rowCount = employeeDB.Count(searchValue);
             return employeeDB.List(page, pageSize, searchValue);
         }
+        
         public static Employee? GetEmployee(int id)
         {
             return employeeDB.Get(id);

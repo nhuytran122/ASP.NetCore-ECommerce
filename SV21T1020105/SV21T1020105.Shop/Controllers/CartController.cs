@@ -14,7 +14,7 @@ namespace SV21T1020105.Shop.Controllers
 
         public IActionResult ShoppingCart()
         {
-            if (ShoppingCartHelper.GetShoppingCart() == null || ShoppingCartHelper.GetShoppingCart().Count() == 0)
+            if (ShoppingCartHelper.GetShoppingCart() == null || !ShoppingCartHelper.GetShoppingCart().Any())
             {
                 return PartialView("_EmptyCart");
             }
@@ -36,7 +36,6 @@ namespace SV21T1020105.Shop.Controllers
             else
             {
                 existsProduct.Quantity += item.Quantity;
-                existsProduct.SalePrice = item.SalePrice;
             }
             ApplicationContext.SetSessionData(SHOPPING_CART, shoppingCart);
             return Json("");

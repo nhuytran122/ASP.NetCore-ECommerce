@@ -58,14 +58,17 @@ namespace SV21T1020105.Shop.Controllers
 
             var attributes = ProductDataService.ListAttributes(id);
             var photos = ProductDataService.ListPhotos(id);
+            var similarProducts = ProductDataService.GetSimilarProducts(product.CategoryID, product.ProductID);
+            var categoryName = CommonDataService.GetCategory(product.CategoryID).CategoryName;
+
             var model = new ProductDetailModel()
             {
                 Product = product,
                 Attributes = attributes,
                 Photos = photos,
-                CategoryName = CommonDataService.GetCategory(product.CategoryID).CategoryName
+                SimilarProducts = similarProducts,
+                CategoryName = categoryName
             };
-            ViewBag.SimilarProducts = ProductDataService.GetSimilarProducts(product.CategoryID, product.ProductID);
 
             return View(model);
         }
