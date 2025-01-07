@@ -328,12 +328,6 @@ namespace SV21T1020105.BusinessLayers
         {
             return shipperDB.List();
         }
-
-        public static bool UpdateCustomerProfile(Customer data)
-        {
-            return customerDB.UpdateCustomerProfile(data);
-        }
-
     }
 }
 

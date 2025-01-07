@@ -41,7 +41,8 @@
                                 <li class="d-flex align-items-center flex-column"
                                     style="min-width: 200px; border-radius: 50%; overflow: hidden;">
                                     <img style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden;"
-                                         src="@WebConfig.IMAGE_SOURE_HOST/images/customers/default-avatar.jpg" />
+                                         src="@WebConfig.IMAGE_SOURE_HOST/images/customers/@(string.IsNullOrWhiteSpace(userData.Photo) ?
+                                            "default-avatar.jpg" : userData.Photo)" />
                                 </li>
                                 <div class="text-center my-3">
                                     @userData.DisplayName

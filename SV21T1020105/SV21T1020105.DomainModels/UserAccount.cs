@@ -7,5 +7,6 @@
         public string DisplayName { get; set; } = "";
         public string Photo { get; set; } = "";
         public string RoleNames { get; set; } = "";
+        public bool IsLocked { get; set; }
     }
 }

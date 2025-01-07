@@ -20,7 +20,8 @@ namespace SV21T1020105.DataLayers.SQLServer
 		                            Email as UserName,
 		                            FullName as DisplayName,
 		                            Photo,
-		                            RoleNames
+		                            RoleNames,
+                                    IsWorking as IsLocked
                             from Employees
                             where	Email = @Email and Password = @Password";
                 var parameters = new

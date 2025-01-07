@@ -69,8 +69,8 @@
                         </div>
                         <div class="form-group">
                             <label>Mật khẩu</label> <span class="text-danger">*</span>
-                            <input name="@nameof(Model.Password)" class="form-control mt-2" type="password">
-                            @Html.ValidationMessage(nameof(Model.Password))
+                            <input name="password" class="form-control mt-2" type="password">
+                            @Html.ValidationMessage("password")
                         </div>
                         <button name="btn-login" type="submit" class="btn btn-default mt-3">Đăng ký</button>
                     </form>

@@ -184,12 +184,20 @@ namespace SV21T1020105.Web.Controllers
             if (data.DisplayOrder <= 0)
                 ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị không hợp lệ");
 
-            ProductPhoto? currentPhoto = ProductDataService.GetPhoto(data.PhotoID);
-
-            if (currentPhoto != null)
+            if (data.PhotoID > 0)
             {
-                int currentDisplayOrder = currentPhoto.DisplayOrder;
-                if (data.DisplayOrder != currentDisplayOrder && ProductDataService.InUsedDisplayOrderOfPhoto(data.ProductID, data.DisplayOrder))
+                ProductPhoto? currentPhoto = ProductDataService.GetPhoto(data.PhotoID);
+                if (currentPhoto != null && data.DisplayOrder != currentPhoto.DisplayOrder)
+                {
+                    if (ProductDataService.InUsedDisplayOrderOfPhoto(data.ProductID, data.DisplayOrder))
+                    {
+                        ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị đã tồn tại. Vui lòng nhập lại");
+                    }
+                }
+            }
+            else
+            {
+                if (ProductDataService.InUsedDisplayOrderOfPhoto(data.ProductID, data.DisplayOrder))
                 {
                     ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị đã tồn tại. Vui lòng nhập lại");
                 }
@@ -212,13 +220,9 @@ namespace SV21T1020105.Web.Controllers
             }
             
             if (data.PhotoID == 0)
-            {
                 ProductDataService.AddPhoto(data);
-            }
             else
-            {
                 ProductDataService.UpdatePhoto(data);
-            }
 
             return RedirectToAction("Edit", new { id = data.ProductID });
         }
@@ -263,16 +267,26 @@ namespace SV21T1020105.Web.Controllers
             if (data.DisplayOrder <= 0)
                 ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị không hợp lệ");
 
-            ProductAttribute? currentAttribute = ProductDataService.GetAttribute(data.AttributeID);
-
-            if (currentAttribute != null)
+            if (data.AttributeID > 0)
             {
-                int currentDisplayOrder = currentAttribute.DisplayOrder;
-                if (data.DisplayOrder != currentDisplayOrder && ProductDataService.InUsedDisplayOrderOfAttribute(data.ProductID, data.DisplayOrder))
+                ProductAttribute? currentAttribute = ProductDataService.GetAttribute(data.AttributeID);
+
+                if (currentAttribute != null && data.DisplayOrder != currentAttribute.DisplayOrder)
+                {
+                    if (ProductDataService.InUsedDisplayOrderOfAttribute(data.ProductID, data.DisplayOrder))
+                    {
+                        ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị đã tồn tại. Vui lòng nhập lại");
+                    }
+                }
+            }
+            else
+            {
+                if (ProductDataService.InUsedDisplayOrderOfAttribute(data.ProductID, data.DisplayOrder))
                 {
                     ModelState.AddModelError(nameof(data.DisplayOrder), "Thứ tự hiển thị đã tồn tại. Vui lòng nhập lại");
                 }
             }
+
 
             if (!ModelState.IsValid)
             {

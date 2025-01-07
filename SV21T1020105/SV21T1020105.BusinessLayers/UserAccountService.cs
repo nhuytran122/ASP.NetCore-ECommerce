@@ -29,6 +29,17 @@ namespace SV21T1020105.BusinessLayers
             else
                 return customerAccountDB.ChangePassword(username, password, newPassword);
         }
+
+        public static int Register(Customer data, string password)
+        {
+            return ((CustomerAccountDAL)customerAccountDB).Register(data, password);
+        }
+
+
+        public static bool UpdateCustomerProfile(Customer data)
+        {
+            return ((CustomerAccountDAL)customerAccountDB).UpdateCustomerProfile(data);
+        }
     }
 
     public enum UserTypes

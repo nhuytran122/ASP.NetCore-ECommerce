@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SV21T1020105.BusinessLayers;
 using SV21T1020105.DomainModels;
@@ -35,7 +37,7 @@ namespace SV21T1020105.Shop.Controllers
         }
 
         [HttpPost]
-        public IActionResult Save(Customer data, IFormFile? uploadPhoto)
+        public async Task<IActionResult> Save(Customer data, IFormFile? uploadPhoto)
         {
             if (string.IsNullOrWhiteSpace(data.CustomerName))
                 ModelState.AddModelError(nameof(data.CustomerName), "Vui lòng nhập họ tên");
@@ -51,7 +53,6 @@ namespace SV21T1020105.Shop.Controllers
                 return View("Edit", data);
             }
 
-            //Xử lý lưu ảnh
             if (uploadPhoto != null)
             {
                 string fileName = $"{DateTime.Now.Ticks}-{uploadPhoto.FileName}";
@@ -63,9 +64,28 @@ namespace SV21T1020105.Shop.Controllers
                 data.Photo = fileName;
             }
 
-            bool result = CommonDataService.UpdateCustomerProfile(data);
+            bool result = UserAccountService.UpdateCustomerProfile(data);
+            if (!result)
+            {
+                ModelState.AddModelError("", "Cập nhật thông tin thất bại.");
+                return View("Edit", data);
+            }
+
+            var userData = User.GetUserData();
+            if (userData != null)
+            {
+                userData.DisplayName = data.CustomerName;
+                userData.Photo = data.Photo;
+
+                // Ghi lại cookie xác thực với data mới
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    userData.CreatePrincipal()
+                );
+            }
 
             return RedirectToAction("Index");
         }
+
     }
 }

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SV21T1020105.BusinessLayers;
 using SV21T1020105.DomainModels;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SV21T1020105.Shop.Controllers
 {
@@ -36,6 +35,11 @@ namespace SV21T1020105.Shop.Controllers
             if (userAccount == null)
             {
                 ModelState.AddModelError("Error", "Đăng nhập thất bại");
+                return View();
+            }
+            if (userAccount.IsLocked)
+            {
+                ModelState.AddModelError("Error", "Tài khoản của bạn hiện đang bị khóa");
                 return View();
             }
 
@@ -98,7 +102,6 @@ namespace SV21T1020105.Shop.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
         public IActionResult Register()
         {
             var data = new Customer()
@@ -111,7 +114,7 @@ namespace SV21T1020105.Shop.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Register(Customer data)
+        public IActionResult Register(Customer data, string password)
         {
             if (string.IsNullOrWhiteSpace(data.CustomerName))
                 ModelState.AddModelError(nameof(data.CustomerName), "Vui lòng nhập tên của bạn");
@@ -123,8 +126,8 @@ namespace SV21T1020105.Shop.Controllers
                 ModelState.AddModelError(nameof(data.Address), "Vui lòng nhập địa chỉ");
             if (string.IsNullOrWhiteSpace(data.Province))
                 ModelState.AddModelError(nameof(data.Province), "Vui lòng chọn tỉnh/thành");
-            if (string.IsNullOrWhiteSpace(data.Password))
-                ModelState.AddModelError(nameof(data.Password), "Vui lòng nhập mật khẩu");
+            if (string.IsNullOrWhiteSpace(password))
+                ModelState.AddModelError("password", "Vui lòng nhập mật khẩu");
 
             if (!ModelState.IsValid)
             {
@@ -132,7 +135,7 @@ namespace SV21T1020105.Shop.Controllers
             }
 
             data.ContactName = data.CustomerName;
-            int result = CommonDataService.AddCustomer(data);
+            int result = UserAccountService.Register(data, password);
             if (result == 0)
             {
                 ModelState.AddModelError(nameof(data.Email), "Email hiện đã tồn tại. Vui lòng đăng ký với email khác");
